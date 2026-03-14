@@ -82,8 +82,5 @@ const observer2 = new IntersectionObserver((entries)=>{
 cards.forEach(card=>{
   observer2.observe(card);
 });
-  
 
 });
-
-

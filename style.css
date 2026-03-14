@@ -294,6 +294,31 @@ main {
 	transition: all 0.3s ease;
 }
 
+.mueblesBtnMobile {
+	display: none;
+	text-align: center;
+	position: relative;
+	padding-top: 30px;
+}
+
+.mueblesBtnMobile a {
+	display: inline-block;
+	background: rgb(0, 0, 0);
+	color: rgb(255, 255, 255);
+	padding: 10px 20px;
+	border-radius: 6px;
+	text-decoration: none;
+	font-weight: 600;
+	font-size: 17px;
+	text-align: center;
+}
+
+.mueblesBtnMobile a:hover {
+	background: #818181;
+	color: white;
+	transition: all 0.3s ease;
+}
+
 .aboutContainer {
 	max-width: 1000px;
 }
@@ -515,6 +540,13 @@ main {
 	.hero h1 {
 		text-align: center;
 	}
+	.mueblesBtnMobile{
+		display: block;
+	}
+	.mueblesBtn{
+		display: none;
+	}
+
 
 }
 
