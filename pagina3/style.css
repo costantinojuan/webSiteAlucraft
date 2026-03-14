@@ -1,0 +1,263 @@
+body {
+	font-family: "roboto", sans-serif;
+	margin: 0;
+}
+
+.navBar {
+	display: flex;
+	background-color: rgb(255, 255, 255);
+	position: fixed;
+	width: 100%;
+	height: 45px;
+	top: 0;
+	margin: 0;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	z-index: 1000;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navBar .listBar {
+	font-family: "Source Sans 3";
+	text-transform: uppercase;
+	letter-spacing: 0.3px;
+	list-style: none;
+	display: flex;
+	font-size: 14px;
+	margin: 0;
+	padding: 0;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+
+.navBar .listBar li {
+	width: 200px;
+}
+
+.listBar .contact {
+	background-color: black;
+}
+
+.listBar .contact p {
+	color: white;
+}
+
+.listBar .pergolas, 
+.listBar .mobiliario{
+  border-right: 0.5px solid #cfcfcf;
+
+}
+
+.navBar a {
+	text-decoration: none;
+	color: black;
+}
+
+.logoNav {
+	height: 40px;
+	margin-left: 10px;
+	align-self: flex-start;
+}
+
+.hamburger {
+	display: none;
+	flex-direction: column;
+	gap: 5px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	margin-right: 20px;
+}
+
+.hamburger span {
+	width: 25px;
+	height: 2px;
+	background: black;
+	transition: 0.3s ease;
+}
+.hero {
+	height: 90vh;
+	background-image: url("/multimedia-portadas/IMG_3451.webp");
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+}
+
+.hero::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.5);
+}
+
+main{
+    margin: 40px 0px 40px 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    gap: 40px;
+}
+main .juegoLivingExterior{
+    width: 100%;
+}
+main .sillones{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    gap: 200px;
+}
+main .reposeras{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+
+
+
+
+
+
+
+
+
+
+.hero2 {
+    width:100%;
+    height: 500px;
+	background-image: url(" /multimedia-portadas/IMG_3451.webp");
+	background-size: cover;
+	background-position: center;
+	position: relative;
+}
+
+.footer {
+	background: #000;
+	color: #fff;
+	padding: 50px 50px 10px 50px;
+	font-family: "Roboto", sans-serif;
+}
+
+.footerContainer {
+	margin: auto;
+}
+
+.footerLogo {
+	font-weight: 200;
+	font-size: 18px;
+	margin-bottom: 20px;
+}
+
+.footerLine {
+	width: 40px;
+	height: 1px;
+	background: #707070;
+	margin: 20px 0 30px;
+}
+
+.footerTop p,
+.footerTop a {
+	font-size: 14px;
+	color: #ccc;
+	margin-bottom: 8px;
+	text-decoration: none;
+	display: flex;
+	flex-direction: column;
+}
+
+.footerTop a:hover {
+	color: #fff;
+}
+
+.footerBottom {
+	margin-top: 60px;
+	border-top: 1px solid #707070;
+	padding-top: 30px;
+}
+
+.footerSocials a {
+	margin-right: 20px;
+	color: #ccc;
+	text-decoration: none;
+	transition: color 0.3s ease;
+}
+
+.footerSocials a:hover {
+	color: #fff;
+}
+
+.whatsappIcon {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	z-index: 6;
+}
+
+.whatsappIcon img {
+	width: 55px;
+	height: 55px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	border-radius: 50px;
+}
+
+.whatsappIcon img:hover {
+	filter: brightness(1.2) sepia(10%) saturate(2);
+}
+
+@media (max-width: 680px) {
+
+	.listBar {
+		display: flex;
+		position: absolute;
+		top: 45px;
+		left: 0;
+		width: 100%;
+		background: white;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		padding: 0;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+	}
+
+	.listBar.active {
+		display: none;
+	}
+
+	.navBar .listBar li {
+		padding: 25px 0;
+		text-align: center;
+		width: 100%;
+	}
+	.listBar .pergolas, 
+	.listBar .mobiliario{
+  	border-right: none;
+  	border-bottom: 0.5px solid #cfcfcf;
+
+}
+
+	.hamburger {
+		display: flex;
+	}
+
+}
+
+@media (max-width: 720px) {
+    main .sillones{
+        flex-direction: column;
+        gap: 40px;
+    }
+}
+
+
+

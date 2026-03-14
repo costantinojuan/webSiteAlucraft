@@ -1,0 +1,15 @@
+RewriteEngine On
+
+# Redirigir de HTTP a HTTPS y eliminar 'www' utilizando THE_REQUEST
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s/(.*)\sHTTP/ [NC]
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} ^www\.alucraft\.com\.ar$ [NC]
+RewriteRule ^ https://alucraft.com.ar/%1 [R=301,L]
+
+# Quitar index.html de la URL
+RewriteRule ^index\.html$ / [R=301,L]
+
+# Reescritura de URLs limpias a archivos reales
+RewriteRule ^pergolas/?$ pagina2/pergolas.html [L]
+RewriteRule ^mobiliarioExterior/?$ pagina3/mobiliarioExterior.html [L]
+RewriteRule ^contacto/?$ pagina4/contacto.html [L]

@@ -1,0 +1,10 @@
+[06-Dec-2025 20:45:56 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "name" in /home/alucraf1/public_html/enviar.php on line 28
+[06-Dec-2025 20:45:56 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "telefono" in /home/alucraf1/public_html/enviar.php on line 29
+[06-Dec-2025 20:45:56 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "email" in /home/alucraf1/public_html/enviar.php on line 30
+[06-Dec-2025 20:45:56 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "message" in /home/alucraf1/public_html/enviar.php on line 31
+[06-Dec-2025 20:45:57 America/Argentina/Buenos_Aires] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/alucraf1/public_html/enviar.php:28) in /home/alucraf1/public_html/enviar.php on line 37
+[11-Dec-2025 16:04:33 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "name" in /home/alucraf1/public_html/enviar.php on line 28
+[11-Dec-2025 16:04:33 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "telefono" in /home/alucraf1/public_html/enviar.php on line 29
+[11-Dec-2025 16:04:33 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "email" in /home/alucraf1/public_html/enviar.php on line 30
+[11-Dec-2025 16:04:33 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "message" in /home/alucraf1/public_html/enviar.php on line 31
+[11-Dec-2025 16:04:34 America/Argentina/Buenos_Aires] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/alucraf1/public_html/enviar.php:28) in /home/alucraf1/public_html/enviar.php on line 37

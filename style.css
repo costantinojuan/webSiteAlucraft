@@ -1,0 +1,544 @@
+body {
+	font-family: "Roboto", sans-serif;
+	margin: 0;
+}
+
+.navBar {
+	display: flex;
+	background-color: rgb(255, 255, 255);
+	position: fixed;
+	width: 100%;
+	height: 45px;
+	top: 0;
+	margin: 0;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	z-index: 1000;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navBar .listBar {
+	font-family: "Source Sans 3";
+	text-transform: uppercase;
+	letter-spacing: 0.3px;
+	list-style: none;
+	display: flex;
+	font-size: 14px;
+	margin: 0;
+	padding: 0;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+
+.navBar .listBar li {
+	width: 200px;
+}
+
+.listBar .contact {
+	background-color: black;
+}
+
+.listBar .contact p {
+	color: white;
+}
+
+.listBar .pergolas,
+.listBar .mobiliario {
+	border-right: 0.5px solid #cfcfcf;
+
+}
+
+.navBar a {
+	text-decoration: none;
+	color: black;
+}
+
+.logoNav {
+	height: 40px;
+	margin-left: 10px;
+	align-self: flex-start;
+}
+
+.hamburger {
+	display: none;
+	flex-direction: column;
+	gap: 5px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	margin-right: 20px;
+}
+
+.hamburger span {
+	width: 25px;
+	height: 2px;
+	background: black;
+	transition: 0.3s ease;
+}
+
+.hero {
+	height: 90vh;
+	background-image: url("/multimedia-portadas/IMG_3451.webp");
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+}
+
+.hero::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.5);
+}
+
+.hero h1 {
+	font-weight: 100;
+	position: relative;
+	color: white;
+	font-size: 48px;
+	z-index: 2;
+}
+
+main {
+	display: flex;
+	flex-direction: column;
+	margin: 64px;
+}
+
+.pergolasCompare {
+	text-align: center;
+	padding-top: 60px;
+
+}
+
+.pergolasCompare h2 {
+	color: black;
+	font-size: 18px;
+	margin-bottom: 30px;
+	opacity: 0.6;
+	font-weight: 400;
+
+
+}
+
+.pergolasCompare .sub {
+	margin-bottom: 60px;
+	font-size: 36px;
+	line-height: 1.2;
+	font-weight: 100;
+	color: #646464;
+
+}
+
+.compareContainer {
+	display: flex;
+	height: 500px;
+	overflow: hidden;
+	border-radius: 14px;
+}
+
+.panel {
+	flex: 1;
+	position: relative;
+	background-size: cover;
+	background-position: center;
+	display: flex;
+	align-items: flex-end;
+	transition: all .6s ease;
+	cursor: pointer;
+}
+
+.panel::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(to top,
+			rgba(0, 0, 0, 0.85),
+			rgba(0, 0, 0, 0.4),
+			transparent);
+}
+
+.panel:hover {
+	flex: 2;
+}
+
+.content {
+	position: relative;
+	z-index: 2;
+	color: white;
+	padding: 40px;
+	text-align: left;
+	max-width: 550px;
+}
+
+.content h3 {
+	font-size: 32px;
+	margin-bottom: 10px;
+}
+
+.content p {
+	opacity: .9;
+	margin-bottom: 20px;
+}
+
+.content a {
+	display: inline-block;
+	background: white;
+	color: black;
+	padding: 10px 20px;
+	border-radius: 6px;
+	text-decoration: none;
+	font-weight: 600;
+}
+
+.movil {
+	background-image: url("./multimedia-portadas/2.webp");
+}
+
+.fija {
+	background-image: url("./multimedia-portadas/3.webp");
+}
+
+.mueblesHome {
+	padding: 120px 8%;
+	max-width: 1400px;
+	margin: auto;
+}
+
+.mueblesText {
+	margin-bottom: 60px;
+}
+
+.tag {
+	font-size: 18px;
+	opacity: 0.6;
+	color: black;
+	display: block;
+	margin-bottom: 20px;
+	font-weight: 400;
+}
+
+.mueblesText h2 {
+	font-weight: 100;
+	font-size: 36px;
+	line-height: 1.2;
+	color: #444;
+	margin-bottom: 30px;
+}
+
+.mueblesText p {
+	font-size: 36px;
+	color: #555;
+	font-weight: 100;
+}
+
+.mueblesText a {
+	color: black;
+	text-decoration: underline 1.5px;
+	text-underline-offset: 4px;
+	font-weight: 150;
+	transition: all 0.2s ease;
+
+
+}
+
+.mueblesText a:hover {
+	color: rgb(165, 165, 165);
+	text-decoration: underline 2px;
+	text-underline-offset: 5px;
+
+}
+
+.mueblesPic img {
+	width: 100%;
+	object-fit: contain;
+}
+
+.mueblesBtn {
+	text-align: center;
+	margin-top: 50px;
+}
+
+.mueblesBtn a {
+	background: black;
+	color: white;
+	padding: 14px 28px;
+	border-radius: 6px;
+	text-decoration: none;
+	font-weight: 500;
+}
+
+.mueblesBtn a:hover {
+	background: #6f6f6f;
+	color: white;
+	transition: all 0.3s ease;
+
+}
+
+.aboutContainer {
+	max-width: 1000px;
+}
+
+.aboutContainer p {
+	font-size: 18px;
+}
+
+.aboutLabel {
+	color: black;
+	margin-bottom: 30px;
+	opacity: 0.6;
+}
+
+.aboutText {
+	font-size: 36px;
+	line-height: 1.2;
+	font-weight: 100;
+	color: #646464;
+}
+
+.aboutText a {
+	color: black;
+	font-weight: 200;
+	text-decoration: underline;
+	text-decoration-thickness: 2px;
+	text-underline-offset: 6px;
+	transition: opacity 0.3s ease;
+}
+
+.aboutText a:hover {
+	opacity: 0.4;
+}
+
+.reveal {
+	opacity: 0;
+	transform: translateY(60px);
+	transition: all 0.8s ease;
+}
+
+.reveal.active {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.hero2 {
+	height: 538px;
+	background-image: url("./multimedia-portadas/IMG_3451.webp");
+	background-size: cover;
+	background-position: center;
+	position: relative;
+	display: flex;
+	align-items: center;
+	padding: 0 8%;
+	color: white;
+}
+
+.hero2::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.35);
+}
+
+.heroContent {
+	position: relative;
+	max-width: 700px;
+}
+
+.heroLabel {
+	font-size: 20px;
+	margin-bottom: 20px;
+	opacity: 0.8;
+	letter-spacing: 0.5px;
+}
+
+.heroTitle {
+	font-size: 52px;
+	line-height: 1.1;
+	font-weight: 400;
+	margin-bottom: 40px;
+}
+
+.heroButton {
+	display: inline-block;
+	padding: 10px 20px;
+	background: white;
+	color: black;
+	text-decoration: none;
+	border-radius: 10px;
+	font-size: 20px;
+	transition: all 0.3s ease;
+}
+
+.heroButton:hover {
+	background: #757575;
+	color: white;
+}
+
+.footer {
+	background: #000;
+	color: #fff;
+	padding: 50px 50px 10px 50px;
+	font-family: "Roboto", sans-serif;
+}
+
+.footerContainer {
+	margin: auto;
+}
+
+.footerLogo {
+	font-weight: 200;
+	font-size: 18px;
+	margin-bottom: 20px;
+}
+
+.footerLine {
+	width: 40px;
+	height: 1px;
+	background: #707070;
+	margin: 20px 0 30px;
+}
+
+.footerTop p,
+.footerTop a {
+	font-size: 14px;
+	color: #ccc;
+	margin-bottom: 8px;
+	text-decoration: none;
+	display: flex;
+	flex-direction: column;
+}
+
+.footerTop a:hover {
+	color: #fff;
+}
+
+.footerBottom {
+	margin-top: 60px;
+	border-top: 1px solid #707070;
+	padding-top: 30px;
+}
+
+.footerSocials a {
+	margin-right: 20px;
+	color: #ccc;
+	text-decoration: none;
+	transition: color 0.3s ease;
+}
+
+.footerSocials a:hover {
+	color: #fff;
+}
+
+.whatsappIcon {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	z-index: 6;
+}
+
+.whatsappIcon img {
+	width: 55px;
+	height: 55px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	border-radius: 50px;
+}
+
+.whatsappIcon img:hover {
+	filter: brightness(1.2) sepia(10%) saturate(2);
+}
+
+@media (max-width: 680px) {
+
+	.listBar {
+		display: flex;
+		position: absolute;
+		top: 45px;
+		left: 0;
+		width: 100%;
+		background: white;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		padding: 0;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+	}
+
+	.listBar.active {
+		display: none;
+	}
+
+	.navBar .listBar li {
+		padding: 25px 0;
+		text-align: center;
+		width: 100%;
+	}
+
+	.listBar .pergolas,
+	.listBar .mobiliario {
+		border-right: none;
+		border-bottom: 0.5px solid #cfcfcf;
+
+	}
+
+	.hamburger {
+		display: flex;
+	}
+
+}
+
+
+@media (max-width: 814px) {
+	.hero h1 {
+		text-align: center;
+	}
+
+}
+
+
+@media (max-width:400px) {
+	main {
+		margin: 20px;
+	}
+
+	.galleryBox h2 {
+		font-size: 36px;
+	}
+
+	.aboutContainer h2 {
+		font-size: 36px;
+	}
+
+	.hero2 .heroLabel {
+		font-size: 18px;
+	}
+
+	.hero2 .heroTitle {
+		font-size: 24px;
+	}
+
+
+}
+
+@media(max-width:900px) {
+
+	.compareContainer {
+		flex-direction: column;
+		height: auto;
+	}
+
+	.panel {
+		height: 320px;
+	}
+
+	.panel:hover {
+		flex: 1;
+	}
+
+}
