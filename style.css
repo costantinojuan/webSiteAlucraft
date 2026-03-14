@@ -197,6 +197,12 @@ main {
 	font-weight: 600;
 }
 
+.content a:hover{
+	background: #353535;
+	color: white;
+	transition: all 0.3s ease;
+}
+
 .movil {
 	background-image: url("./multimedia-portadas/2.webp");
 }
@@ -253,6 +259,14 @@ main {
 
 }
 
+.mueblesPic{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-around;
+
+}
+
 .mueblesPic img {
 	width: 100%;
 	object-fit: contain;
@@ -260,20 +274,22 @@ main {
 
 .mueblesBtn {
 	text-align: center;
-	margin-top: 50px;
+	position: absolute;
 }
 
 .mueblesBtn a {
-	background: black;
-	color: white;
-	padding: 14px 28px;
+	display: inline-block;
+	background: white;
+	color: black;
+	padding: 10px 20px;
 	border-radius: 6px;
 	text-decoration: none;
-	font-weight: 500;
+	font-weight: 600;
+	font-size: 20px;
 }
 
 .mueblesBtn a:hover {
-	background: #6f6f6f;
+	background: #353535;
 	color: white;
 	transition: all 0.3s ease;
 }
@@ -300,16 +316,19 @@ main {
 }
 
 .aboutText a {
+	display: inline-block;
+	background: white;
 	color: black;
-	font-weight: 200;
-	text-decoration: underline;
-	text-decoration-thickness: 2px;
-	text-underline-offset: 6px;
-	transition: opacity 0.3s ease;
+	padding: 10px 20px;
+	border-radius: 6px;
+	text-decoration: none;
+	font-weight: 600;
 }
 
 .aboutText a:hover {
-	opacity: 0.4;
+	background: black;
+	color: white;
+	transition: all 0.3s ease;
 }
 
 .reveal {
@@ -370,10 +389,11 @@ main {
 	border-radius: 10px;
 	font-size: 20px;
 	transition: all 0.3s ease;
+	font-weight: 600;
 }
 
 .heroButton:hover {
-	background: #757575;
+	background: #353535;
 	color: white;
 }
 
