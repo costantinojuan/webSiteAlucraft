@@ -244,8 +244,6 @@ main {
 	text-underline-offset: 4px;
 	font-weight: 150;
 	transition: all 0.2s ease;
-
-
 }
 
 .mueblesText a:hover {
@@ -278,7 +276,6 @@ main {
 	background: #6f6f6f;
 	color: white;
 	transition: all 0.3s ease;
-
 }
 
 .aboutContainer {
