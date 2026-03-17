@@ -80,9 +80,9 @@ body {
 
 .hero {
 	height: 90vh;
-	background-image: url("/multimedia-portadas/IMG_3451.webp");
+	background-image: url("/multimedia-portadas/pergolaFija.png");
 	background-size: cover;
-	background-position: center;
+	background-position: 50% 20%;
 	background-repeat: no-repeat;
 	display: flex;
 	justify-content: center;
@@ -204,11 +204,11 @@ main {
 }
 
 .movil {
-	background-image: url("./multimedia-portadas/2.webp");
+	background-image: url("./multimedia-portadas/1.webp");
 }
 
 .fija {
-	background-image: url("./multimedia-portadas/3.webp");
+	background-image: url("./multimedia-portadas/IMG_3704.webp");
 }
 
 .mueblesHome {
