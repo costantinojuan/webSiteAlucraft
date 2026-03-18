@@ -90,6 +90,71 @@
                <p>The Outer Deck</p>
             </div>
          </section>
+
+         <!-- Portfolio modal + grid -->
+         <section class="portfolioSection">
+            <div class="portfolioContainer">
+               <section class="album">
+                  <h2>Fijas</h2>
+                  <div class="portfolioGrid">
+                     <div class="card" onclick="openPortfolioModal(0)">
+                        <img src="./multimedia-portadas/IMG_3451.webp" alt="F1">
+                        <div class="card-title">F1</div>
+                     </div>
+                     <div class="card" onclick="openPortfolioModal(1)">
+                        <img src="./multimedia-portadas/833AE57E-CB63-4DED-8621-4E7BB96AD296_1_105_c.jpeg" alt="F2">
+                        <div class="card-title">F2</div>
+                     </div>
+                     <div class="card" onclick="openPortfolioModal(2)">
+                        <img src="./multimedia-portadas/1.webp" alt="F3">
+                        <div class="card-title">F3</div>
+                     </div>
+                     <div class="card" onclick="openPortfolioModal(3)">
+                        <img src="./multimedia-portadas/2.webp" alt="F4">
+                        <div class="card-title">F4</div>
+                     </div>
+                  </div>
+               </section>
+
+               <section class="album">
+                  <h2>Móviles</h2>
+                  <div class="portfolioGrid">
+                     <div class="card" onclick="openPortfolioModal(4)">
+                        <img src="../multimedia-portadas/1.webp" alt="M1">
+                        <div class="card-title">M1</div>
+                     </div>
+                     <div class="card" onclick="openPortfolioModal(5)">
+                        <img src="../multimedia-portadas/4.webp" alt="M2">
+                        <div class="card-title">M2</div>
+                     </div>
+                     <div class="card" onclick="openPortfolioModal(6)">
+                        <img src="../multimedia-portadas/5.webp" alt="M3">
+                        <div class="card-title">M3</div>
+                     </div>
+                     <div class="card" onclick="openPortfolioModal(7)">
+                        <img src="../multimedia-portadas/6.webp" alt="M4">
+                        <div class="card-title">M4</div>
+                     </div>
+                  </div>
+               </section>
+            </div>
+            <!-- modal -->
+            <div class="modal" id="portfolioModal">
+               <div class="modal-content">
+                  <span class="close" onclick="closePortfolioModal()">✖</span>
+                  <div class="modal-header">
+                     <button class="modal-nav prev" onclick="prevPortfolioImage()">‹</button>
+                     <div class="modal-title-wrapper">
+                        <h2 id="portfolioModalTitle"></h2>
+                        <span id="portfolioModalCounter" class="modal-counter"></span>
+                     </div>
+                     <button class="modal-nav next" onclick="nextPortfolioImage()">›</button>
+                  </div>
+                  <div id="portfolioGallery"></div>
+               </div>
+            </div>
+         </section>
+
          <section class="interiorSection">
             <div class="interiorHeader reveal">
                <span>Interior Views</span>
