@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Portfolio Pérgolas</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f5f5f5;
+}
+
+/* GRID */
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 80px;
+}
+
+.album {
+  margin-bottom: 60px;
+}
+
+.album h2 {
+  font-size: 28px;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+  justify-content: center;
+  padding: 0;
+}
+
+
+/* CARD */
+.card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1; /* cuadrado */
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 12px;
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.3s;
+}
+
+.card:hover img {
+  transform: scale(1.1);
+}
+
+.card-title {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 10px;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  font-size: 14px;
+}
+
+/* MODAL */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  max-width: 800px;
+  width: 90%;
+  max-height: 90vh;
+  overflow: auto;
+  border-radius: 10px;
+}
+
+.modal img {
+  width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  margin-bottom: 10px;
+  border-radius: 8px;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.modal-header h2 {
+  font-size: 18px;
+  margin: 0;
+  text-align: center;
+  flex: 1;
+  color: #333;
+}
+
+.modal-title-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-counter {
+  font-size: 12px;
+  color: rgba(0,0,0,0.6);
+  margin-top: 4px;
+}
+
+.modal-nav {
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.modal-nav:hover {
+  background: rgba(255, 255, 255, 1);
+}
+
+.close {
+  float: right;
+  cursor: pointer;
+  font-size: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <section class="album">
+    <h2>Fijas</h2>
+    <div class="grid">
+      <div class="card" onclick="openModal(0)">
+        <img src="./multimedia-portadas/1.webp">
+        <div class="card-title">F1</div>
+      </div>
+
+      <div class="card" onclick="openModal(1)">
+        <img src="./multimedia-portadas/2.webp">
+        <div class="card-title">F2</div>
+      </div>
+
+      <div class="card" onclick="openModal(2)">
+        <img src="./multimedia-portadas/3.webp">
+        <div class="card-title">F3</div>
+      </div>
+
+      <div class="card" onclick="openModal(3)">
+        <img src="./multimedia-portadas/4.webp">
+        <div class="card-title">F4</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="album">
+    <h2>Móviles</h2>
+    <div class="grid">
+      <div class="card" onclick="openModal(4)">
+        <img src="./multimedia-portadas/5.webp">
+        <div class="card-title">M1</div>
+      </div>
+
+      <div class="card" onclick="openModal(5)">
+        <img src="./multimedia-portadas/6.webp">
+        <div class="card-title">M2</div>
+      </div>
+
+      <div class="card" onclick="openModal(6)">
+        <img src="./multimedia-portadas/7.webp">
+        <div class="card-title">M3</div>
+      </div>
+
+      <div class="card" onclick="openModal(7)">
+        <img src="./multimedia-portadas/8.webp">
+        <div class="card-title">M4</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">✖</span>
+    <div class="modal-header">
+      <button class="modal-nav prev" onclick="prevImage()">‹</button>
+      <div class="modal-title-wrapper">
+        <h2 id="modalTitle"></h2>
+        <span id="modalCounter" class="modal-counter"></span>
+      </div>
+      <button class="modal-nav next" onclick="nextImage()">›</button>
+    </div>
+    <div id="gallery"></div>
+  </div>
+</div>
+
+<script>
+const albums = [
+  {
+    title: "F1",
+    images: [
+      "./multimedia-portadas/1.webp",
+      "./multimedia-portadas/2.webp"
+    ]
+  },
+  {
+    title: "F2",
+    images: [
+      "./multimedia-portadas/3.webp",
+      "./multimedia-portadas/4.webp"
+    ]
+  },
+  {
+    title: "F3",
+    images: [
+      "./multimedia-portadas/5.webp",
+      "./multimedia-portadas/6.webp"
+    ]
+  },
+  {
+    title: "F4",
+    images: [
+      "./multimedia-portadas/7.webp",
+      "./multimedia-portadas/8.webp"
+    ]
+  },
+  {
+    title: "M1",
+    images: [
+      "./multimedia-portadas/2.webp",
+      "./multimedia-portadas/1.webp"
+    ]
+  },
+  {
+    title: "M2",
+    images: [
+      "./multimedia-portadas/4.webp",
+      "./multimedia-portadas/3.webp"
+    ]
+  },
+  {
+    title: "M3",
+    images: [
+      "./multimedia-portadas/6.webp",
+      "./multimedia-portadas/5.webp"
+    ]
+  },
+  {
+    title: "M4",
+    images: [
+      "./multimedia-portadas/8.webp",
+      "./multimedia-portadas/7.webp"
+    ]
+  }
+];
+
+let currentAlbum = 0;
+let currentImage = 0;
+
+function openModal(albumIndex) {
+  currentAlbum = albumIndex;
+  currentImage = 0;
+  showImage();
+  const modal = document.getElementById("modal");
+  modal.style.display = "flex";
+  modal.setAttribute("aria-hidden", "false");
+}
+
+function closeModal() {
+  const modal = document.getElementById("modal");
+  modal.style.display = "none";
+  modal.setAttribute("aria-hidden", "true");
+}
+
+function showImage() {
+  const album = albums[currentAlbum];
+  const gallery = document.getElementById("gallery");
+  const title = document.getElementById("modalTitle");
+  const counter = document.getElementById("modalCounter");
+
+  if (!album) return;
+
+  const images = album.images || [];
+  if (!images.length) return;
+
+  // Normalize index
+  if (currentImage < 0) currentImage = images.length - 1;
+  if (currentImage >= images.length) currentImage = 0;
+
+  title.textContent = album.title || "";
+  counter.textContent = `${currentImage + 1} / ${images.length}`;
+  gallery.innerHTML = "";
+
+  const img = document.createElement("img");
+  img.src = images[currentImage];
+  img.alt = album.title || "";
+  gallery.appendChild(img);
+}
+
+function prevImage() {
+  currentImage -= 1;
+  showImage();
+}
+
+function nextImage() {
+  currentImage += 1;
+  showImage();
+}
+
+window.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeModal();
+  }
+});
+
+// Click outside modal content to close
+const modalEl = document.getElementById("modal");
+if (modalEl) {
+  modalEl.addEventListener("click", (event) => {
+    if (event.target === modalEl) {
+      closeModal();
+    }
+  });
+}
+</script>
+
+</body>
+</html>

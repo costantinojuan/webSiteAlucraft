@@ -369,9 +369,9 @@ main {
 
 .hero2 {
 	height: 538px;
-	background-image: url("./multimedia-portadas/IMG_3451.webp");
+	background-image: url("./multimedia-portadas/833AE57E-CB63-4DED-8621-4E7BB96AD296_1_105_c.jpeg");
 	background-size: cover;
-	background-position: center;
+	background-position: 50% 20%;
 	position: relative;
 	display: flex;
 	align-items: center;
