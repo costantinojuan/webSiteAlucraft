@@ -555,21 +555,24 @@ body {
 	align-items: center;
 	justify-content: center;
 	padding: 14px 30px;
-	background: #111;
-	border: 1px solid #111;
+	background: rgb(88, 186, 58);
+	border: 1px solid black;
 	border-radius: 999px;
 	font-family: "Source Sans 3", sans-serif;
 	font-size: 18px;
 	font-weight: 600;
-	color: #fff;
+	color: black;
 	text-decoration: none;
 	transition: all 0.25s ease;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .ctaButton:hover {
 	background: transparent;
 	color: #111;
 	transform: translateY(-2px);
+	border: 1px solid black;
+
 }
 
 .reveal {
