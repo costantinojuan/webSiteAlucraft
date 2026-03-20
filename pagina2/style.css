@@ -105,8 +105,8 @@ body {
 }
 
 .pergolaTypes {
-	padding: 100px 0;
-	background: #f8f8f8;
+	padding: 80px 0;
+	background: #fff;
 }
 
 .pergolaTypesHeader {
@@ -228,8 +228,8 @@ body {
 }
 
 .whyChoose {
-	padding: 100px 0;
-	background: #fff;
+	padding: 80px 0;
+	background: #f9f9f9;
 }
 
 .whyContainer {
@@ -306,7 +306,7 @@ body {
 .processSection {
 	--process-image-size: 240px;
 	--process-icon-size: 60px;
-	padding: 100px 0;
+	padding: 80px 0;
 	background: #fff;
 }
 
@@ -414,7 +414,7 @@ body {
 
 /* Portfolio grid + modal */
 .portfolioSection {
-	padding: 100px 0;
+	padding: 80px 0;
 	background: #f9f9f9;
 }
 
@@ -571,6 +571,10 @@ body {
 	font-size: 20px;
 }
 
+
+.ctaSection {
+	padding: 90px 0;
+}
 
 .ctaContainer {
 	max-width: 760px;
