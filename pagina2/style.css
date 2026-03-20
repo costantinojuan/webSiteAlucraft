@@ -120,27 +120,16 @@ body {
 }
 
 .pergolaTypes .pergolaType {
-	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	gap: 40px;
-	align-items: start;
+	position: relative;
 	max-width: 1100px;
 	margin: 0 auto 80px;
 }
 
-.pergolaTypes .pergolaType:nth-of-type(even) .pergolaTypeImage {
-	order: 2;
-}
-
-.pergolaTypes .pergolaType:nth-of-type(even) .pergolaTypeContent {
-	order: 1;
-}
-
 .pergolaTypeImage {
 	width: 100%;
-	aspect-ratio: 4 / 3;
+	aspect-ratio: 16 / 10;
 	overflow: hidden;
-	border-radius: 16px;
+	border-radius: 0;
 }
 
 .pergolaTypeImage img {
@@ -148,6 +137,25 @@ body {
 	height: 100%;
 	object-fit: cover;
 	display: block;
+}
+
+.pergolaTypeContent {
+	position: absolute;
+	left: 28px;
+	bottom: 28px;
+	max-width: 420px;
+	padding: 18px 20px;
+	background: rgba(255, 255, 255, 0.78);
+	backdrop-filter: blur(2px);
+	border-radius: 14px;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+	text-align: left;
+}
+
+.pergolaTypes .pergolaType:nth-of-type(even) .pergolaTypeContent {
+	left: auto;
+	right: 28px;
+	text-align: left;
 }
 
 .pergolaTypeContent h2 {
@@ -162,8 +170,8 @@ body {
 }
 
 .pergolaTypeList {
-	list-style: disc;
-	padding-left: 22px;
+	list-style: none;
+	padding-left: 0;
 	color: rgba(0,0,0,0.75);
 	margin: 0;
 }
@@ -173,11 +181,20 @@ body {
 }
 
 @media (max-width: 900px) {
-	.pergolaTypes .pergolaType {
-		grid-template-columns: 1fr;
-	}
 	.pergolaTypes {
 		padding: 80px 60px;
+	}
+	.pergolaTypeContent {
+		left: 16px;
+		right: 16px;
+		bottom: 16px;
+		max-width: none;
+		padding: 14px 16px;
+	}
+	.pergolaTypes .pergolaType:nth-of-type(even) .pergolaTypeContent {
+		left: 16px;
+		right: 16px;
+		text-align: right;
 	}
 	.pergolaTypesHeader h2 {
 		font-size: 32px;
@@ -194,11 +211,19 @@ body {
 	.pergolaTypesHeader h2 {
 		font-size: 28px;
 	}
+	.pergolaTypeImage {
+		aspect-ratio: 4 / 3;
+	}
 	.pergolaTypeContent h2 {
-		font-size: 28px;
+		font-size: 24px;
+		margin-bottom: 8px;
 	}
 	.pergolaTypeText {
-		font-size: 16px;
+		font-size: 15px;
+		margin-bottom: 12px;
+	}
+	.pergolaTypeList li {
+		margin-bottom: 6px;
 	}
 }
 

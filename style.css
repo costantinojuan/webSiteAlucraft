@@ -177,6 +177,11 @@ main {
 	max-width: 550px;
 }
 
+.panel.fija .content {
+	text-align: right;
+	margin-left: auto;
+}
+
 .content h3 {
 	font-size: 32px;
 	margin-bottom: 10px;
