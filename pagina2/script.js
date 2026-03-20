@@ -34,6 +34,36 @@ const observer = new IntersectionObserver((entries) => {
 reveals.forEach(el => observer.observe(el));
 
   /* =========================
+     PROCESS LINE ALIGNMENT
+  ========================= */
+
+  const processSteps = document.querySelector(".processSteps");
+  const processIcons = document.querySelectorAll(".processStep .processIcon");
+
+  const updateProcessLine = () => {
+    if (!processSteps || processIcons.length < 2) return;
+
+    const firstIcon = processIcons[0];
+    const lastIcon = processIcons[processIcons.length - 1];
+
+    const stepsRect = processSteps.getBoundingClientRect();
+    const firstRect = firstIcon.getBoundingClientRect();
+    const lastRect = lastIcon.getBoundingClientRect();
+
+    const lineTop = firstRect.top + firstRect.height / 2 - stepsRect.top;
+    const lineLeft = firstRect.left + firstRect.width / 2 - stepsRect.left;
+    const lineRight = stepsRect.right - (lastRect.left + lastRect.width / 2);
+
+    processSteps.style.setProperty("--process-line-top", `${lineTop}px`);
+    processSteps.style.setProperty("--process-line-left", `${lineLeft}px`);
+    processSteps.style.setProperty("--process-line-right", `${lineRight}px`);
+  };
+
+  updateProcessLine();
+  window.addEventListener("resize", updateProcessLine);
+  window.addEventListener("load", updateProcessLine);
+
+  /* =========================
      PORTFOLIO
   ========================= */
 

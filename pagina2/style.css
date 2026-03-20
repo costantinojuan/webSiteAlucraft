@@ -264,6 +264,8 @@ body {
 
 /* Process section */
 .processSection {
+	--process-image-size: 240px;
+	--process-icon-size: 60px;
 	padding: 100px 0;
 	background: #fff;
 }
@@ -286,29 +288,33 @@ body {
 	align-items: center;
 	position: relative;
 	margin-top: 40px;
+	--process-line-top: calc(var(--process-image-size) + 15px + (var(--process-icon-size) / 2));
+	--process-line-left: 0px;
+	--process-line-right: 0px;
 }
 
 .processSteps::before {
 	content: '';
 	position: absolute;
-	top: 50%;
-	left: 0;
-	right: 0;
+	top: var(--process-line-top);
+	left: var(--process-line-left);
+	right: var(--process-line-right);
 	height: 2px;
 	background: #e0e0e0;
 	z-index: 1;
 }
 
 .processStep {
-	background: #fff;
-	z-index: 2;
+	background: transparent;
+	position: relative;
+	flex: 1;
 	text-align: center;
 	padding: 0 20px;
 }
 
 .processImage {
 	width: 100%;
-	max-width: 180px;
+	max-width: var(--process-image-size);
 	aspect-ratio: 1 / 1;
 	height: auto;
 	object-fit: cover;
@@ -331,6 +337,8 @@ body {
 	font-size: 20px;
 	font-weight: bold;
 	margin: 0 auto 15px;
+	position: relative;
+	z-index: 2;
 }
 
 .processStep p {
@@ -340,6 +348,10 @@ body {
 }
 
 @media (max-width: 768px) {
+	.processSection {
+		--process-icon-size: 50px;
+	}
+
 	.processSteps {
 		flex-direction: column;
 		gap: 30px;
@@ -349,6 +361,9 @@ body {
 	}
 	.processStep {
 		padding: 0;
+	}
+	.processImage {
+		max-width: 280px;
 	}
 	.processIcon {
 		width: 50px;
