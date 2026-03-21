@@ -300,12 +300,26 @@ main {
 
 .mueblesBtn {
 	position: absolute;
-	left: 30px;
+	left: 50%;
 	bottom: 30px;
+	transform: translateX(-50%);
 	z-index: 2;
-	text-align: left;
+	text-align: center;
 	max-width: 620px;
+	width: 100%;
 	color: #fff;
+}
+
+.mueblesTag {
+	display: inline-block;
+	font-size: 11px;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	background: rgba(255,255,255,0.2);
+	border: 1px solid rgba(255,255,255,0.4);
+	padding: 4px 12px;
+	border-radius: 20px;
+	margin-bottom: 12px;
 }
 
 .mueblesBtn h3 {

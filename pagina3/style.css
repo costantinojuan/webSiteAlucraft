@@ -1,64 +1,71 @@
 body {
-	font-family: "roboto", sans-serif;
+	font-family: "Roboto", sans-serif;
 	margin: 0;
+	color: #1a1a1a;
 }
 
+/* ── Navbar ────────────────────────────────── */
 .navBar {
 	display: flex;
-	background-color: rgb(255, 255, 255);
+	background-color: #fff;
 	position: fixed;
 	width: 100%;
-	height: 45px;
+	height: 52px;
 	top: 0;
-	margin: 0;
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
 	z-index: 1000;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	box-sizing: border-box;
 }
 
 .navBar .listBar {
-	font-family: "Source Sans 3";
+	font-family: "Source Sans 3", sans-serif;
 	text-transform: uppercase;
-	letter-spacing: 0.3px;
+	letter-spacing: 0.5px;
 	list-style: none;
 	display: flex;
-	font-size: 14px;
+	font-size: 13px;
 	margin: 0;
 	padding: 0;
 	align-items: center;
-	justify-content: center;
-	text-align: center;
+	height: 100%;
 }
 
 .navBar .listBar li {
-	width: 200px;
+	width: 180px;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .listBar .contact {
-	background-color: black;
+	background-color: #111;
 }
 
 .listBar .contact p {
-	color: white;
+	color: #fff;
 }
 
-.listBar .pergolas, 
-.listBar .mobiliario{
-  border-right: 0.5px solid #cfcfcf;
+.listBar .pergolas,
+.listBar .mobiliario {
+	border-right: 1px solid #e8e8e8;
+}
 
+.listBar li p {
+	margin: 0;
 }
 
 .navBar a {
 	text-decoration: none;
-	color: black;
+	color: #111;
 }
 
 .logoNav {
-	height: 40px;
-	margin-left: 10px;
-	align-self: flex-start;
+	height: 38px;
+	margin-left: 16px;
 }
 
 .hamburger {
@@ -69,23 +76,28 @@ body {
 	border: none;
 	cursor: pointer;
 	margin-right: 20px;
+	padding: 4px;
 }
 
 .hamburger span {
-	width: 25px;
+	width: 24px;
 	height: 2px;
-	background: black;
+	background: #111;
 	transition: 0.3s ease;
+	display: block;
 }
+
+/* ── Hero ───────────────────────────────────── */
 .hero {
 	height: 90vh;
-	background-image: url("/multimedia-portadas/IMG_3451.webp");
+	min-height: 480px;
+	background-image: url("/multimedia-portadas/juegoJardin.jpeg");
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
 	display: flex;
-	justify-content: center;
-	align-items: center;
+	align-items: flex-end;
+	padding-bottom: 80px;
 	position: relative;
 }
 
@@ -93,53 +105,140 @@ body {
 	content: "";
 	position: absolute;
 	inset: 0;
-	background: rgba(0, 0, 0, 0.5);
+	background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 60%);
 }
 
-main{
-    margin: 40px 0px 40px 0px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    gap: 40px;
-}
-main .juegoLivingExterior{
-    width: 100%;
-}
-main .sillones{
-    display: flex;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    gap: 200px;
-}
-main .reposeras{
-    display: flex;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
+.heroContent {
+	position: relative;
+	z-index: 1;
+	max-width: 700px;
+	padding: 0 60px;
+	color: #fff;
 }
 
+.heroLabel {
+	display: inline-block;
+	font-size: 12px;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	background: rgba(255,255,255,0.2);
+	border: 1px solid rgba(255,255,255,0.4);
+	padding: 4px 12px;
+	border-radius: 20px;
+	margin-bottom: 16px;
+}
 
+.heroTitle {
+	font-size: 56px;
+	font-weight: 700;
+	margin: 0 0 16px;
+	line-height: 1.05;
+}
 
+.heroSub {
+	font-size: 18px;
+	color: rgba(255,255,255,0.85);
+	margin: 0 0 28px;
+	line-height: 1.5;
+	max-width: 480px;
+}
 
+.heroBtn {
+	display: inline-block;
+	background: #fff;
+	color: #111;
+	padding: 13px 28px;
+	border-radius: 8px;
+	text-decoration: none;
+	font-weight: 600;
+	font-size: 15px;
+	transition: background 0.25s, color 0.25s;
+}
 
+.heroBtn:hover {
+	background: #111;
+	color: #fff;
+}
 
+/* ── Main layout ────────────────────────────── */
+main {
+	padding-top: 60px;
+}
 
+/* ── Category headers ───────────────────────── */
+.categoriaHeader {
+	text-align: center;
+	padding: 60px 20px 32px;
+	max-width: 600px;
+	margin: 0 auto;
+}
 
+.categoriaTag {
+	display: inline-block;
+	font-size: 11px;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	background: #f0f0f0;
+	color: #555;
+	padding: 4px 12px;
+	border-radius: 20px;
+	margin-bottom: 14px;
+}
 
+.categoriaHeader h2 {
+	font-size: 34px;
+	font-weight: 700;
+	margin: 0 0 10px;
+	color: #111;
+}
 
-.hero2 {
-    width:100%;
-    height: 500px;
-	background-image: url(" /multimedia-portadas/IMG_3451.webp");
+.categoriaHeader p {
+	font-size: 16px;
+	color: #666;
+	margin: 0;
+	line-height: 1.5;
+}
+
+/* ── Product sections ───────────────────────── */
+.productoFull {
+	width: 100%;
+	max-width: 1100px;
+	margin: 0 auto 20px;
+	padding: 0 24px;
+	box-sizing: border-box;
+}
+
+.productoGrid {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 32px;
+	max-width: 1100px;
+	margin: 0 auto 20px;
+	padding: 0 24px;
+	box-sizing: border-box;
+}
+
+/* ── Separador imagen ───────────────────────── */
+.separadorImagen {
+	width: 100%;
+	height: 320px;
+	background-image: url("/multimedia-portadas/IMG_3451.webp");
 	background-size: cover;
 	background-position: center;
+	background-attachment: fixed;
+	margin: 60px 0 0;
 	position: relative;
 }
 
+.separadorImagen::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: rgba(0,0,0,0.3);
+}
+
+/* ── Footer ─────────────────────────────────── */
 .footer {
 	background: #000;
 	color: #fff;
@@ -195,39 +294,65 @@ main .reposeras{
 	color: #fff;
 }
 
+/* ── WhatsApp icon ──────────────────────────── */
 .whatsappIcon {
 	position: fixed;
 	bottom: 20px;
 	right: 20px;
-	z-index: 6;
+	z-index: 999;
 }
 
 .whatsappIcon img {
-	width: 55px;
-	height: 55px;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-	border-radius: 50px;
+	width: 52px;
+	height: 52px;
+	box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+	border-radius: 50%;
+	transition: filter 0.2s;
 }
 
 .whatsappIcon img:hover {
-	filter: brightness(1.2) sepia(10%) saturate(2);
+	filter: brightness(1.15);
+}
+
+/* ── Responsive ─────────────────────────────── */
+@media (max-width: 768px) {
+	.heroTitle {
+		font-size: 36px;
+	}
+
+	.heroContent {
+		padding: 0 28px;
+	}
+
+	.heroSub {
+		font-size: 15px;
+	}
+
+	.categoriaHeader h2 {
+		font-size: 26px;
+	}
+
+	.separadorImagen {
+		background-attachment: scroll;
+		height: 200px;
+	}
+
+	.footer {
+		padding: 40px 24px 10px;
+	}
 }
 
 @media (max-width: 680px) {
-
 	.listBar {
-		display: flex;
 		position: absolute;
-		top: 45px;
+		top: 52px;
 		left: 0;
 		width: 100%;
-		background: white;
+		background: #fff;
 		flex-direction: column;
-		justify-content: center;
-		align-items: center;
+		height: auto;
+		box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 		padding: 0;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
 	}
 
 	.listBar.active {
@@ -235,29 +360,40 @@ main .reposeras{
 	}
 
 	.navBar .listBar li {
-		padding: 25px 0;
-		text-align: center;
 		width: 100%;
+		height: auto;
+		padding: 18px 0;
+		border-bottom: 1px solid #eee;
+		justify-content: center;
 	}
-	.listBar .pergolas, 
-	.listBar .mobiliario{
-  	border-right: none;
-  	border-bottom: 0.5px solid #cfcfcf;
 
-}
+	.listBar .pergolas,
+	.listBar .mobiliario {
+		border-right: none;
+	}
 
 	.hamburger {
 		display: flex;
 	}
 
+	.hero {
+		align-items: center;
+		padding-bottom: 0;
+	}
+
+	.heroContent {
+		text-align: center;
+		padding: 0 20px;
+	}
+
+	.heroSub {
+		max-width: 100%;
+	}
+
+	.productoGrid {
+		flex-direction: column;
+		align-items: center;
+		gap: 20px;
+	}
 }
-
-@media (max-width: 720px) {
-    main .sillones{
-        flex-direction: column;
-        gap: 40px;
-    }
-}
-
-
 
