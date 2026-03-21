@@ -10,51 +10,61 @@ body {
 	background-color: #fff;
 	position: fixed;
 	width: 100%;
-	height: 52px;
+	height: 56px;
 	top: 0;
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
 	z-index: 1000;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	padding: 0 14px;
 	box-sizing: border-box;
+	transition: height 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.navBar.scrolled {
+	height: 50px;
+	background-color: rgba(255, 255, 255, 0.96);
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
 .navBar .listBar {
 	font-family: "Source Sans 3", sans-serif;
 	text-transform: uppercase;
-	letter-spacing: 0.5px;
+	letter-spacing: 0.6px;
 	list-style: none;
 	display: flex;
 	font-size: 13px;
 	margin: 0;
 	padding: 0;
 	align-items: center;
-	height: 100%;
+	justify-content: center;
+	text-align: center;
+	gap: 8px;
 }
 
 .navBar .listBar li {
-	width: 180px;
-	height: 100%;
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	min-width: 0;
+	height: 50px;
 }
 
 .listBar .contact {
-	background-color: #111;
+	background: transparent;
+	border-radius: 0;
 }
 
-.listBar .contact p {
+.listBar .contact a {
+	background: #000;
+	border-radius: 8px;
 	color: #fff;
 }
 
-.listBar .pergolas,
-.listBar .mobiliario {
-	border-right: 1px solid #e8e8e8;
+.listBar .contact p {
+	color: inherit;
 }
 
-.listBar li p {
+.navBar .listBar p {
 	margin: 0;
 }
 
@@ -63,28 +73,56 @@ body {
 	color: #111;
 }
 
+.navBar .listBar li a {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	height: 40px;
+	padding: 0 16px;
+	border-radius: 8px;
+	transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.navBar .listBar .contact a {
+	min-width: 132px;
+	padding: 0 18px;
+}
+
 .logoNav {
-	height: 38px;
-	margin-left: 16px;
+	height: 42px;
+	margin-left: 10px;
+	align-self: center;
 }
 
 .hamburger {
 	display: none;
 	flex-direction: column;
-	gap: 5px;
+	gap: 4px;
 	background: none;
 	border: none;
 	cursor: pointer;
 	margin-right: 20px;
-	padding: 4px;
+	padding: 6px;
+	z-index: 1100;
 }
 
 .hamburger span {
 	width: 24px;
 	height: 2px;
 	background: #111;
-	transition: 0.3s ease;
-	display: block;
+	transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.hamburger.open span:nth-child(1) {
+	transform: translateY(6px) rotate(45deg);
+}
+
+.hamburger.open span:nth-child(2) {
+	opacity: 0;
+}
+
+.hamburger.open span:nth-child(3) {
+	transform: translateY(-6px) rotate(-45deg);
 }
 
 /* ── Hero ───────────────────────────────────── */
@@ -343,33 +381,80 @@ main {
 }
 
 @media (max-width: 680px) {
-	.listBar {
-		position: absolute;
-		top: 52px;
-		left: 0;
-		width: 100%;
-		background: #fff;
-		flex-direction: column;
-		height: auto;
-		box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-		padding: 0;
+	body.menu-open {
+		overflow: hidden;
 	}
 
-	.listBar.active {
+	.navBar .listBar {
 		display: none;
+		position: fixed;
+		top: 64px;
+		left: 12px;
+		right: 12px;
+		width: auto;
+		background: #fff;
+		flex-direction: column;
+		padding: 0;
+		border-radius: 14px;
+		box-shadow: 0 16px 28px rgba(0, 0, 0, 0.16);
+		pointer-events: none;
+		gap: 0;
+		justify-content: flex-start;
+		align-items: stretch;
+	}
+
+	.navBar .listBar.active {
+		display: flex;
+		pointer-events: auto;
 	}
 
 	.navBar .listBar li {
 		width: 100%;
-		height: auto;
-		padding: 18px 0;
-		border-bottom: 1px solid #eee;
+		min-width: auto;
+		padding: 0;
+		display: flex;
+		align-items: center;
 		justify-content: center;
+		border-bottom: 1px solid #eee;
+		flex: 0 0 auto;
 	}
 
-	.listBar .pergolas,
-	.listBar .mobiliario {
-		border-right: none;
+	.navBar .listBar li:last-child {
+		border-bottom: none;
+	}
+
+	.navBar .listBar li a {
+		padding: 16px 18px;
+		width: 100%;
+		height: auto;
+		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: background-color 0.25s ease;
+		border-radius: 0;
+		min-width: auto;
+	}
+
+	.navBar .listBar li a p {
+		margin: 0;
+		padding: 0;
+	}
+
+	.navBar .listBar li:not(.contact) a {
+		background: transparent;
+		color: black;
+	}
+
+	.navBar .listBar .contact {
+		border-radius: 0;
+	}
+
+	.navBar .listBar .contact a {
+		background: transparent;
+		color: black;
+		min-width: auto;
+		padding: 0 18px;
 	}
 
 	.hamburger {
