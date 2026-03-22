@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      if (!navMenu.classList.contains("active") && !navMenu.contains(event.target) && !hamburger.contains(event.target)) {
+      if (navMenu.classList.contains("active") && !navMenu.contains(event.target) && !hamburger.contains(event.target)) {
         closeMenu();
       }
     });
