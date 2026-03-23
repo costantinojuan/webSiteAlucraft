@@ -305,10 +305,9 @@ main {
 .footerTop a {
 	font-size: 14px;
 	color: #ccc;
-	margin-bottom: 8px;
+	margin: 0 0 8px;
 	text-decoration: none;
-	display: flex;
-	flex-direction: column;
+	display: block;
 }
 
 .footerTop a:hover {
