@@ -163,7 +163,7 @@ reveals.forEach(el => observer.observe(el));
       });
    }
 
-  
+
 
 });
 

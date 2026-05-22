@@ -124,59 +124,52 @@ reveals.forEach(el => observer.observe(el));
 
   const portfolioAlbums = [
     {
-      title: "F1",
-      images: [
-        "../multimedia-portadas/1.webp",
-        "../multimedia-portadas/2.webp"
-      ]
-    },
-    {
-      title: "F2",
-      images: [
-        "../multimedia-portadas/3.webp",
-        "../multimedia-portadas/4.webp"
-      ]
-    },
-    {
-      title: "F3",
-      images: [
-        "../multimedia-portadas/5.webp",
-        "../multimedia-portadas/6.webp"
-      ]
-    },
-    {
-      title: "F4",
-      images: [
-        "../multimedia-portadas/7.webp",
-        "../multimedia-portadas/8.webp"
-      ]
-    },
-    {
       title: "M1",
       images: [
-        "../multimedia-portadas/2.webp",
-        "../multimedia-portadas/1.webp"
+        "../multimedia/2.webp",
+        "../multimedia/1.webp"
       ]
     },
     {
       title: "M2",
       images: [
-        "../multimedia-portadas/4.webp",
-        "../multimedia-portadas/3.webp"
+        "../multimedia/4.webp",
+        "../multimedia/3.webp"
       ]
     },
     {
       title: "M3",
       images: [
-        "../multimedia-portadas/6.webp",
-        "../multimedia-portadas/5.webp"
+        "../multimedia/6.webp",
+        "../multimedia/5.webp"
       ]
     },
     {
       title: "M4",
       images: [
-        "../multimedia-portadas/8.webp",
-        "../multimedia-portadas/7.webp"
+        "../multimedia/8.webp",
+        "../multimedia/7.webp"
+      ]
+    },
+    {
+      title: "F1",
+      images: [
+        "../multimedia/1.webp",
+        "../multimedia/2.webp"
+      ]
+    },
+    {
+      title: "F2",
+      images: [
+        "../multimedia/3.webp",
+        "../multimedia/4.webp"
+      ]
+    },
+    {
+      title: "F3",
+      images: [
+        "../multimedia/5.webp",
+        "../multimedia/6.webp"
       ]
     }
   ];

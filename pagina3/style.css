@@ -129,7 +129,7 @@ body {
 .hero {
 	height: 90vh;
 	min-height: 480px;
-	background-image: url("/multimedia-portadas/juegoJardin.jpeg");
+	background-image: url("/multimedia/juegoJardin.jpeg");
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
@@ -257,11 +257,15 @@ main {
 	box-sizing: border-box;
 }
 
+.sillones.productoGrid {
+	gap: 100px;
+}
+
 /* ── Separador imagen ───────────────────────── */
 .separadorImagen {
 	width: 100%;
-	height: 320px;
-	background-image: url("/multimedia-portadas/IMG_3451.webp");
+	height: 400px;
+	background-image: url("/multimedia/IMG_3451.webp");
 	background-size: cover;
 	background-position: center;
 	background-attachment: fixed;

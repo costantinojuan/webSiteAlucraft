@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const toggleMenu = function () {
       navMenu.classList.toggle("active");
       hamburger.classList.toggle("open");
-      
+
       const isOpen = navMenu.classList.contains("active");
       hamburger.setAttribute("aria-expanded", isOpen ? "true" : "false");
       hamburger.setAttribute("aria-label", isOpen ? "Cerrar menu" : "Abrir menu");
