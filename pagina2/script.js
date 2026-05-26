@@ -154,15 +154,20 @@ reveals.forEach(el => observer.observe(el));
     {
       title: "F1",
       images: [
-        "../multimedia/1.webp",
-        "../multimedia/2.webp"
+        "./multimedia/f1/1.webp",
+        "./multimedia/f1/2.webp",
+        "./multimedia/f1/3.webp",
+        "./multimedia/f1/4.webp"
       ]
     },
     {
       title: "F2",
       images: [
-        "../multimedia/3.webp",
-        "../multimedia/4.webp"
+        "./multimedia/f2/1.webp",
+        "./multimedia/f2/2.webp",
+        "./multimedia/f2/3.webp",
+        "./multimedia/f2/4.webp",
+        "./multimedia/f2/5.webp"
       ]
     },
     {
