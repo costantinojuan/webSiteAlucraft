@@ -142,9 +142,9 @@ body {
 
 .hero {
 	height: 90vh;
-	background-image: url("/multimedia/IMG_3451.webp");
+	background-image: url("/./pagina2/multimedia/f3/1.webp");
 	background-size: cover;
-	background-position: center;
+	background-position: 50% 20%;
 	position: relative;
 	z-index: 3;
 	display: flex;

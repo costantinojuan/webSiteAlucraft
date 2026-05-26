@@ -133,22 +133,32 @@ reveals.forEach(el => observer.observe(el));
     {
       title: "M2",
       images: [
-        "../multimedia/4.webp",
-        "../multimedia/3.webp"
+        "./multimedia/m2/1.webp",
+        "./multimedia/m2/2.webp",
+        "./multimedia/m2/3.webp",
+        "./multimedia/m2/4.webp",
+        "./multimedia/m2/5.webp",
+        "./multimedia/m2/6.webp",
+        "./multimedia/m2/7.webp",
+        "./multimedia/m2/8.webp",
+        "./multimedia/m2/9.webp"
       ]
     },
     {
       title: "M3",
       images: [
-        "../multimedia/6.webp",
-        "../multimedia/5.webp"
+        "./multimedia/m3/1.webp",
+        "./multimedia/m3/2.webp",
+        "./multimedia/m3/3.webp",
+        "./multimedia/m3/4.webp",
+        "./multimedia/m3/5.webp"
       ]
     },
     {
       title: "M4",
       images: [
-        "../multimedia/8.webp",
-        "../multimedia/7.webp"
+        "./multimedia/m4/1.webp",
+        "./multimedia/m4/2.webp"
       ]
     },
     {
@@ -173,8 +183,17 @@ reveals.forEach(el => observer.observe(el));
     {
       title: "F3",
       images: [
-        "../multimedia/5.webp",
-        "../multimedia/6.webp"
+        "./multimedia/f3/1.webp",
+        "./multimedia/f3/2.webp",
+        "./multimedia/f3/3.webp",
+        "./multimedia/f3/4.webp",
+        "./multimedia/f3/5.webp",
+        "./multimedia/f3/6.webp",
+        "./multimedia/f3/7.webp",
+        "./multimedia/f3/8.webp",
+        "./multimedia/f3/9.webp",
+        "./multimedia/f3/10.webp",
+        "./multimedia/f3/11.webp"
       ]
     }
   ];
