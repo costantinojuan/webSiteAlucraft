@@ -6,7 +6,8 @@
   "main": "api/index.js",
   "scripts": {
     "dev": "node --watch server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "list-ids": "node scripts/list-config-ids.js"
   },
   "engines": {
     "node": ">=18"

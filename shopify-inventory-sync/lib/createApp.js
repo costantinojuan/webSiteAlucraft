@@ -6,7 +6,19 @@ const { syncJuegoLivingStock } = require("./syncJuegoStock");
 function createApp() {
   const app = express();
 
-  app.get("/", (_req, res) => {
+  app.get("/", (req, res) => {
+    // Shopify redirige acá al instalar (hmac, host en query)
+    if (req.query.host || req.query.hmac) {
+      return res.status(200).type("html").send(`<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><title>Alucraft Inventory Sync</title></head>
+<body style="font-family:system-ui;max-width:32rem;margin:3rem auto;padding:0 1rem">
+  <h1>App conectada</h1>
+  <p>El servidor está activo. El stock del <strong>Juego Living</strong> se sincroniza con el webhook <code>orders/paid</code>.</p>
+  <p>Copiá el <strong>Admin API access token</strong> en el Partner Dashboard → esta app → API credentials → y pegalo en Vercel como <code>SHOPIFY_ADMIN_ACCESS_TOKEN</code>.</p>
+  <p>Podés cerrar esta pestaña.</p>
+</body></html>`);
+    }
+
     res.json({
       ok: true,
       service: "shopify-inventory-sync",
