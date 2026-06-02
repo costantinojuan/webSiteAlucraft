@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Centro de armado - Alucraft</title>
+      <link rel="shortcut icon" href="../Logos/alucraft-logo.png" type="image/png">
+      <meta name="description" content="Centro de armado de productos Alucraft. Encontrá guías de armado para todos nuestros productos.">
+      <link rel="stylesheet" href="../style.css">
+      <style>
+         .armado-hero {
+            background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+            padding: 100px 30px;
+            text-align: center;
+            margin-top: 56px;
+         }
+
+         .armado-hero h1 {
+            font-size: 48px;
+            margin: 0 0 20px;
+            font-weight: 300;
+            color: #000;
+         }
+
+         .armado-hero p {
+            font-size: 18px;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+         }
+
+         .armado-container {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 0 30px;
+         }
+
+         .armado-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-top: 60px;
+         }
+
+         .armado-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+         }
+
+         .armado-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            transform: translateY(-4px);
+         }
+
+         .armado-card-image {
+            background: linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%);
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            color: #ddd;
+         }
+
+         .armado-card-content {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+         }
+
+         .armado-card h3 {
+            font-size: 20px;
+            margin: 0 0 15px;
+            font-weight: 500;
+            color: #000;
+         }
+
+         .armado-card p {
+            font-size: 14px;
+            color: #888;
+            line-height: 1.6;
+            margin: 0 0 20px;
+            flex-grow: 1;
+         }
+
+         .armado-card-button {
+            display: inline-block;
+            background: #000;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            transition: background 0.3s ease;
+         }
+
+         .armado-card:hover .armado-card-button {
+            background: #333;
+         }
+
+         @media (max-width: 1200px) {
+            .armado-grid {
+               grid-template-columns: repeat(2, 1fr);
+               gap: 25px;
+            }
+
+            .armado-hero h1 {
+               font-size: 36px;
+            }
+         }
+
+         @media (max-width: 768px) {
+            .armado-hero {
+               padding: 60px 20px;
+               margin-top: 56px;
+            }
+
+            .armado-hero h1 {
+               font-size: 28px;
+            }
+
+            .armado-hero p {
+               font-size: 16px;
+            }
+
+            .armado-container {
+               margin: 50px auto;
+               padding: 0 20px;
+            }
+
+            .armado-grid {
+               grid-template-columns: 1fr;
+               gap: 20px;
+               margin-top: 40px;
+            }
+
+            .armado-card-image {
+               height: 150px;
+            }
+
+            .armado-card-content {
+               padding: 20px;
+            }
+
+            .armado-card h3 {
+               font-size: 18px;
+               margin-bottom: 10px;
+            }
+         }
+      </style>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+      <!-- Google tag (gtag.js) -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11148252614"></script>
+      <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+
+         gtag('config', 'AW-11148252614');
+      </script>
+      <script>
+         function gtag_report_conversion(url) {
+           var callback = function () {
+             if (typeof(url) != 'undefined') {
+               window.location = url;
+             }
+           };
+           gtag('event', 'conversion', {
+               'send_to': 'AW-11148252614/H7fJCPyduLYYEMar88Mp',
+               'event_callback': callback
+           });
+           return false;
+         }
+      </script>
+   </head>
+   <body>
+      <header>
+         <div class="navBar">
+            <a href="../index.html">
+            <img class="logoNav" src="../Logos/alucraftLogo.png" alt="">
+            </a>
+            <ul class="listBar active" id="navMenu">
+               <li class="pergolas">
+                  <a href="../pagina2/pergolas.html">
+                     <p>Pérgolas</p>
+                  </a>
+               </li>
+               <li class="mobiliario">
+                  <a href="../pagina3/mobiliarioExterior.html">
+                     <p>Mobiliario exterior</p>
+                  </a>
+               </li>
+               <li class="contact">
+                  <a href="../pagina4/contacto.html">
+                     <p>Contacto</p>
+                  </a>
+               </li>
+            </ul>
+            <button class="hamburger" id="hamburger" aria-label="Abrir menu" aria-controls="navMenu" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+            </button>
+         </div>
+      </header>
+
+      <main>
+         <section class="armado-hero">
+            <h1>Centro de armado</h1>
+            <p>Encontrá la guía de armado correspondiente a tu producto Alucraft.</p>
+         </section>
+
+         <section class="armado-container">
+            <div class="armado-grid">
+               <a href="./sillon-1-cuerpo.html" class="armado-card">
+                  <div class="armado-card-image">🪑</div>
+                  <div class="armado-card-content">
+                     <h3>Sillón 1 cuerpo</h3>
+                     <p>Guía paso a paso para el armado de tu sillón individual de aluminio.</p>
+                     <span class="armado-card-button">Ver guía</span>
+                  </div>
+               </a>
+
+               <a href="./sillon-3-cuerpos.html" class="armado-card">
+                  <div class="armado-card-image">🪑</div>
+                  <div class="armado-card-content">
+                     <h3>Sillón 3 cuerpos</h3>
+                     <p>Instrucciones de armado para tu sofá de tres módulos de aluminio.</p>
+                     <span class="armado-card-button">Ver guía</span>
+                  </div>
+               </a>
+
+               <a href="./mesa-ratona.html" class="armado-card">
+                  <div class="armado-card-image">🪑</div>
+                  <div class="armado-card-content">
+                     <h3>Mesa ratona</h3>
+                     <p>Pasos para armar tu mesa de aluminio compacta y elegante.</p>
+                     <span class="armado-card-button">Ver guía</span>
+                  </div>
+               </a>
+
+               <a href="./reposera.html" class="armado-card">
+                  <div class="armado-card-image">🪑</div>
+                  <div class="armado-card-content">
+                     <h3>Reposera</h3>
+                     <p>Instrucciones para montar tu reposera reclinable de aluminio.</p>
+                     <span class="armado-card-button">Ver guía</span>
+                  </div>
+               </a>
+            </div>
+         </section>
+      </main>
+
+      <footer class="footer">
+        <div class="footer-container">
+
+          <div class="footer-col footer-brand">
+            <h3>Alucraft</h3>
+            <p>Muebles y pérgolas de aluminio para exterior.</p>
+          </div>
+
+          <div class="footer-col">
+            <h4>Productos</h4>
+            <a href="../pagina2/pergolas.html">Pérgolas</a>
+            <a href="../pagina3/mobiliarioExterior.html">Mobiliario exterior</a>
+          </div>
+
+          <div class="footer-col">
+            <h4>Ayuda</h4>
+            <a href="./armado.html">Centro de armado</a>
+            <a href="#">Preguntas frecuentes</a>
+            <a href="#">Cuidados del producto</a>
+            <a href="#">Garantía</a>
+          </div>
+
+          <div class="footer-col">
+            <h4>Contacto</h4>
+            <p>craft.aluminio@gmail.com</p>
+            <p>+54 11 3212 2439</p>
+            <p>Rodolfo López 1684, Quilmes, Buenos Aires, Argentina</p>
+          </div>
+
+        </div>
+
+        <div class="footer-bottom">
+          <div class="footer-social">
+            <a href="#">Facebook</a>
+            <a href="https://www.instagram.com/craft.alu/">Instagram</a>
+            <a href="#">YouTube</a>
+          </div>
+
+          <p>© 2026 Alucraft. Todos los derechos reservados.</p>
+        </div>
+      </footer>
+
+      <div class="whatsappIcon">
+        <a href="https://wa.me/5491132122439" target="_blank" onclick="return gtag_report_conversion('https://wa.me/5491132122439')">
+        <img src="../multimedia-items/logo-whatsapp-verde.png" alt="WhatsApp">
+        </a>
+      </div>
+
+      <script src="../script.js"></script>
+      <script src="../shopify-global.js"></script>
+   </body>
+</html>

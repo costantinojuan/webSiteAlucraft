@@ -126,14 +126,14 @@ body {
 
 .hero {
 	height: 90vh;
-	background-image: url("/multimedia/pergolaFija.png");
+	background-image: url("/./pagina2/multimedia/f3/1.webp");
 	background-size: cover;
 	background-position: 50% 20%;
-	background-repeat: no-repeat;
+	position: relative;
+	z-index: 3;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	position: relative;
 }
 
 .hero::before {
@@ -473,113 +473,107 @@ main {
 	transform: translateY(0);
 }
 
-.hero2 {
-	height: 538px;
-	background-image: url("./multimedia/833AE57E-CB63-4DED-8621-4E7BB96AD296_1_105_c.jpeg");
-	background-size: cover;
-	background-position: 50% 20%;
-	position: relative;
-	display: flex;
-	align-items: center;
-	padding: 0 8%;
-	color: white;
-}
-
-.hero2::before {
-	content: "";
-	position: absolute;
-	inset: 0;
-	background: rgba(0, 0, 0, 0.35);
-}
-
-.heroContent {
-	position: relative;
-	max-width: 700px;
-}
-
-.heroLabel {
-	font-size: 20px;
-	margin-bottom: 20px;
-	opacity: 0.8;
-	letter-spacing: 0.5px;
-}
-
-.heroTitle {
-	font-size: 52px;
-	line-height: 1.1;
-	font-weight: 400;
-	margin-bottom: 40px;
-}
-
-.heroButton {
-	display: inline-block;
-	padding: 10px 20px;
-	background: white;
-	color: black;
-	text-decoration: none;
-	border-radius: 10px;
-	font-size: 20px;
-	transition: all 0.3s ease;
-	font-weight: 600;
-}
-
-.heroButton:hover {
-	background: #353535;
-	color: white;
-}
-
 .footer {
 	background: #000;
 	color: #fff;
-	padding: 50px 50px 10px 50px;
-	font-family: "Roboto", sans-serif;
+	padding: 70px 50px 30px;
 }
 
-.footerContainer {
-	margin: auto;
+.footer-container {
+	max-width: 1200px;
+	margin: 0 auto;
+	display: grid;
+	grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
+	gap: 50px;
 }
 
-.footerLogo {
-	font-weight: 200;
-	font-size: 18px;
-	margin-bottom: 20px;
+.footer h3,
+.footer h4 {
+	margin-bottom: 18px;
+	font-weight: 500;
 }
 
-.footerLine {
-	width: 40px;
-	height: 1px;
-	background: #707070;
-	margin: 20px 0 30px;
+.footer h3 {
+	font-size: 22px;
 }
 
-.footerTop p,
-.footerTop a {
+.footer h4 {
 	font-size: 14px;
-	color: #ccc;
-	margin: 0 0 8px;
+	text-transform: uppercase;
+	letter-spacing: 1.2px;
+}
+
+.footer p,
+.footer a {
+	color: #cfcfcf;
+	font-size: 15px;
+	line-height: 1.8;
 	text-decoration: none;
 	display: block;
 }
 
-.footerTop a:hover {
+.footer a:hover {
 	color: #fff;
 }
 
-.footerBottom {
-	margin-top: 60px;
-	border-top: 1px solid #707070;
-	padding-top: 30px;
+.footer-bottom {
+	max-width: 1200px;
+	margin: 55px auto 0;
+	padding-top: 25px;
+	border-top: 1px solid rgba(255, 255, 255, 0.25);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 25px;
 }
 
-.footerSocials a {
-	margin-right: 20px;
-	color: #ccc;
+.footer-bottom p {
+	margin: 0;
+	font-size: 14px;
+	color: #cfcfcf;
+}
+
+.footer-social {
+	display: flex;
+	gap: 22px;
+}
+
+.footer-social a {
+	font-size: 14px;
+	color: #cfcfcf;
 	text-decoration: none;
-	transition: color 0.3s ease;
 }
 
-.footerSocials a:hover {
+.footer-social a:hover {
 	color: #fff;
+}
+
+@media (max-width: 900px) {
+	.footer-container {
+		grid-template-columns: 1fr 1fr;
+		gap: 40px;
+	}
+}
+
+@media (max-width: 768px) {
+	.footer {
+		padding: 50px 25px 25px;
+	}
+
+	.footer-container {
+		grid-template-columns: 1fr;
+		gap: 35px;
+	}
+
+	.footer-bottom {
+		flex-direction: column;
+		align-items: flex-start;
+		margin-top: 40px;
+	}
+
+	.footer-social {
+		gap: 18px;
+	}
 }
 
 .whatsappIcon {
@@ -711,15 +705,6 @@ main {
 	.aboutContainer h2 {
 		font-size: 36px;
 	}
-
-	.hero2 .heroLabel {
-		font-size: 18px;
-	}
-
-	.hero2 .heroTitle {
-		font-size: 24px;
-	}
-
 
 }
 
