@@ -68,6 +68,7 @@ async function main() {
   const sillon3 = find(["sillon", "3"]);
   const mesa = find(["mesa", "ratona"]);
   const juego = find(["juego", "living"]);
+  const reposera = find(["reposera"]);
 
   console.log("\n=== PRODUCT_ID (copiá a Vercel) ===");
   const mapping = [
@@ -75,6 +76,7 @@ async function main() {
     ["PRODUCT_ID_SILLON_3", sillon3, ["sillon", "3"]],
     ["PRODUCT_ID_MESA", mesa, ["mesa"]],
     ["PRODUCT_ID_JUEGO", juego, ["juego", "living"]],
+    ["PRODUCT_ID_REPOSERA", reposera, ["reposera"]],
   ];
 
   for (const [envKey, product, keywords] of mapping) {

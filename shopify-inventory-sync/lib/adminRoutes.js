@@ -1,0 +1,142 @@
+const path = require("path");
+const express = require("express");
+const { getAdminConfig, validateCredentials, requireAdmin, isAdminConfigured } = require("./auth");
+const { getAlertThresholds, getWhatsAppConfig } = require("./config");
+const { getDashboardStockSummary } = require("./dashboardData");
+const { getPendingOrders } = require("./shopifyOrders");
+const { getLastSync, recordSync } = require("./syncState");
+const { syncJuegoLivingStock } = require("./syncJuegoStock");
+const { checkAndSendStockAlerts } = require("./alerts/stockAlerts");
+const { renderLoginPage, renderDashboardPage } = require("./views/adminPages");
+
+function whatsappStatusLabel() {
+  const cfg = getWhatsAppConfig();
+  if (!cfg.provider) return "No configurado";
+  if (cfg.misconfigured) return "Incompleto";
+  if (cfg.unknownProvider) return "Proveedor inválido";
+  if (cfg.enabled) return `Activo (${cfg.provider})`;
+  return "No configurado";
+}
+
+async function runSyncWithAlerts(source) {
+  const syncResult = await syncJuegoLivingStock();
+  recordSync(syncResult, source);
+
+  const stock = await getDashboardStockSummary();
+  const alertResult = await checkAndSendStockAlerts(stock.products);
+
+  return { syncResult, alertResult, stock };
+}
+
+function createAdminRouter() {
+  const router = express.Router();
+
+  router.get("/login", (req, res) => {
+    if (!isAdminConfigured()) {
+      return res.status(503).send("Admin no configurado");
+    }
+    if (req.session?.admin) {
+      return res.redirect("/admin");
+    }
+    const nextUrl = req.query.next || "/admin";
+    return res.status(200).send(renderLoginPage({ error: null, nextUrl }));
+  });
+
+  router.post("/login", express.urlencoded({ extended: false }), (req, res) => {
+    if (!isAdminConfigured()) {
+      return res.status(503).send("Admin no configurado");
+    }
+
+    const username = req.body.username || "";
+    const password = req.body.password || "";
+    const nextUrl = req.body.next || "/admin";
+
+    if (!validateCredentials(username, password)) {
+      return res.status(401).send(
+        renderLoginPage({ error: "Usuario o contraseña incorrectos.", nextUrl })
+      );
+    }
+
+    req.session.admin = true;
+    req.session.username = username;
+    return res.redirect(nextUrl.startsWith("/admin") ? nextUrl : "/admin");
+  });
+
+  router.post("/logout", requireAdmin, (req, res) => {
+    req.session = null;
+    return res.redirect("/admin/login");
+  });
+
+  router.get("/", requireAdmin, async (req, res) => {
+    try {
+      const [stock, orders] = await Promise.all([
+        getDashboardStockSummary(),
+        getPendingOrders(),
+      ]);
+
+      return res.status(200).send(
+        renderDashboardPage({
+          stock,
+          orders,
+          lastSync: getLastSync(),
+          thresholds: getAlertThresholds(),
+          whatsappStatus: whatsappStatusLabel(),
+          flash: null,
+        })
+      );
+    } catch (error) {
+      console.error("Dashboard error", error);
+      return res.status(500).send(`Error cargando dashboard: ${error.message}`);
+    }
+  });
+
+  router.post("/api/sync", requireAdmin, async (req, res) => {
+    try {
+      const { syncResult, alertResult } = await runSyncWithAlerts("manual");
+
+      return res.status(200).json({
+        ok: true,
+        synced: syncResult,
+        alerts: alertResult,
+        lastSync: getLastSync(),
+      });
+    } catch (error) {
+      console.error("Manual sync error", error);
+      return res.status(500).json({
+        ok: false,
+        error: error.message,
+      });
+    }
+  });
+
+  return router;
+}
+
+function mountAdmin(app) {
+  const config = getAdminConfig();
+
+  if (config) {
+    const cookieSession = require("cookie-session");
+    app.use(
+      cookieSession({
+        name: "alucraft_admin",
+        keys: [config.sessionSecret],
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production",
+      })
+    );
+  }
+
+  app.use(
+    "/admin/static",
+    express.static(path.join(__dirname, "..", "public", "admin"), {
+      maxAge: process.env.NODE_ENV === "production" ? "1h" : 0,
+    })
+  );
+
+  app.use("/admin", createAdminRouter());
+}
+
+module.exports = { mountAdmin, runSyncWithAlerts };

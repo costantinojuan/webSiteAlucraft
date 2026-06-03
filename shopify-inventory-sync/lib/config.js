@@ -40,18 +40,69 @@ function getAuthConfig() {
 function getSyncConfig() {
   getAuthConfig();
 
+  const productIds = {
+    sillon1: requireEnv("PRODUCT_ID_SILLON_1"),
+    sillon3: requireEnv("PRODUCT_ID_SILLON_3"),
+    mesa: requireEnv("PRODUCT_ID_MESA"),
+    juego: requireEnv("PRODUCT_ID_JUEGO"),
+  };
+
+  const reposera = process.env.PRODUCT_ID_REPOSERA?.trim();
+  if (reposera) {
+    productIds.reposera = reposera;
+  }
+
   return {
     storeDomain: getStoreDomain(),
     /** Optional — if omitted, resolved from inventory API */
     locationId: process.env.LOCATION_ID?.trim() || null,
-    productIds: {
-      sillon1: requireEnv("PRODUCT_ID_SILLON_1"),
-      sillon3: requireEnv("PRODUCT_ID_SILLON_3"),
-      mesa: requireEnv("PRODUCT_ID_MESA"),
-      juego: requireEnv("PRODUCT_ID_JUEGO"),
-    },
+    productIds,
     apiVersion: process.env.SHOPIFY_API_VERSION || SHOPIFY_API_VERSION,
   };
+}
+
+function getAlertThresholds() {
+  return {
+    sillon1: Number(process.env.ALERT_THRESHOLD_SILLON_1 ?? 4),
+    sillon3: Number(process.env.ALERT_THRESHOLD_SILLON_3 ?? 2),
+    mesa: Number(process.env.ALERT_THRESHOLD_MESA ?? 2),
+    reposera: Number(process.env.ALERT_THRESHOLD_REPOSERA ?? 2),
+    juego: Number(process.env.ALERT_THRESHOLD_JUEGO ?? 1),
+  };
+}
+
+function getWhatsAppConfig() {
+  const provider = process.env.WHATSAPP_PROVIDER?.trim().toLowerCase() || "";
+  const to = process.env.WHATSAPP_TO?.trim() || "";
+
+  if (!provider || !to) {
+    return { enabled: false, provider: null, to: null };
+  }
+
+  if (provider === "twilio") {
+    const accountSid = process.env.TWILIO_ACCOUNT_SID?.trim();
+    const authToken = process.env.TWILIO_AUTH_TOKEN?.trim();
+    const from = process.env.TWILIO_WHATSAPP_FROM?.trim();
+    if (!accountSid || !authToken || !from) {
+      return { enabled: false, provider: "twilio", to, misconfigured: true };
+    }
+    return { enabled: true, provider: "twilio", to, accountSid, authToken, from };
+  }
+
+  if (provider === "cloud_api") {
+    const token = process.env.WHATSAPP_CLOUD_TOKEN?.trim();
+    const phoneNumberId = process.env.WHATSAPP_CLOUD_PHONE_NUMBER_ID?.trim();
+    if (!token || !phoneNumberId) {
+      return { enabled: false, provider: "cloud_api", to, misconfigured: true };
+    }
+    return { enabled: true, provider: "cloud_api", to, token, phoneNumberId };
+  }
+
+  return { enabled: false, provider, to, unknownProvider: true };
+}
+
+function getAdminStoreUrl() {
+  return `https://${getStoreDomain()}/admin`;
 }
 
 function getWebhookSecret() {
@@ -63,4 +114,7 @@ module.exports = {
   getAuthConfig,
   getStoreDomain,
   getWebhookSecret,
+  getAlertThresholds,
+  getWhatsAppConfig,
+  getAdminStoreUrl,
 };

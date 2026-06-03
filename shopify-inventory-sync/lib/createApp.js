@@ -1,10 +1,12 @@
 const express = require("express");
 const { getWebhookSecret } = require("./config");
 const { verifyShopifyWebhook } = require("./verifyWebhook");
-const { syncJuegoLivingStock } = require("./syncJuegoStock");
+const { mountAdmin, runSyncWithAlerts } = require("./adminRoutes");
 
 function createApp() {
   const app = express();
+
+  mountAdmin(app);
 
   app.get("/", (req, res) => {
     // Shopify redirige acá al instalar (hmac, host en query)
@@ -14,6 +16,7 @@ function createApp() {
 <body style="font-family:system-ui;max-width:32rem;margin:3rem auto;padding:0 1rem">
   <h1>App conectada</h1>
   <p>El servidor está activo. El stock del <strong>Juego Living</strong> se sincroniza con el webhook <code>orders/paid</code>.</p>
+  <p>Panel admin: <a href="/admin">/admin</a></p>
   <p>Copiá el <strong>Admin API access token</strong> en el Partner Dashboard → esta app → API credentials → y pegalo en Vercel como <code>SHOPIFY_ADMIN_ACCESS_TOKEN</code>.</p>
   <p>Podés cerrar esta pestaña.</p>
 </body></html>`);
@@ -23,6 +26,7 @@ function createApp() {
       ok: true,
       service: "shopify-inventory-sync",
       webhook: "POST /webhooks/orders-paid",
+      admin: "/admin",
     });
   });
 
@@ -50,19 +54,19 @@ function createApp() {
           console.warn("Unexpected webhook topic", { topic, shop });
         }
 
-        // No inspeccionamos line_items de la orden: cualquier venta pagada
-        // dispara un recálculo completo del Juego desde el inventario actual.
-        const result = await syncJuegoLivingStock();
+        const { syncResult, alertResult } = await runSyncWithAlerts("webhook");
 
         console.log("Juego Living stock synced", {
           shop,
           topic,
-          result,
+          syncResult,
+          alerts: alertResult,
         });
 
         return res.status(200).json({
           ok: true,
-          synced: result,
+          synced: syncResult,
+          alerts: alertResult,
         });
       } catch (error) {
         console.error("Webhook handler error", error);
@@ -74,7 +78,6 @@ function createApp() {
     }
   );
 
-  // JSON parser for any future routes (after webhook route)
   app.use(express.json());
 
   return app;
