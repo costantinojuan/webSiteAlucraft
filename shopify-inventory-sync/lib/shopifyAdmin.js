@@ -1,5 +1,6 @@
 const { SHOPIFY_API_VERSION } = require("./apiVersion");
 const { getConfig } = require("./config");
+const { getAccessToken } = require("./accessToken");
 const { variantGid, locationGid } = require("./gids");
 
 function graphqlUrl(config) {
@@ -9,11 +10,12 @@ function graphqlUrl(config) {
 
 async function shopifyGraphQL(query, variables = {}) {
   const config = getConfig();
+  const accessToken = await getAccessToken();
   const response = await fetch(graphqlUrl(config), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-Shopify-Access-Token": config.adminAccessToken,
+      "X-Shopify-Access-Token": accessToken,
     },
     body: JSON.stringify({ query, variables }),
   });

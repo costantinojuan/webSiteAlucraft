@@ -3,30 +3,30 @@
  * Lista ubicaciones y variantes para copiar a Vercel.
  * Uso (desde shopify-inventory-sync/):
  *   SHOPIFY_STORE_DOMAIN=tu-tienda.myshopify.com \
- *   SHOPIFY_ADMIN_ACCESS_TOKEN=shpat_... \
+ *   SHOPIFY_CLIENT_ID=... SHOPIFY_CLIENT_SECRET=... \
  *   node scripts/list-config-ids.js
  */
 
 require("dotenv").config({ path: require("path").join(__dirname, "..", ".env") });
 
-const store = process.env.SHOPIFY_STORE_DOMAIN?.replace(/^https?:\/\//, "").replace(/\/$/, "");
-const token = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
-const version = process.env.SHOPIFY_API_VERSION || "2025-04";
-
-if (!store || !token) {
-  console.error("Faltan SHOPIFY_STORE_DOMAIN y SHOPIFY_ADMIN_ACCESS_TOKEN en .env o en el entorno.");
-  process.exit(1);
-}
+const { getAuthConfig } = require("../lib/config");
+const { getAccessToken } = require("../lib/accessToken");
+const { SHOPIFY_API_VERSION } = require("../lib/apiVersion");
 
 async function gql(query, variables = {}) {
-  const res = await fetch(`https://${store}/admin/api/${version}/graphql.json`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Shopify-Access-Token": token,
-    },
-    body: JSON.stringify({ query, variables }),
-  });
+  const auth = getAuthConfig();
+  const token = await getAccessToken();
+  const res = await fetch(
+    `https://${auth.storeDomain}/admin/api/${SHOPIFY_API_VERSION}/graphql.json`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Access-Token": token,
+      },
+      body: JSON.stringify({ query, variables }),
+    }
+  );
   const json = await res.json();
   if (json.errors?.length) {
     throw new Error(json.errors.map((e) => e.message).join("; "));
@@ -35,8 +35,9 @@ async function gql(query, variables = {}) {
 }
 
 async function main() {
+  const auth = getAuthConfig();
   console.log("\n=== SHOPIFY_STORE_DOMAIN ===");
-  console.log(store);
+  console.log(auth.storeDomain);
 
   const locData = await gql(`{
     locations(first: 20) {
