@@ -1,4 +1,5 @@
 const { getAuthConfig } = require("./config");
+const { readJsonResponse } = require("./httpJson");
 
 /** @type {{ token: string, expiresAt: number } | null} */
 let cache = null;
@@ -17,7 +18,7 @@ async function fetchClientCredentialsToken(auth) {
     body: body.toString(),
   });
 
-  const payload = await response.json();
+  const payload = await readJsonResponse(response, "Token OAuth (client credentials)");
 
   if (!response.ok) {
     throw new Error(

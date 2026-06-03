@@ -11,6 +11,10 @@ function variantGid(variantId) {
   return toGid("ProductVariant", variantId);
 }
 
+function productGid(productId) {
+  return toGid("Product", productId);
+}
+
 function locationGid(locationId) {
   return toGid("Location", locationId);
 }
@@ -27,6 +31,7 @@ function parseNumericId(gid) {
 
 module.exports = {
   variantGid,
+  productGid,
   locationGid,
   inventoryItemGid,
   parseNumericId,

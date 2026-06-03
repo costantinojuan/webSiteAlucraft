@@ -16,9 +16,6 @@ function getStoreDomain() {
   return normalizeStoreDomain(requireEnv("SHOPIFY_STORE_DOMAIN"));
 }
 
-/**
- * Auth: legacy shpat_ OR Dev Dashboard client credentials (desde ene 2026).
- */
 function getAuthConfig() {
   const storeDomain = getStoreDomain();
   const staticToken = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN?.trim();
@@ -39,21 +36,31 @@ function getAuthConfig() {
   );
 }
 
-function getConfig() {
+/** Config for inventory sync (webhook handler validates secret separately). */
+function getSyncConfig() {
   getAuthConfig();
 
   return {
     storeDomain: getStoreDomain(),
-    webhookSecret: requireEnv("SHOPIFY_WEBHOOK_SECRET"),
-    locationId: requireEnv("LOCATION_ID"),
-    variantIds: {
-      sillon1: requireEnv("VARIANT_ID_SILLON_1"),
-      sillon3: requireEnv("VARIANT_ID_SILLON_3"),
-      mesa: requireEnv("VARIANT_ID_MESA"),
-      juego: requireEnv("VARIANT_ID_JUEGO"),
+    /** Optional — if omitted, resolved from inventory API */
+    locationId: process.env.LOCATION_ID?.trim() || null,
+    productIds: {
+      sillon1: requireEnv("PRODUCT_ID_SILLON_1"),
+      sillon3: requireEnv("PRODUCT_ID_SILLON_3"),
+      mesa: requireEnv("PRODUCT_ID_MESA"),
+      juego: requireEnv("PRODUCT_ID_JUEGO"),
     },
     apiVersion: process.env.SHOPIFY_API_VERSION || SHOPIFY_API_VERSION,
   };
 }
 
-module.exports = { getConfig, getAuthConfig, getStoreDomain };
+function getWebhookSecret() {
+  return requireEnv("SHOPIFY_WEBHOOK_SECRET");
+}
+
+module.exports = {
+  getSyncConfig,
+  getAuthConfig,
+  getStoreDomain,
+  getWebhookSecret,
+};

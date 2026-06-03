@@ -1,17 +1,17 @@
 const { SHOPIFY_API_VERSION } = require("./apiVersion");
-const { getConfig } = require("./config");
+const { getStoreDomain } = require("./config");
 const { getAccessToken } = require("./accessToken");
-const { variantGid, locationGid } = require("./gids");
+const { productGid, locationGid, parseNumericId } = require("./gids");
+const { readJsonResponse } = require("./httpJson");
 
-function graphqlUrl(config) {
-  const version = config.apiVersion || SHOPIFY_API_VERSION;
-  return `https://${config.storeDomain}/admin/api/${version}/graphql.json`;
+function graphqlUrl() {
+  const version = process.env.SHOPIFY_API_VERSION || SHOPIFY_API_VERSION;
+  return `https://${getStoreDomain()}/admin/api/${version}/graphql.json`;
 }
 
 async function shopifyGraphQL(query, variables = {}) {
-  const config = getConfig();
   const accessToken = await getAccessToken();
-  const response = await fetch(graphqlUrl(config), {
+  const response = await fetch(graphqlUrl(), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -20,12 +20,10 @@ async function shopifyGraphQL(query, variables = {}) {
     body: JSON.stringify({ query, variables }),
   });
 
-  const payload = await response.json();
+  const payload = await readJsonResponse(response, "GraphQL Admin API");
 
   if (!response.ok) {
-    const error = new Error(
-      `Shopify GraphQL HTTP ${response.status}: ${JSON.stringify(payload)}`
-    );
+    const error = new Error(`Shopify GraphQL HTTP ${response.status}: ${JSON.stringify(payload)}`);
     error.status = response.status;
     error.payload = payload;
     throw error;
@@ -42,14 +40,16 @@ async function shopifyGraphQL(query, variables = {}) {
   return payload.data;
 }
 
-const VARIANTS_INVENTORY_QUERY = `
-  query VariantsInventoryItems($ids: [ID!]!) {
-    nodes(ids: $ids) {
-      ... on ProductVariant {
-        id
-        title
-        inventoryItem {
+const PRODUCT_VARIANTS_QUERY = `
+  query ProductVariants($id: ID!) {
+    product(id: $id) {
+      id
+      title
+      variants(first: 100) {
+        nodes {
           id
+          title
+          inventoryItem { id }
         }
       }
     }
@@ -72,56 +72,78 @@ const INVENTORY_LEVELS_QUERY = `
   }
 `;
 
-const INVENTORY_SET_QUANTITIES_MUTATION = `
-  mutation inventorySetQuantities($input: InventorySetQuantitiesInput!) {
-    inventorySetQuantities(input: $input) {
-      inventoryAdjustmentGroup {
-        createdAt
-        reason
-      }
-      userErrors {
-        field
-        message
-        code
+const INVENTORY_ITEM_LEVELS_QUERY = `
+  query InventoryItemLevels($id: ID!) {
+    inventoryItem(id: $id) {
+      id
+      inventoryLevels(first: 10) {
+        nodes {
+          location { id legacyResourceId }
+          quantities(names: ["available"]) { name quantity }
+        }
       }
     }
   }
 `;
 
-/**
- * @param {Record<string, string>} variantIdsMap e.g. { sillon1: "123", ... }
- */
-async function getVariantsWithInventoryItems(variantIdsMap) {
-  const ids = Object.values(variantIdsMap).map(variantGid);
-  const data = await shopifyGraphQL(VARIANTS_INVENTORY_QUERY, { ids });
-  const nodes = data.nodes || [];
-
-  const byKey = {};
-  const entries = Object.entries(variantIdsMap);
-
-  for (const [key, numericVariantId] of entries) {
-    const expectedGid = variantGid(numericVariantId);
-    const node = nodes.find((n) => n?.id === expectedGid);
-
-    if (!node?.inventoryItem?.id) {
-      throw new Error(`Variant not found or missing inventory item: ${key} (${numericVariantId})`);
+const INVENTORY_SET_QUANTITIES_MUTATION = `
+  mutation inventorySetQuantities($input: InventorySetQuantitiesInput!) {
+    inventorySetQuantities(input: $input) {
+      inventoryAdjustmentGroup { createdAt reason }
+      userErrors { field message code }
     }
+  }
+`;
 
-    byKey[key] = {
-      variantGid: node.id,
-      title: node.title,
-      inventoryItemGid: node.inventoryItem.id,
-    };
+async function getProductWithVariants(numericProductId) {
+  const data = await shopifyGraphQL(PRODUCT_VARIANTS_QUERY, {
+    id: productGid(numericProductId),
+  });
+
+  if (!data.product) {
+    throw new Error(`Product not found: ${numericProductId}`);
   }
 
-  return byKey;
+  return {
+    productGid: data.product.id,
+    productId: parseNumericId(data.product.id),
+    title: data.product.title,
+    variants: (data.product.variants?.nodes || []).map((v) => ({
+      variantGid: v.id,
+      variantId: parseNumericId(v.id),
+      title: (v.title || "Default Title").trim(),
+      inventoryItemGid: v.inventoryItem?.id,
+    })),
+  };
 }
 
 /**
- * @param {string[]} inventoryItemGids
- * @param {string} locationId Numeric location ID from env
- * @returns {Map<string, number>} inventoryItemGid → available quantity
+ * Resolves location numeric ID from env or first inventory level on an item.
  */
+async function resolveLocationId(preferredLocationId, sampleInventoryItemGid) {
+  if (preferredLocationId) {
+    return preferredLocationId;
+  }
+
+  const data = await shopifyGraphQL(INVENTORY_ITEM_LEVELS_QUERY, {
+    id: sampleInventoryItemGid,
+  });
+
+  const levels = data.inventoryItem?.inventoryLevels?.nodes || [];
+  if (levels.length === 0) {
+    throw new Error(
+      "No se pudo detectar LOCATION_ID automáticamente. " +
+        "Agregá LOCATION_ID en Vercel o activá el scope read_locations en la app."
+    );
+  }
+
+  const primary = levels[0];
+  const numeric =
+    primary.location?.legacyResourceId || parseNumericId(primary.location?.id);
+
+  return String(numeric);
+}
+
 async function getAvailableQuantities(inventoryItemGids, locationId) {
   const data = await shopifyGraphQL(INVENTORY_LEVELS_QUERY, {
     ids: inventoryItemGids,
@@ -132,10 +154,8 @@ async function getAvailableQuantities(inventoryItemGids, locationId) {
 
   for (const node of data.nodes || []) {
     if (!node?.id) continue;
-
     const availableEntry = node.inventoryLevel?.quantities?.find((q) => q.name === "available");
-    const quantity = availableEntry?.quantity ?? 0;
-    levels.set(node.id, Number(quantity) || 0);
+    levels.set(node.id, Number(availableEntry?.quantity) || 0);
   }
 
   for (const gid of inventoryItemGids) {
@@ -147,9 +167,6 @@ async function getAvailableQuantities(inventoryItemGids, locationId) {
   return levels;
 }
 
-/**
- * Sets absolute available quantity (sync). Uses inventorySetQuantities.
- */
 async function setAvailableQuantity(inventoryItemGid, locationId, quantity) {
   const data = await shopifyGraphQL(INVENTORY_SET_QUANTITIES_MUTATION, {
     input: {
@@ -187,7 +204,8 @@ async function setAvailableQuantity(inventoryItemGid, locationId, quantity) {
 module.exports = {
   SHOPIFY_API_VERSION,
   shopifyGraphQL,
-  getVariantsWithInventoryItems,
+  getProductWithVariants,
+  resolveLocationId,
   getAvailableQuantities,
   setAvailableQuantity,
 };

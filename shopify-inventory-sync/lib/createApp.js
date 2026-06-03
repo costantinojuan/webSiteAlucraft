@@ -1,5 +1,5 @@
 const express = require("express");
-const { getConfig } = require("./config");
+const { getWebhookSecret } = require("./config");
 const { verifyShopifyWebhook } = require("./verifyWebhook");
 const { syncJuegoLivingStock } = require("./syncJuegoStock");
 
@@ -36,12 +36,12 @@ function createApp() {
     express.raw({ type: "application/json" }),
     async (req, res) => {
       try {
-        const config = getConfig();
+        const webhookSecret = getWebhookSecret();
         const hmac = req.get("X-Shopify-Hmac-Sha256");
         const topic = req.get("X-Shopify-Topic");
         const shop = req.get("X-Shopify-Shop-Domain");
 
-        if (!verifyShopifyWebhook(req.body, hmac, config.webhookSecret)) {
+        if (!verifyShopifyWebhook(req.body, hmac, webhookSecret)) {
           console.warn("Invalid webhook HMAC", { shop, topic });
           return res.status(401).send("Unauthorized");
         }
