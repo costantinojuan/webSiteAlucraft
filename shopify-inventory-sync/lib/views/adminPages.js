@@ -1,3 +1,7 @@
+function brandLogo() {
+  return `<img src="/admin/static/alucraft-logo.png" alt="Alucraft" class="brand-logo" width="44" height="44">`;
+}
+
 function escapeHtml(value) {
   return String(value ?? "")
     .replace(/&/g, "&amp;")
@@ -40,7 +44,7 @@ function renderLoginPage({ error, nextUrl }) {
   <main class="auth-page">
     <section class="auth-card">
       <div class="brand">
-        <span class="brand-mark">A</span>
+        ${brandLogo()}
         <div>
           <h1>Alucraft Admin</h1>
           <p>Panel interno de stock y pedidos</p>
@@ -130,7 +134,7 @@ function renderDashboardPage({ stock, orders, lastSync, thresholds, whatsappStat
   <div class="app-shell">
     <header class="topbar">
       <div class="brand-inline">
-        <span class="brand-mark">A</span>
+        ${brandLogo()}
         <div>
           <strong>Alucraft Admin</strong>
           <span class="muted">Stock &amp; pedidos</span>

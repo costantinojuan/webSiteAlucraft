@@ -71,6 +71,14 @@ a {
   color: var(--muted);
 }
 
+.brand-logo {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
 .brand-mark {
   width: 44px;
   height: 44px;
