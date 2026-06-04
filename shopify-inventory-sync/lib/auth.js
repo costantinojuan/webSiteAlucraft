@@ -30,9 +30,9 @@ function validateCredentials(username, password) {
   if (!config) {
     return false;
   }
-  return (
-    timingSafeEqual(username, config.username) && timingSafeEqual(password, config.password)
-  );
+  const user = String(username).trim();
+  const pass = String(password).trim();
+  return timingSafeEqual(user, config.username) && timingSafeEqual(pass, config.password);
 }
 
 function requireAdmin(req, res, next) {
@@ -44,12 +44,12 @@ function requireAdmin(req, res, next) {
     return next();
   }
 
-  if (req.path.startsWith("/admin/api/")) {
+  if (req.path.startsWith("/api/")) {
     return res.status(401).json({ ok: false, error: "No autorizado" });
   }
 
   const nextUrl = encodeURIComponent(req.originalUrl || "/admin");
-  return res.redirect(`/admin/login?next=${nextUrl}`);
+  return res.redirect(`/admin/login?next=${nextUrl}&session=expired`);
 }
 
 function adminNotConfiguredPage() {

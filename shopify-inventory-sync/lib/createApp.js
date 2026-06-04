@@ -6,6 +6,9 @@ const { mountAdmin, runSyncWithAlerts } = require("./adminRoutes");
 function createApp() {
   const app = express();
 
+  // Vercel termina HTTPS delante del proxy; necesario para cookies secure
+  app.set("trust proxy", 1);
+
   mountAdmin(app);
 
   app.get("/", (req, res) => {

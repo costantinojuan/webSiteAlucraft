@@ -39,7 +39,11 @@ function createAdminRouter() {
       return res.redirect("/admin");
     }
     const nextUrl = req.query.next || "/admin";
-    return res.status(200).send(renderLoginPage({ error: null, nextUrl }));
+    let error = null;
+    if (req.query.session === "expired") {
+      error = "La sesión no se guardó. Probá de nuevo tras el último deploy.";
+    }
+    return res.status(200).send(renderLoginPage({ error, nextUrl }));
   });
 
   router.post("/login", express.urlencoded({ extended: false }), (req, res) => {
@@ -47,19 +51,19 @@ function createAdminRouter() {
       return res.status(503).send("Admin no configurado");
     }
 
-    const username = req.body.username || "";
-    const password = req.body.password || "";
+    const username = String(req.body.username || "").trim();
+    const password = String(req.body.password || "").trim();
     const nextUrl = req.body.next || "/admin";
 
     if (!validateCredentials(username, password)) {
-      return res.status(401).send(
+      return res.status(200).send(
         renderLoginPage({ error: "Usuario o contraseña incorrectos.", nextUrl })
       );
     }
 
-    req.session.admin = true;
-    req.session.username = username;
-    return res.redirect(nextUrl.startsWith("/admin") ? nextUrl : "/admin");
+    req.session = { admin: true, username };
+    const destination = nextUrl.startsWith("/admin") ? nextUrl : "/admin";
+    return res.redirect(303, destination);
   });
 
   router.post("/logout", requireAdmin, (req, res) => {
@@ -112,6 +116,10 @@ function createAdminRouter() {
   return router;
 }
 
+function isProduction() {
+  return process.env.NODE_ENV === "production" || process.env.VERCEL === "1";
+}
+
 function mountAdmin(app) {
   const config = getAdminConfig();
 
@@ -124,7 +132,8 @@ function mountAdmin(app) {
         maxAge: 7 * 24 * 60 * 60 * 1000,
         httpOnly: true,
         sameSite: "lax",
-        secure: process.env.NODE_ENV === "production",
+        secure: isProduction(),
+        path: "/",
       })
     );
   }
