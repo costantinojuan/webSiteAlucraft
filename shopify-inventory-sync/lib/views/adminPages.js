@@ -47,7 +47,7 @@ function renderLoginPage({ error, nextUrl }) {
         ${brandLogo()}
         <div>
           <h1>Alucraft Admin</h1>
-          <p>Panel interno de stock y pedidos</p>
+          <p>Panel interno de stock</p>
         </div>
       </div>
       ${error ? `<div class="alert alert-error">${escapeHtml(error)}</div>` : ""}
@@ -91,44 +91,20 @@ function stockCard(product, thresholds) {
   </article>`;
 }
 
-function orderCard(order) {
-  const items = order.lineItems.map((line) => `<li>${escapeHtml(line)}</li>`).join("");
-
-  return `
-  <article class="order-card">
-    <header class="order-header">
-      <div>
-        <h3>${escapeHtml(order.name)}</h3>
-        <p class="muted">${escapeHtml(order.customer)} · ${escapeHtml(order.createdAtFormatted)}</p>
-      </div>
-      <a class="btn btn-small" href="${escapeHtml(order.adminUrl)}" target="_blank" rel="noopener">Abrir en Shopify</a>
-    </header>
-    <ul class="order-items">${items}</ul>
-    <footer class="order-footer">
-      <span class="pill">${escapeHtml(order.financialStatus)}</span>
-      <span class="pill">${escapeHtml(order.fulfillmentStatus)}</span>
-      <strong>${escapeHtml(order.total)}</strong>
-    </footer>
-  </article>`;
-}
-
-function renderDashboardPage({ stock, orders, lastSync, thresholds, whatsappStatus, flash }) {
+function renderDashboardPage({
+  stock,
+  lastSync,
+  thresholds,
+  whatsappStatus,
+  shopifyOrdersUrl,
+}) {
   const cards = stock.products.map((p) => stockCard(p, thresholds)).join("");
-  const orderCards = orders.error
-    ? `<p class="empty-state">No se pudieron cargar pedidos. Agregá el permiso <code>read_orders</code> en la app de Shopify y reinstalala.</p>`
-    : orders.orders.length > 0
-      ? orders.orders.map(orderCard).join("")
-      : '<p class="empty-state">No hay pedidos pendientes de preparación.</p>';
 
   const lastSyncText = lastSync
     ? `${formatDateTime(lastSync.at)} (${lastSync.source === "webhook" ? "webhook" : "manual"})`
     : "Todavía no hubo recálculos en esta instancia";
 
   const fetchedAt = formatDateTime(stock.fetchedAt);
-
-  const flashHtml = flash
-    ? `<div class="alert ${flash.type === "error" ? "alert-error" : "alert-success"}">${escapeHtml(flash.message)}</div>`
-    : "";
 
   const body = `
   <div class="app-shell">
@@ -137,27 +113,24 @@ function renderDashboardPage({ stock, orders, lastSync, thresholds, whatsappStat
         ${brandLogo()}
         <div>
           <strong>Alucraft Admin</strong>
-          <span class="muted">Stock &amp; pedidos</span>
+          <span class="muted">Stock</span>
         </div>
       </div>
-      <form method="post" action="/admin/logout">
-        <button type="submit" class="btn btn-ghost">Salir</button>
-      </form>
+      <div class="topbar-actions">
+        <a class="btn btn-small" href="${escapeHtml(shopifyOrdersUrl)}" target="_blank" rel="noopener">Pedidos en Shopify</a>
+        <form method="post" action="/admin/logout">
+          <button type="submit" class="btn btn-ghost">Salir</button>
+        </form>
+      </div>
     </header>
 
     <main class="content">
-      ${flashHtml}
-
       <section class="section">
         <div class="section-head">
           <h1>Resumen</h1>
           <p class="muted">Consultado ${escapeHtml(fetchedAt)}</p>
         </div>
         <div class="stats-row">
-          <div class="stat-chip">
-            <span>Pedidos pendientes</span>
-            <strong>${orders.count}</strong>
-          </div>
           <div class="stat-chip">
             <span>Última sincronización</span>
             <strong class="stat-small">${escapeHtml(lastSyncText)}</strong>
@@ -176,13 +149,6 @@ function renderDashboardPage({ stock, orders, lastSync, thresholds, whatsappStat
         </div>
         <div id="sync-result" class="sync-result" hidden></div>
         <div class="cards-grid">${cards}</div>
-      </section>
-
-      <section class="section">
-        <div class="section-head">
-          <h2>Pedidos pendientes</h2>
-        </div>
-        <div class="orders-list">${orderCards}</div>
       </section>
     </main>
   </div>`;

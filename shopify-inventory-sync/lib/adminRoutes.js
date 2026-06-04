@@ -1,9 +1,8 @@
 const path = require("path");
 const express = require("express");
 const { getAdminConfig, validateCredentials, requireAdmin, isAdminConfigured } = require("./auth");
-const { getAlertThresholds, getWhatsAppConfig } = require("./config");
+const { getAlertThresholds, getWhatsAppConfig, getShopifyPendingOrdersUrl } = require("./config");
 const { getDashboardStockSummary } = require("./dashboardData");
-const { getPendingOrders } = require("./shopifyOrders");
 const { getLastSync, recordSync } = require("./syncState");
 const { syncJuegoLivingStock } = require("./syncJuegoStock");
 const { checkAndSendStockAlerts } = require("./alerts/stockAlerts");
@@ -16,19 +15,6 @@ function whatsappStatusLabel() {
   if (cfg.unknownProvider) return "Proveedor inválido";
   if (cfg.enabled) return `Activo (${cfg.provider})`;
   return "No configurado";
-}
-
-async function loadPendingOrdersSafe() {
-  try {
-    return { ...await getPendingOrders(), error: null };
-  } catch (error) {
-    console.warn("Pending orders unavailable", error.message);
-    return {
-      count: 0,
-      orders: [],
-      error: error.message,
-    };
-  }
 }
 
 async function runSyncWithAlerts(source) {
@@ -87,22 +73,14 @@ function createAdminRouter() {
   router.get("/", requireAdmin, async (req, res) => {
     try {
       const stock = await getDashboardStockSummary();
-      const orders = await loadPendingOrdersSafe();
 
       return res.status(200).send(
         renderDashboardPage({
           stock,
-          orders,
           lastSync: getLastSync(),
           thresholds: getAlertThresholds(),
           whatsappStatus: whatsappStatusLabel(),
-          flash: orders.error
-            ? {
-                type: "error",
-                message:
-                  "Pedidos no disponibles: faltan permisos read_orders en la app de Shopify. El stock sí se muestra abajo.",
-              }
-            : null,
+          shopifyOrdersUrl: getShopifyPendingOrdersUrl(),
         })
       );
     } catch (error) {

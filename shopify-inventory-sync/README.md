@@ -3,7 +3,7 @@
 Mini app Node.js + Express para:
 
 - Recalcular stock del **Juego Living Exterior** desde sus componentes
-- Panel admin privado con inventario, pedidos pendientes y recálculo manual
+- Panel admin privado con inventario y recálculo manual
 - Alertas opcionales por WhatsApp cuando el stock está bajo
 
 Usa **Shopify Admin GraphQL API**.
@@ -83,7 +83,8 @@ Las alertas tienen cooldown de 6 horas por variante para no spamear.
 - `read_inventory`
 - `write_inventory`
 - `read_products`
-- `read_orders` (pedidos pendientes en el dashboard)
+
+(No requiere `read_orders`: los pedidos se ven en Shopify Admin desde un link en el panel.)
 
 ## Rutas
 
@@ -154,8 +155,8 @@ Tras configurar `ADMIN_USERNAME`, `ADMIN_PASSWORD` y `SESSION_SECRET`:
 
 1. Entrá a `/admin`
 2. Verás tarjetas de stock por producto y variantes
-3. Pedidos pendientes (no preparados / parciales)
-4. Botón **Recalcular stock de juegos**
+3. Botón **Recalcular stock de juegos**
+4. Link **Pedidos en Shopify** (abre pedidos pendientes en Shopify Admin)
 
 El token de Shopify **nunca** se expone al frontend; todas las llamadas van por el backend.
 

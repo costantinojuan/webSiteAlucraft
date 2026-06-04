@@ -56,4 +56,8 @@ async function getAccessToken() {
   return fetchClientCredentialsToken(auth);
 }
 
-module.exports = { getAccessToken };
+function clearTokenCache() {
+  cache = null;
+}
+
+module.exports = { getAccessToken, clearTokenCache };

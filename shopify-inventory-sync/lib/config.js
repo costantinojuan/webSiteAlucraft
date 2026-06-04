@@ -105,6 +105,11 @@ function getAdminStoreUrl() {
   return `https://${getStoreDomain()}/admin`;
 }
 
+function getShopifyPendingOrdersUrl() {
+  const handle = getStoreDomain().replace(/\.myshopify\.com$/i, "");
+  return `https://admin.shopify.com/store/${handle}/orders?status=open&fulfillment_status=unfulfilled`;
+}
+
 function getWebhookSecret() {
   return requireEnv("SHOPIFY_WEBHOOK_SECRET");
 }
@@ -117,4 +122,5 @@ module.exports = {
   getAlertThresholds,
   getWhatsAppConfig,
   getAdminStoreUrl,
+  getShopifyPendingOrdersUrl,
 };

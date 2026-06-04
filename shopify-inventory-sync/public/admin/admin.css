@@ -170,6 +170,12 @@ a {
   border-bottom: 1px solid var(--border);
 }
 
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .content {
   max-width: 1100px;
   margin: 0 auto;
