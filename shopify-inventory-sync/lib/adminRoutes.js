@@ -6,6 +6,7 @@ const { getDashboardStockSummary } = require("./dashboardData");
 const { getLastSync, recordSync } = require("./syncState");
 const { syncJuegoLivingStock } = require("./syncJuegoStock");
 const { checkAndSendStockAlerts } = require("./alerts/stockAlerts");
+const { sendWhatsAppMessage } = require("./alerts/whatsapp");
 const { renderLoginPage, renderDashboardPage } = require("./views/adminPages");
 
 function whatsappStatusLabel() {
@@ -80,6 +81,7 @@ function createAdminRouter() {
           lastSync: getLastSync(),
           thresholds: getAlertThresholds(),
           whatsappStatus: whatsappStatusLabel(),
+          whatsappEnabled: getWhatsAppConfig().enabled,
           shopifyOrdersUrl: getShopifyPendingOrdersUrl(),
         })
       );
@@ -105,6 +107,26 @@ function createAdminRouter() {
         ok: false,
         error: error.message,
       });
+    }
+  });
+
+  router.post("/api/test-whatsapp", requireAdmin, async (req, res) => {
+    const cfg = getWhatsAppConfig();
+    if (!cfg.enabled) {
+      return res.status(400).json({
+        ok: false,
+        error: "WhatsApp no configurado. Agregá las variables en Vercel y redeploy.",
+      });
+    }
+
+    try {
+      const result = await sendWhatsAppMessage(
+        "Prueba de alerta Alucraft.\nSi recibís este mensaje, WhatsApp está configurado correctamente."
+      );
+      return res.status(200).json({ ok: true, result });
+    } catch (error) {
+      console.error("WhatsApp test error", error);
+      return res.status(500).json({ ok: false, error: error.message });
     }
   });
 

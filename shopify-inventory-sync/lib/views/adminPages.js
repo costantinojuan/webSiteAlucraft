@@ -96,6 +96,7 @@ function renderDashboardPage({
   lastSync,
   thresholds,
   whatsappStatus,
+  whatsappEnabled,
   shopifyOrdersUrl,
 }) {
   const cards = stock.products.map((p) => stockCard(p, thresholds)).join("");
@@ -138,6 +139,12 @@ function renderDashboardPage({
           <div class="stat-chip">
             <span>WhatsApp alertas</span>
             <strong class="stat-small">${escapeHtml(whatsappStatus)}</strong>
+            ${
+              whatsappEnabled
+                ? `<button type="button" id="whatsapp-test-btn" class="btn btn-small" style="margin-top:0.5rem">Probar WhatsApp</button>
+                   <span id="whatsapp-test-result" class="muted" style="display:block;margin-top:0.35rem;font-size:0.8rem"></span>`
+                : `<span class="muted" style="display:block;margin-top:0.35rem;font-size:0.8rem">Configurá Twilio en Vercel</span>`
+            }
           </div>
         </div>
       </section>
