@@ -18,6 +18,19 @@ function whatsappStatusLabel() {
   return "No configurado";
 }
 
+async function loadPendingOrdersSafe() {
+  try {
+    return { ...await getPendingOrders(), error: null };
+  } catch (error) {
+    console.warn("Pending orders unavailable", error.message);
+    return {
+      count: 0,
+      orders: [],
+      error: error.message,
+    };
+  }
+}
+
 async function runSyncWithAlerts(source) {
   const syncResult = await syncJuegoLivingStock();
   recordSync(syncResult, source);
@@ -73,10 +86,8 @@ function createAdminRouter() {
 
   router.get("/", requireAdmin, async (req, res) => {
     try {
-      const [stock, orders] = await Promise.all([
-        getDashboardStockSummary(),
-        getPendingOrders(),
-      ]);
+      const stock = await getDashboardStockSummary();
+      const orders = await loadPendingOrdersSafe();
 
       return res.status(200).send(
         renderDashboardPage({
@@ -85,7 +96,13 @@ function createAdminRouter() {
           lastSync: getLastSync(),
           thresholds: getAlertThresholds(),
           whatsappStatus: whatsappStatusLabel(),
-          flash: null,
+          flash: orders.error
+            ? {
+                type: "error",
+                message:
+                  "Pedidos no disponibles: faltan permisos read_orders en la app de Shopify. El stock sí se muestra abajo.",
+              }
+            : null,
         })
       );
     } catch (error) {

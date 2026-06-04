@@ -110,8 +110,9 @@ function orderCard(order) {
 
 function renderDashboardPage({ stock, orders, lastSync, thresholds, whatsappStatus, flash }) {
   const cards = stock.products.map((p) => stockCard(p, thresholds)).join("");
-  const orderCards =
-    orders.orders.length > 0
+  const orderCards = orders.error
+    ? `<p class="empty-state">No se pudieron cargar pedidos. Agregá el permiso <code>read_orders</code> en la app de Shopify y reinstalala.</p>`
+    : orders.orders.length > 0
       ? orders.orders.map(orderCard).join("")
       : '<p class="empty-state">No hay pedidos pendientes de preparación.</p>';
 
