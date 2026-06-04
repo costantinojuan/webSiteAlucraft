@@ -2,13 +2,30 @@ const { getWhatsAppConfig } = require("../config");
 
 function normalizePhoneE164(phone) {
   const raw = String(phone).trim();
-  if (raw.startsWith("whatsapp:")) {
+  if (raw.toLowerCase().startsWith("whatsapp:")) {
     return raw;
   }
-  if (raw.startsWith("+")) {
+
+  let digits = raw.replace(/\D/g, "");
+  if (!digits) {
     return raw;
   }
-  return `+${raw.replace(/\D/g, "")}`;
+
+  // Argentina móvil: 011... o 911... → 54911...
+  if (digits.startsWith("0")) {
+    digits = digits.replace(/^0+/, "");
+  }
+  if (digits.startsWith("54") && !digits.startsWith("549") && digits.length >= 10) {
+    digits = `549${digits.slice(2)}`;
+  }
+  if (digits.startsWith("9") && digits.length === 10) {
+    digits = `54${digits}`;
+  }
+  if (!digits.startsWith("54") && digits.length === 10) {
+    digits = `549${digits}`;
+  }
+
+  return `+${digits}`;
 }
 
 async function sendTwilioWhatsApp(config, body) {
@@ -36,7 +53,8 @@ async function sendTwilioWhatsApp(config, body) {
   const payload = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw new Error(`Twilio WhatsApp error ${response.status}: ${JSON.stringify(payload)}`);
+    const detail = payload.message || payload.error_message || JSON.stringify(payload);
+    throw new Error(`Twilio WhatsApp error ${response.status}: ${detail}`);
   }
 
   return { provider: "twilio", sid: payload.sid };
