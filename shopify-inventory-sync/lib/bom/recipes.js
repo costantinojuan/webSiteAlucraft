@@ -87,4 +87,47 @@ function getRecipe(productKey, parsed) {
   return builder(parsed);
 }
 
-module.exports = { getRecipe, recipeSillon1, recipeSillon3, recipeReposera, recipeMesa };
+/** Suma líneas BOM por SKU. */
+function mergeRecipeLines(lines) {
+  const bySku = new Map();
+
+  for (const line of lines) {
+    const prev = bySku.get(line.sku);
+    if (prev) {
+      prev.qty += line.qty;
+    } else {
+      bySku.set(line.sku, { sku: line.sku, qty: line.qty, label: line.label });
+    }
+  }
+
+  return [...bySku.values()];
+}
+
+/** Componentes que consume 1 Juego Living vendido. */
+function getJuegoSaleRecipe(parsed) {
+  const { mesaColorFromJuegoTitle } = require("./parseVariant");
+  const { parseMesaVariantTitle } = require("./parseVariant");
+
+  const lines = [];
+
+  for (const line of recipeSillon1(parsed)) {
+    lines.push({ ...line, qty: line.qty * 2 });
+  }
+
+  lines.push(...recipeSillon3(parsed));
+
+  const mesaColor = mesaColorFromJuegoTitle(parsed.title);
+  lines.push(...recipeMesa(parseMesaVariantTitle(mesaColor)));
+
+  return mergeRecipeLines(lines);
+}
+
+module.exports = {
+  getRecipe,
+  getJuegoSaleRecipe,
+  mergeRecipeLines,
+  recipeSillon1,
+  recipeSillon3,
+  recipeReposera,
+  recipeMesa,
+};

@@ -119,12 +119,21 @@ Las alertas tienen cooldown de 6 horas por variante para no spamear.
 
 ## Webhook `orders/paid`
 
-1. Shopify envía orden pagada
+1. Shopify envía la orden pagada (con `line_items`)
 2. Se valida `X-Shopify-Hmac-Sha256`
-3. Se recalcula stock del Juego desde componentes
-4. Opcionalmente se envían alertas WhatsApp si hay stock bajo
+3. **Se descuentan componentes** según el BOM (Juego, Sillón 1/3, Mesa, Reposera)
+4. Se recalculan productos terminados en Shopify
+5. Opcionalmente alertas WhatsApp si hay stock bajo
 
-Cualquier venta pagada dispara el recálculo (no se filtra por productos en la orden).
+Pedidos duplicados (reintentos de Shopify) se ignoran por ~7 días (memoria de instancia).
+
+**Importante:** desactivá el Flow viejo que descontaba componentes al vender el Juego — si no, se descuenta dos veces.
+
+### Probar deducciones sin Shopify
+
+```bash
+node scripts/test-order-deduct.js
+```
 
 ## Desarrollo local
 
@@ -184,4 +193,4 @@ El token de Shopify **nunca** se expone al frontend; todas las llamadas van por 
 ## Notas
 
 - **Última sincronización**: se guarda en memoria de la instancia (en Vercel puede resetearse en cold start; el stock en pantalla siempre se consulta en vivo).
-- **Flow + app**: Flow descuenta componentes al vender el Juego; esta app recalcula el stock del Juego. Son complementarios.
+- **Ventas**: al pagarse un pedido, la app descuenta piezas del depósito (componentes borrador) y recalcula terminados. No hace falta Shopify Flow para eso.

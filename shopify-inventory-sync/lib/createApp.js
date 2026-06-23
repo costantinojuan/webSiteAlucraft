@@ -18,7 +18,7 @@ function createApp() {
 <html lang="es"><head><meta charset="utf-8"><title>Alucraft Inventory Sync</title></head>
 <body style="font-family:system-ui;max-width:32rem;margin:3rem auto;padding:0 1rem">
   <h1>App conectada</h1>
-  <p>El servidor está activo. El stock del <strong>Juego Living</strong> se sincroniza con el webhook <code>orders/paid</code>.</p>
+  <p>Al pagarse un pedido, la app descuenta <strong>componentes</strong> y recalcula stock en la tienda (webhook <code>orders/paid</code>).</p>
   <p>Panel admin: <a href="/admin">/admin</a></p>
   <p>Copiá el <strong>Admin API access token</strong> en el Partner Dashboard → esta app → API credentials → y pegalo en Vercel como <code>SHOPIFY_ADMIN_ACCESS_TOKEN</code>.</p>
   <p>Podés cerrar esta pestaña.</p>
@@ -57,20 +57,20 @@ function createApp() {
           console.warn("Unexpected webhook topic", { topic, shop });
         }
 
-        const { syncResult, alertResult } = await runSyncWithAlerts("webhook");
+        const { handleOrderPaid } = require("./handleOrderPaid");
+        const result = await handleOrderPaid(req.body, shop);
 
-        console.log("Juego Living stock synced", {
+        console.log("Order paid processed", {
           shop,
           topic,
-          syncResult,
-          alerts: alertResult,
+          orderId: result.orderId,
+          orderName: result.orderName,
+          skipped: result.skipped,
+          deductions: result.deductions?.length ?? 0,
+          errors: result.deductionErrors?.length ?? 0,
         });
 
-        return res.status(200).json({
-          ok: true,
-          synced: syncResult,
-          alerts: alertResult,
-        });
+        return res.status(200).json(result);
       } catch (error) {
         console.error("Webhook handler error", error);
         return res.status(500).json({

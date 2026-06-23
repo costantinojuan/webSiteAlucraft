@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "node --watch server.js",
     "start": "node server.js",
-    "list-ids": "node scripts/list-config-ids.js"
+    "list-ids": "node scripts/list-config-ids.js",
+    "test-deduct": "node scripts/test-order-deduct.js"
   },
   "engines": {
     "node": ">=18"
