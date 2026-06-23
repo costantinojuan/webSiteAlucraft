@@ -1,73 +1,74 @@
 (function () {
+  const nav = document.getElementById("dash-nav");
+  const viewTitle = document.getElementById("view-title");
   const syncBtn = document.getElementById("sync-btn");
-  const syncResult = document.getElementById("sync-result");
+  const syncToast = document.getElementById("sync-toast");
+
+  const VIEW_TITLES = {
+    tienda: "Tienda",
+    deposito: "Depósito",
+  };
+
+  if (nav) {
+    nav.addEventListener("click", (e) => {
+      const btn = e.target.closest(".dash-nav-btn");
+      if (!btn) return;
+
+      const view = btn.dataset.view;
+      nav.querySelectorAll(".dash-nav-btn").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      document.querySelectorAll(".dash-panel").forEach((p) => p.classList.remove("active"));
+      const panel = document.getElementById(`view-${view}`);
+      if (panel) panel.classList.add("active");
+      if (viewTitle) viewTitle.textContent = VIEW_TITLES[view] || view;
+    });
+  }
+
+  document.querySelectorAll(".show-all-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const key = btn.dataset.target;
+      const all = document.querySelector(`[data-all="${key}"]`);
+      if (all) {
+        all.classList.remove("hidden");
+        btn.hidden = true;
+      }
+    });
+  });
+
+  function showToast(message, type) {
+    if (!syncToast) return;
+    syncToast.hidden = false;
+    syncToast.className = `sync-toast ${type}`;
+    syncToast.textContent = message;
+  }
 
   const PRODUCT_LABELS = {
     sillon1: "Sillón 1",
     sillon3: "Sillón 3",
-    mesa: "Mesa Ratona",
+    mesa: "Mesa",
     reposera: "Reposera",
-    juego: "Juego Living",
+    juego: "Juego",
   };
 
-  function formatLegacyJuegoResults(synced) {
-    if (!Array.isArray(synced) || synced.length === 0) {
-      return "No hubo variantes para actualizar.";
+  function formatSyncSummary(syncResult) {
+    if (!syncResult || syncResult.mode !== "components") {
+      return "Inventario actualizado.";
     }
 
-    return synced
-      .map((row) => {
-        const prev = row.juego?.previousAvailable ?? "?";
-        const next = row.juego?.calculated ?? row.juego?.available ?? "?";
-        return `${row.juegoVariant}: ${prev} → ${next}`;
-      })
-      .join("<br>");
-  }
-
-  function formatComponentsResults(syncResult) {
-    const sections = [];
-
+    const parts = [];
     for (const [key, product] of Object.entries(syncResult.products || {})) {
-      if (!product?.synced?.length) {
-        continue;
-      }
-
-      const label = PRODUCT_LABELS[key] || key;
-      const rows = product.synced
-        .map((row) => {
-          const prev = row.previousAvailable ?? "?";
-          const next = row.calculated ?? row.available ?? "?";
-          const bottleneck = row.bottleneck
-            ? ` · cuello: ${row.bottleneck.label} (${row.bottleneck.available})`
-            : "";
-          return `${row.variant}: ${prev} → ${next}${bottleneck}`;
-        })
-        .join("<br>");
-
-      sections.push(`<strong>${label}</strong><br>${rows}`);
+      if (!product?.synced?.length) continue;
+      const total = product.synced.reduce((s, r) => s + (r.calculated ?? 0), 0);
+      parts.push(`${PRODUCT_LABELS[key] || key}: ${total}`);
     }
-
-    return sections.length > 0 ? sections.join("<br><br>") : "No hubo variantes para actualizar.";
+    return parts.length ? parts.join(" · ") : "Inventario actualizado.";
   }
 
-  function formatSyncResults(syncResult) {
-    if (!syncResult) {
-      return "Sin detalle de sincronización.";
-    }
-
-    if (syncResult.mode === "components") {
-      return formatComponentsResults(syncResult);
-    }
-
-    return formatLegacyJuegoResults(syncResult.synced);
-  }
-
-  if (syncBtn && syncResult) {
+  if (syncBtn) {
     syncBtn.addEventListener("click", async () => {
       syncBtn.disabled = true;
-      syncResult.hidden = false;
-      syncResult.className = "sync-result";
-      syncResult.textContent = "Recalculando inventario…";
+      showToast("Recalculando…", "ok");
 
       try {
         const response = await fetch("/admin/api/sync", {
@@ -79,26 +80,13 @@
         const data = await response.json();
 
         if (!response.ok || !data.ok) {
-          throw new Error(data.error || "Error al recalcular stock");
+          throw new Error(data.error || "Error al recalcular");
         }
 
-        syncResult.className = "sync-result alert-success";
-        const alertNote = data.alerts?.sent
-          ? " Se envió alerta de WhatsApp."
-          : data.alerts?.lowCount
-            ? " Hay stock bajo (WhatsApp no enviado o en cooldown)."
-            : "";
-
-        syncResult.innerHTML =
-          `<strong>Inventario recalculado correctamente.</strong>${alertNote}<br><br>` +
-          formatSyncResults(data.synced) +
-          `<br><br><em>Recargando panel…</em>`;
-
-        setTimeout(() => window.location.reload(), 1500);
+        showToast(`✓ ${formatSyncSummary(data.synced)}`, "ok");
+        setTimeout(() => window.location.reload(), 1200);
       } catch (error) {
-        syncResult.className = "sync-result alert-error";
-        syncResult.textContent = error.message || "No se pudo recalcular el stock.";
-      } finally {
+        showToast(error.message || "Error al recalcular", "err");
         syncBtn.disabled = false;
       }
     });
@@ -110,7 +98,7 @@
   if (whatsappBtn && whatsappResult) {
     whatsappBtn.addEventListener("click", async () => {
       whatsappBtn.disabled = true;
-      whatsappResult.textContent = "Enviando prueba…";
+      whatsappResult.textContent = "Enviando…";
 
       try {
         const response = await fetch("/admin/api/test-whatsapp", {
@@ -120,14 +108,12 @@
         });
 
         const data = await response.json();
-
         if (!response.ok || !data.ok) {
-          throw new Error(data.error || "Error al enviar WhatsApp");
+          throw new Error(data.error || "Error");
         }
-
-        whatsappResult.textContent = "Mensaje enviado. Revisá tu WhatsApp.";
+        whatsappResult.textContent = "Enviado ✓";
       } catch (error) {
-        whatsappResult.textContent = error.message || "No se pudo enviar.";
+        whatsappResult.textContent = error.message || "Error";
       } finally {
         whatsappBtn.disabled = false;
       }

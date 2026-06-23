@@ -1,5 +1,5 @@
 function brandLogo() {
-  return `<img src="/admin/static/alucraft-logo.png" alt="Alucraft" class="brand-logo" width="44" height="44">`;
+  return `<img src="/admin/static/alucraft-logo.png" alt="Alucraft" class="brand-logo" width="40" height="40">`;
 }
 
 function escapeHtml(value) {
@@ -28,7 +28,7 @@ function layout({ title, body, extraHead = "" }) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${escapeHtml(title)} — Alucraft Admin</title>
+  <title>${escapeHtml(title)} — Alucraft</title>
   <link rel="stylesheet" href="/admin/static/admin.css">
   ${extraHead}
 </head>
@@ -46,8 +46,8 @@ function renderLoginPage({ error, nextUrl }) {
       <div class="brand">
         ${brandLogo()}
         <div>
-          <h1>Alucraft Admin</h1>
-          <p>Panel interno de stock</p>
+          <h1>Alucraft</h1>
+          <p>Panel de stock</p>
         </div>
       </div>
       ${error ? `<div class="alert alert-error">${escapeHtml(error)}</div>` : ""}
@@ -66,198 +66,127 @@ function renderLoginPage({ error, nextUrl }) {
     </section>
   </main>`;
 
-  return layout({ title: "Login", body, extraHead: "" });
+  return layout({ title: "Login", body });
 }
 
-function renderInfoPanel() {
-  return `
-  <section class="info-panel">
-    <h2>¿Cómo leer este panel?</h2>
-    <div class="info-grid">
-      <div class="info-item">
-        <span class="info-step">1</span>
-        <div>
-          <strong>Componentes</strong>
-          <p>Stock <em>físico</em> en depósito (estructuras + almohadones). Acá cargás lo que tenés realmente.</p>
-        </div>
-      </div>
-      <div class="info-item">
-        <span class="info-step">2</span>
-        <div>
-          <strong>Listo para vender</strong>
-          <p>Cuántos productos terminados se pueden armar con esos componentes. Shopify muestra estos números en la tienda.</p>
-        </div>
-      </div>
-      <div class="info-item">
-        <span class="info-step">3</span>
-        <div>
-          <strong>Recalcular</strong>
-          <p>Actualiza los productos terminados en Shopify según el stock de componentes. Tocá el botón después de cargar piezas.</p>
-        </div>
-      </div>
-    </div>
-  </section>`;
+const PRODUCT_SHORT = {
+  juego: { code: "JG", name: "Juego Living" },
+  sillon1: { code: "S1", name: "Sillón 1 cuerpo" },
+  sillon3: { code: "S3", name: "Sillón 3 cuerpos" },
+  mesa: { code: "MR", name: "Mesa ratona" },
+  reposera: { code: "RP", name: "Reposera" },
+};
+
+function colorClass(name) {
+  const n = String(name || "").toLowerCase();
+  if (n.includes("marr")) return "c-brown";
+  if (n.includes("negro")) return "c-black";
+  if (n.includes("beige")) return "c-beige";
+  if (n.includes("claro")) return "c-gray-l";
+  if (n.includes("oscuro")) return "c-gray-d";
+  return "c-default";
 }
 
-function renderComponentGroups(groups) {
-  if (!groups?.length) {
-    return `<p class="empty-state">No se pudieron cargar los componentes.</p>`;
+function renderVariantPills(variants, { showZero = false } = {}) {
+  const visible = showZero ? variants : variants.filter((v) => (v.fabricable ?? v.available ?? 0) > 0);
+
+  if (visible.length === 0) {
+    return `<span class="empty-pill">Sin stock</span>`;
   }
 
-  return groups
-    .map((group) => {
-      const tables = group.products
-        .map((product) => {
-          const rows = product.variants
-            .map(
-              (v) => `
-            <tr>
-              <td>${escapeHtml(product.label)}</td>
-              <td>${escapeHtml(v.title)}</td>
-              <td><code class="sku">${escapeHtml(v.sku)}</code></td>
-              <td class="num ${v.stock === 0 ? "zero" : ""}"><strong>${v.stock}</strong></td>
-            </tr>`
-            )
-            .join("");
-
-          return rows;
-        })
-        .join("");
-
-      return `
-      <article class="component-group">
-        <header class="component-group-head">
-          <h3>${escapeHtml(group.title)}</h3>
-          <p class="muted">${escapeHtml(group.hint)}</p>
-        </header>
-        <div class="table-wrap">
-          <table class="stock-table">
-            <thead>
-              <tr>
-                <th>Producto</th>
-                <th>Variante</th>
-                <th>SKU</th>
-                <th>Stock</th>
-              </tr>
-            </thead>
-            <tbody>${tables}</tbody>
-          </table>
-        </div>
-      </article>`;
-    })
-    .join("");
-}
-
-function bottleneckLabel(bottleneck) {
-  if (!bottleneck) {
-    return "";
-  }
-  const qty =
-    bottleneck.qtyPerUnit && bottleneck.qtyPerUnit > 1
-      ? ` (necesita ${bottleneck.qtyPerUnit})`
-      : "";
-  return `<span class="bottleneck" title="Pieza que limita esta variante">Limita: ${escapeHtml(bottleneck.label)} — ${bottleneck.available} disp.${qty}</span>`;
-}
-
-function renderStructurePools(pools) {
-  if (!pools?.length) {
-    return "";
-  }
-
-  const items = pools
-    .map((pool) => {
-      const parts = pool.variants
-        .map((v) => `${escapeHtml(v.title.split(" / ").pop() || v.title)}: ${v.fabricable}`)
-        .join(" · ");
-      return `
-      <li>
-        <strong>${escapeHtml(pool.structureColor)}</strong>:
-        ${pool.structureStock} estructura(s) → repartidas: ${parts || "—"}
-      </li>`;
-    })
-    .join("");
-
-  return `<ul class="pool-list">${items}</ul>`;
-}
-
-function renderFinishedProduct(product, thresholds) {
-  const threshold = thresholds[product.key];
-  const withStock = product.variants.filter((v) => v.fabricable > 0);
-  const isLow = product.totalFabricable <= (threshold ?? 0);
-
-  const variantRows = product.variants
+  return visible
     .map((v) => {
-      const low = v.fabricable <= (threshold ?? 0);
-      const zero = v.fabricable === 0;
-      const breakdown =
-        product.key === "juego" && v.breakdown
-          ? `<span class="breakdown">S1: ${v.breakdown.sillon1} · S3: ${v.breakdown.sillon3} · Mesa ${escapeHtml(v.breakdown.mesaColor)}: ${v.breakdown.mesa}</span>`
-          : v.cushionCap != null && product.sharedStructure
-            ? `<span class="breakdown">Máx. por almohadones: ${v.cushionCap}</span>`
-            : "";
+      const qty = v.fabricable ?? v.available ?? 0;
+      const title = v.title || "";
+      const parts = title.includes(" / ") ? title.split(" / ") : [title];
+
+      const dots =
+        parts.length > 1
+          ? `<span class="pill-dots"><i class="${colorClass(parts[0])}"></i><i class="${colorClass(parts[1])}"></i></span>`
+          : `<span class="pill-dots"><i class="${colorClass(parts[0])}"></i></span>`;
 
       return `
-      <tr class="${zero ? "row-zero" : ""} ${low && !zero ? "row-low" : ""}">
-        <td>${escapeHtml(v.title)}</td>
-        <td class="num"><strong>${v.fabricable}</strong></td>
-        <td class="meta">${breakdown}${bottleneckLabel(v.bottleneck)}</td>
-      </tr>`;
+      <span class="vpill ${qty === 0 ? "vpill-zero" : ""}" title="${escapeHtml(title)}">
+        <em>${qty}</em>
+        ${dots}
+        <span class="vpill-label">${escapeHtml(title)}</span>
+      </span>`;
     })
     .join("");
+}
+
+function renderTiendaRow(product, thresholds) {
+  const meta = PRODUCT_SHORT[product.key] || { code: "?", name: product.title };
+  const threshold = thresholds[product.key] ?? 0;
+  const isLow = product.totalFabricable <= threshold;
+  const variants = product.variants || [];
 
   return `
-  <article class="card finished-card ${isLow ? "card-warning" : ""}">
-    <header class="card-header">
+  <article class="tienda-row ${isLow ? "is-low" : ""}" data-product="${escapeHtml(product.key)}">
+    <div class="tienda-row-left">
+      <span class="tienda-code">${escapeHtml(meta.code)}</span>
       <div>
-        <h2>${escapeHtml(product.title)}</h2>
-        <p class="card-hint">${escapeHtml(product.hint)}</p>
+        <h3>${escapeHtml(meta.name)}</h3>
+        <p class="tienda-sub">${variants.filter((v) => v.fabricable > 0).length} variantes con stock</p>
       </div>
-      ${isLow ? '<span class="badge badge-warning">Stock bajo</span>' : ""}
-    </header>
-    <div class="finished-summary">
-      <p class="card-total">${product.totalFabricable}</p>
-      <p class="card-sub">unidades vendibles · ${withStock.length} variante(s) con stock</p>
     </div>
-    ${product.structurePools?.length ? `<div class="pool-box"><span class="pool-label">Reparto de estructuras</span>${renderStructurePools(product.structurePools)}</div>` : ""}
-    <div class="table-wrap">
-      <table class="stock-table stock-table-compact">
-        <thead>
-          <tr>
-            <th>Variante (estructura / tela)</th>
-            <th>Disponible</th>
-            <th>Detalle</th>
-          </tr>
-        </thead>
-        <tbody>${variantRows}</tbody>
-      </table>
+    <div class="tienda-row-qty">
+      <strong>${product.totalFabricable}</strong>
+      <span>disponibles</span>
+    </div>
+    <div class="tienda-row-pills">
+      ${renderVariantPills(variants)}
+      ${variants.some((v) => v.fabricable === 0) ? `<button type="button" class="link-btn show-all-btn" data-target="${escapeHtml(product.key)}">+ ver sin stock</button>` : ""}
+      <div class="tienda-row-pills-all hidden" data-all="${escapeHtml(product.key)}">
+        ${renderVariantPills(variants, { showZero: true })}
+      </div>
     </div>
   </article>`;
 }
 
-function renderLegacyStockCards(stock, thresholds) {
-  return stock.products
-    .map((product) => {
-      const threshold = thresholds[product.key];
-      const isLow = product.variants.some((v) => v.available <= threshold);
-      const variantLines = product.variants
-        .map((v) => {
-          const low = v.available <= threshold;
-          return `<li class="${low ? "low" : ""}">${escapeHtml(v.title)}: <strong>${v.available}</strong></li>`;
-        })
-        .join("");
-
-      return `
-      <article class="card ${isLow ? "card-warning" : ""}">
-        <header class="card-header">
-          <h2>${escapeHtml(product.title)}</h2>
-          ${isLow ? '<span class="badge badge-warning">Stock bajo</span>' : ""}
-        </header>
-        <p class="card-total">${product.totalAvailable}</p>
-        <p class="card-sub">unidades totales</p>
-        <ul class="variant-list">${variantLines}</ul>
-      </article>`;
-    })
+function renderDepositoItem(product) {
+  const colors = product.variants
+    .map(
+      (v) => `
+    <div class="depo-color">
+      <i class="${colorClass(v.title)}"></i>
+      <span>${escapeHtml(v.title)}</span>
+      <strong>${v.stock}</strong>
+    </div>`
+    )
     .join("");
+
+  return `
+  <div class="depo-item">
+    <header>
+      <h4>${escapeHtml(product.label)}</h4>
+      <span>${product.totalStock} u.</span>
+    </header>
+    <div class="depo-colors">${colors}</div>
+  </div>`;
+}
+
+function renderDepositoView(groups) {
+  return groups
+    .map(
+      (group) => `
+    <section class="depo-block">
+      <h3>${escapeHtml(group.title)}</h3>
+      <div class="depo-grid">${group.products.map(renderDepositoItem).join("")}</div>
+    </section>`
+    )
+    .join("");
+}
+
+function renderLegacyTienda(stock, thresholds) {
+  const products = stock.products.map((p) => ({
+    key: p.key,
+    title: p.title,
+    totalFabricable: p.totalAvailable,
+    variants: p.variants.map((v) => ({ title: v.title, fabricable: v.available, available: v.available })),
+  }));
+
+  return products.map((p) => renderTiendaRow(p, thresholds)).join("");
 }
 
 function renderDashboardPage({
@@ -270,84 +199,106 @@ function renderDashboardPage({
   shopifyOrdersUrl,
 }) {
   const lastSyncText = lastSync
-    ? `${formatDateTime(lastSync.at)} (${lastSync.source === "webhook" ? "webhook" : "manual"})`
-    : "Todavía no hubo recálculos en esta instancia";
+    ? formatDateTime(lastSync.at)
+    : "Nunca";
 
   const fetchedAt = formatDateTime(stock.fetchedAt);
   const useBomView = bomView?.mode === "components" && bomView.components && bomView.finished;
 
-  const inventoryBody = useBomView
-    ? `
-        ${renderInfoPanel()}
-        <section class="subsection">
-          <div class="subsection-head">
-            <h2>Componentes — stock físico</h2>
-            <p class="muted">${bomView.components.totalPhysicalUnits} piezas en total (suma de todas las variantes)</p>
-          </div>
-          <div class="component-groups">${renderComponentGroups(bomView.components.groups)}</div>
-        </section>
-        <section class="subsection">
-          <div class="subsection-head">
-            <h2>Listo para vender — calculado</h2>
-            <p class="muted">Lo que aparece en Shopify después de recalcular</p>
-          </div>
-          <div class="finished-grid">${bomView.finished.map((p) => renderFinishedProduct(p, thresholds)).join("")}</div>
-        </section>`
-    : `<div class="cards-grid">${renderLegacyStockCards(stock, thresholds)}</div>`;
+  const tiendaProducts = useBomView ? bomView.finished : null;
+  const tiendaHtml = useBomView
+    ? tiendaProducts.map((p) => renderTiendaRow(p, thresholds)).join("")
+    : renderLegacyTienda(stock, thresholds);
+
+  const depositoHtml = useBomView
+    ? renderDepositoView(bomView.components.groups)
+    : `<p class="empty-state">Modo legacy — solo se muestra stock de productos terminados.</p>`;
+
+  const totalPiezas = useBomView ? bomView.components.totalPhysicalUnits : "—";
+  const totalVendible = useBomView
+    ? bomView.finished.reduce((s, p) => s + p.totalFabricable, 0)
+    : stock.products.reduce((s, p) => s + p.totalAvailable, 0);
 
   const body = `
-  <div class="app-shell">
-    <header class="topbar">
-      <div class="brand-inline">
+  <div class="dash">
+    <aside class="dash-side">
+      <div class="dash-brand">
         ${brandLogo()}
         <div>
-          <strong>Alucraft Admin</strong>
-          <span class="muted">Stock</span>
+          <strong>Alucraft</strong>
+          <span>Inventario</span>
         </div>
       </div>
-      <div class="topbar-actions">
-        <a class="btn btn-small" href="${escapeHtml(shopifyOrdersUrl)}" target="_blank" rel="noopener">Pedidos en Shopify</a>
+
+      <nav class="dash-nav" id="dash-nav">
+        <button type="button" class="dash-nav-btn active" data-view="tienda">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          Tienda
+        </button>
+        <button type="button" class="dash-nav-btn" data-view="deposito">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          Depósito
+        </button>
+      </nav>
+
+      <div class="dash-side-foot">
+        <button type="button" id="sync-btn" class="btn btn-accent btn-block">
+          Recalcular todo
+        </button>
+        <a class="btn btn-ghost btn-block" href="${escapeHtml(shopifyOrdersUrl)}" target="_blank" rel="noopener">Shopify ↗</a>
         <form method="post" action="/admin/logout">
-          <button type="submit" class="btn btn-ghost">Salir</button>
+          <button type="submit" class="btn btn-ghost btn-block">Salir</button>
         </form>
       </div>
-    </header>
+    </aside>
 
-    <main class="content content-wide">
-      <section class="section">
-        <div class="section-head row-between">
-          <div>
-            <h1>Inventario</h1>
-            <p class="muted">Consultado ${escapeHtml(fetchedAt)}</p>
-          </div>
-          <button type="button" id="sync-btn" class="btn btn-primary">Recalcular inventario</button>
+    <div class="dash-body">
+      <header class="dash-top">
+        <div>
+          <h1 id="view-title">Tienda</h1>
+          <p class="muted">Actualizado ${escapeHtml(fetchedAt)}</p>
         </div>
-        <div id="sync-result" class="sync-result" hidden></div>
-        <div class="stats-row">
-          <div class="stat-chip">
-            <span>Última sincronización</span>
-            <strong class="stat-small">${escapeHtml(lastSyncText)}</strong>
+        <div class="dash-kpis">
+          <div class="kpi">
+            <span>Piezas en depósito</span>
+            <strong>${totalPiezas}</strong>
           </div>
-          <div class="stat-chip">
-            <span>WhatsApp alertas</span>
-            <strong class="stat-small">${escapeHtml(whatsappStatus)}</strong>
-            ${
-              whatsappEnabled
-                ? `<button type="button" id="whatsapp-test-btn" class="btn btn-small" style="margin-top:0.5rem">Probar WhatsApp</button>
-                   <span id="whatsapp-test-result" class="muted" style="display:block;margin-top:0.35rem;font-size:0.8rem"></span>`
-                : `<span class="muted" style="display:block;margin-top:0.35rem;font-size:0.8rem">Configurá Twilio en Vercel</span>`
-            }
+          <div class="kpi">
+            <span>Listo para vender</span>
+            <strong>${totalVendible}</strong>
+          </div>
+          <div class="kpi kpi-sm">
+            <span>Último recálculo</span>
+            <strong>${escapeHtml(lastSyncText)}</strong>
           </div>
         </div>
-      </section>
+      </header>
 
-      <section class="section">
-        ${inventoryBody}
-      </section>
-    </main>
+      <div id="sync-toast" class="sync-toast" hidden></div>
+
+      <div id="view-tienda" class="dash-panel active">
+        <p class="panel-lead">Stock que ve el cliente en Shopify — calculado desde componentes.</p>
+        <div class="tienda-list">${tiendaHtml}</div>
+      </div>
+
+      <div id="view-deposito" class="dash-panel">
+        <p class="panel-lead">Piezas físicas en depósito — acá cargás stock en Shopify (productos borrador).</p>
+        <div class="deposito-wrap">${depositoHtml}</div>
+      </div>
+
+      <footer class="dash-foot">
+        <span>WhatsApp: ${escapeHtml(whatsappStatus)}</span>
+        ${
+          whatsappEnabled
+            ? `<button type="button" id="whatsapp-test-btn" class="link-btn">Probar</button>
+               <span id="whatsapp-test-result" class="muted"></span>`
+            : ""
+        }
+      </footer>
+    </div>
   </div>`;
 
-  return layout({ title: "Dashboard", body });
+  return layout({ title: "Stock", body });
 }
 
 module.exports = {
