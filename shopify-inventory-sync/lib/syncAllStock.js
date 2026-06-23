@@ -8,6 +8,7 @@ const {
 const { loadComponentStock } = require("./bom/loadComponentStock");
 const { getRecipe } = require("./bom/recipes");
 const { calculateFabricable } = require("./bom/calculate");
+const { calculateWithSharedStructure } = require("./bom/sharedStructureAllocation");
 const {
   parseVariantTitle,
   parseMesaVariantTitle,
@@ -20,19 +21,47 @@ async function syncFinishedProductFromComponents({
   stockBySku,
   locationId,
   parseTitle,
+  sharedStructure = false,
 }) {
   const product = await getProductWithVariants(productId);
   const itemGids = product.variants.map((v) => v.inventoryItemGid).filter(Boolean);
   const previousLevels =
     itemGids.length > 0 ? await getAvailableQuantities(itemGids, locationId) : new Map();
 
+  const parsedVariants = product.variants.map((variant) => ({
+    variant,
+    title: variant.title,
+    parsed: parseTitle(variant.title),
+  }));
+
+  let fabricableByTitle;
+  let metaByTitle = new Map();
+
+  if (sharedStructure) {
+    const result = calculateWithSharedStructure(
+      parsedVariants,
+      stockBySku,
+      (parsed) => getRecipe(productKey, parsed)
+    );
+    fabricableByTitle = result.fabricableByTitle;
+    metaByTitle = result.metaByTitle;
+  } else {
+    fabricableByTitle = new Map();
+    for (const { variant, parsed } of parsedVariants) {
+      const recipe = getRecipe(productKey, parsed);
+      const { fabricable, bottleneck } = calculateFabricable(stockBySku, recipe);
+      fabricableByTitle.set(variant.title, fabricable);
+      metaByTitle.set(variant.title, { bottleneck, recipe, structureShared: false });
+    }
+  }
+
   const synced = [];
   const calculatedByTitle = new Map();
 
-  for (const variant of product.variants) {
-    const parsed = parseTitle(variant.title);
+  for (const { variant, parsed } of parsedVariants) {
     const recipe = getRecipe(productKey, parsed);
-    const { fabricable, bottleneck } = calculateFabricable(stockBySku, recipe);
+    const fabricable = fabricableByTitle.get(variant.title) ?? 0;
+    const meta = metaByTitle.get(variant.title) || {};
     const previousAvailable = previousLevels.get(variant.inventoryItemGid) ?? 0;
 
     calculatedByTitle.set(variant.title, fabricable);
@@ -51,7 +80,10 @@ async function syncFinishedProductFromComponents({
         qty: line.qty,
         available: stockBySku.get(line.sku) ?? 0,
       })),
-      bottleneck,
+      cushionCap: meta.cushionCap,
+      structureStock: meta.structureStock,
+      structureShared: meta.structureShared ?? false,
+      bottleneck: meta.bottleneck ?? null,
       previousAvailable,
       calculated: fabricable,
       available: updated.quantity,
@@ -82,6 +114,7 @@ async function syncAllStock() {
     stockBySku,
     locationId,
     parseTitle: parseVariantTitle,
+    sharedStructure: true,
   });
 
   const sillon3Result = await syncFinishedProductFromComponents({
@@ -90,6 +123,7 @@ async function syncAllStock() {
     stockBySku,
     locationId,
     parseTitle: parseVariantTitle,
+    sharedStructure: true,
   });
 
   const mesaResult = await syncFinishedProductFromComponents({
@@ -108,6 +142,7 @@ async function syncAllStock() {
       stockBySku,
       locationId,
       parseTitle: parseVariantTitle,
+      sharedStructure: true,
     });
   }
 
