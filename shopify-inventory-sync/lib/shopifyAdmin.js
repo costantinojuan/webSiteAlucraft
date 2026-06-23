@@ -95,6 +95,57 @@ const INVENTORY_SET_QUANTITIES_MUTATION = `
   }
 `;
 
+const CATALOG_PRODUCTS_QUERY = `
+  query CatalogProducts($cursor: String) {
+    products(first: 50, after: $cursor) {
+      pageInfo { hasNextPage endCursor }
+      nodes {
+        id
+        title
+        status
+        variants(first: 25) {
+          nodes {
+            id
+            title
+            sku
+            inventoryItem { id }
+          }
+        }
+      }
+    }
+  }
+`;
+
+async function fetchAllProductsCatalog() {
+  const products = [];
+  let cursor = null;
+
+  do {
+    const data = await shopifyGraphQL(CATALOG_PRODUCTS_QUERY, { cursor });
+    const connection = data.products;
+
+    for (const node of connection.nodes || []) {
+      products.push({
+        productGid: node.id,
+        productId: parseNumericId(node.id),
+        title: node.title,
+        status: node.status,
+        variants: (node.variants?.nodes || []).map((v) => ({
+          variantGid: v.id,
+          variantId: parseNumericId(v.id),
+          title: (v.title || "Default Title").trim(),
+          sku: (v.sku || "").trim(),
+          inventoryItemGid: v.inventoryItem?.id,
+        })),
+      });
+    }
+
+    cursor = connection.pageInfo?.hasNextPage ? connection.pageInfo.endCursor : null;
+  } while (cursor);
+
+  return products;
+}
+
 async function getProductWithVariants(numericProductId) {
   const data = await shopifyGraphQL(PRODUCT_VARIANTS_QUERY, {
     id: productGid(numericProductId),
@@ -204,6 +255,7 @@ async function setAvailableQuantity(inventoryItemGid, locationId, quantity) {
 module.exports = {
   SHOPIFY_API_VERSION,
   shopifyGraphQL,
+  fetchAllProductsCatalog,
   getProductWithVariants,
   resolveLocationId,
   getAvailableQuantities,

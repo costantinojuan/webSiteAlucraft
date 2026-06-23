@@ -4,7 +4,7 @@ const { getAdminConfig, validateCredentials, requireAdmin, isAdminConfigured } =
 const { getAlertThresholds, getWhatsAppConfig, getShopifyPendingOrdersUrl } = require("./config");
 const { getDashboardStockSummary } = require("./dashboardData");
 const { getLastSync, recordSync } = require("./syncState");
-const { syncJuegoLivingStock } = require("./syncJuegoStock");
+const { runInventorySync } = require("./inventorySync");
 const { checkAndSendStockAlerts } = require("./alerts/stockAlerts");
 const { sendWhatsAppMessage } = require("./alerts/whatsapp");
 const { renderLoginPage, renderDashboardPage } = require("./views/adminPages");
@@ -19,7 +19,7 @@ function whatsappStatusLabel() {
 }
 
 async function runSyncWithAlerts(source) {
-  const syncResult = await syncJuegoLivingStock();
+  const syncResult = await runInventorySync();
   recordSync(syncResult, source);
 
   const stock = await getDashboardStockSummary();

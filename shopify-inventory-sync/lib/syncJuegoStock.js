@@ -7,6 +7,8 @@ const {
   setAvailableQuantity,
 } = require("./shopifyAdmin");
 
+const { mesaColorFromJuegoTitle } = require("./bom/parseVariant");
+
 /**
  * stockJuego = min(floor(sillon1/2), sillon3, mesa)
  */
@@ -16,15 +18,6 @@ function calculateJuegoStock(stockSillon1, stockSillon3, stockMesa) {
   const mesa = Number(stockMesa) || 0;
 
   return Math.min(Math.floor(s1 / 2), s3, mesa);
-}
-
-/** "Marrón / Gris oscuro" → "Marrón" (para matchear mesa ratona) */
-function mesaColorFromJuegoTitle(juegoVariantTitle) {
-  const title = (juegoVariantTitle || "").trim();
-  if (title.includes(" / ")) {
-    return title.split(" / ")[0].trim();
-  }
-  return title;
 }
 
 function indexVariantsByTitle(variants) {

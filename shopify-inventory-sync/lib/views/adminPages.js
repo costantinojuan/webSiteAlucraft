@@ -152,7 +152,7 @@ function renderDashboardPage({
       <section class="section">
         <div class="section-head row-between">
           <h2>Inventario</h2>
-          <button type="button" id="sync-btn" class="btn btn-primary">Recalcular stock de juegos</button>
+          <button type="button" id="sync-btn" class="btn btn-primary">Recalcular inventario</button>
         </div>
         <div id="sync-result" class="sync-result" hidden></div>
         <div class="cards-grid">${cards}</div>

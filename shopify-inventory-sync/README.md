@@ -2,11 +2,32 @@
 
 Mini app Node.js + Express para:
 
-- Recalcular stock del **Juego Living Exterior** desde sus componentes
+- Recalcular inventario de **productos terminados** desde componentes (BOM)
 - Panel admin privado con inventario y recálculo manual
 - Alertas opcionales por WhatsApp cuando el stock está bajo
 
 Usa **Shopify Admin GraphQL API**.
+
+## Modo de sincronización
+
+Por defecto (`INVENTORY_SYNC_MODE=components`):
+
+1. Lee stock de **9 productos componente** (estructuras + almohadones + mesa draft)
+2. Calcula cuántos sillones, reposeras y mesas se pueden fabricar (`min` de piezas)
+3. Actualiza stock de productos **terminados** en Shopify
+4. Calcula el Juego Living: `min(floor(sillon1/2), sillon3, mesa)`
+
+Modo legacy (`INVENTORY_SYNC_MODE=legacy`): solo recalcula Juego Living leyendo stock de sillones/mesa terminados (comportamiento anterior).
+
+### Componentes esperados
+
+Creá 9 productos en **borrador** con variantes por color. SKUs sugeridos (ver `npm run list-ids`):
+
+- Estructuras: `EST-S1-MR`, `EST-S3-NM`, etc.
+- Almohadones: `ALM-B1-658010-BE`, `ALM-R3-924412-GO`, etc.
+- Mesa componente (draft): `MES-RAT-MR`, `MES-RAT-NM`
+
+Variantes terminadas: título `"Marrón / Beige"` (estructura / tela).
 
 ## Fórmula del Juego
 
@@ -33,7 +54,7 @@ stockJuego = Math.min(
 | `PRODUCT_ID_MESA` | Product ID — Mesa Ratona |
 | `PRODUCT_ID_JUEGO` | Product ID — Juego Living Exterior |
 
-Opcional: `PRODUCT_ID_REPOSERA`, `LOCATION_ID`, `SHOPIFY_API_VERSION` (default `2025-04`).
+Opcional: `PRODUCT_ID_REPOSERA`, `PRODUCT_ID_MESA_COMPONENT`, `INVENTORY_SYNC_MODE` (`components`|`legacy`), `LOCATION_ID`, `SHOPIFY_API_VERSION` (default `2025-04`).
 
 ### Panel admin (obligatorio para `/admin`)
 

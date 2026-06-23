@@ -58,7 +58,17 @@ function getSyncConfig() {
     locationId: process.env.LOCATION_ID?.trim() || null,
     productIds,
     apiVersion: process.env.SHOPIFY_API_VERSION || SHOPIFY_API_VERSION,
+    inventorySyncMode: getInventorySyncMode(),
   };
+}
+
+/** `components` (default) = BOM desde piezas; `legacy` = solo recalcula Juego Living */
+function getInventorySyncMode() {
+  const mode = (process.env.INVENTORY_SYNC_MODE || "components").trim().toLowerCase();
+  if (mode !== "components" && mode !== "legacy") {
+    throw new Error('INVENTORY_SYNC_MODE debe ser "components" o "legacy"');
+  }
+  return mode;
 }
 
 function getAlertThresholds() {
@@ -123,4 +133,5 @@ module.exports = {
   getWhatsAppConfig,
   getAdminStoreUrl,
   getShopifyPendingOrdersUrl,
+  getInventorySyncMode,
 };
