@@ -3,6 +3,7 @@ const express = require("express");
 const { getAdminConfig, validateCredentials, requireAdmin, isAdminConfigured } = require("./auth");
 const { getAlertThresholds, getWhatsAppConfig, getShopifyPendingOrdersUrl } = require("./config");
 const { getDashboardStockSummary } = require("./dashboardData");
+const { getDashboardBomView } = require("./dashboardBomView");
 const { getLastSync, recordSync } = require("./syncState");
 const { runInventorySync } = require("./inventorySync");
 const { checkAndSendStockAlerts } = require("./alerts/stockAlerts");
@@ -73,11 +74,15 @@ function createAdminRouter() {
 
   router.get("/", requireAdmin, async (req, res) => {
     try {
-      const stock = await getDashboardStockSummary();
+      const [stock, bomView] = await Promise.all([
+        getDashboardStockSummary(),
+        getDashboardBomView(),
+      ]);
 
       return res.status(200).send(
         renderDashboardPage({
           stock,
+          bomView,
           lastSync: getLastSync(),
           thresholds: getAlertThresholds(),
           whatsappStatus: whatsappStatusLabel(),

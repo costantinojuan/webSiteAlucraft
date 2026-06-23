@@ -91,7 +91,10 @@
 
         syncResult.innerHTML =
           `<strong>Inventario recalculado correctamente.</strong>${alertNote}<br><br>` +
-          formatSyncResults(data.synced);
+          formatSyncResults(data.synced) +
+          `<br><br><em>Recargando panel…</em>`;
+
+        setTimeout(() => window.location.reload(), 1500);
       } catch (error) {
         syncResult.className = "sync-result alert-error";
         syncResult.textContent = error.message || "No se pudo recalcular el stock.";

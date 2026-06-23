@@ -182,6 +182,237 @@ a {
   padding: 1.25rem;
 }
 
+.content-wide {
+  max-width: 1200px;
+}
+
+.info-panel {
+  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdfa 100%);
+  border: 1px solid #99f6e4;
+  border-radius: var(--radius);
+  padding: 1.25rem 1.35rem;
+  margin-bottom: 1.5rem;
+}
+
+.info-panel h2 {
+  margin: 0 0 1rem;
+  font-size: 1.05rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.info-item {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.info-step {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  background: var(--primary);
+  color: white;
+  display: grid;
+  place-items: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.info-item p {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.subsection {
+  margin-bottom: 2rem;
+}
+
+.subsection-head {
+  margin-bottom: 1rem;
+}
+
+.subsection-head h2 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.component-groups {
+  display: grid;
+  gap: 1rem;
+}
+
+.component-group {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.component-group-head {
+  padding: 1rem 1.1rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  background: #f8fafc;
+}
+
+.component-group-head h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.component-group-head p {
+  margin: 0.35rem 0 0;
+  font-size: 0.875rem;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.stock-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.stock-table th,
+.stock-table td {
+  padding: 0.65rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.stock-table th {
+  background: #fafafa;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.stock-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.stock-table .num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.stock-table .num.zero {
+  color: #94a3b8;
+}
+
+.stock-table .num strong {
+  font-size: 1rem;
+}
+
+.stock-table-compact td.meta {
+  color: var(--muted);
+  font-size: 0.8rem;
+  max-width: 280px;
+}
+
+.stock-table tr.row-zero {
+  opacity: 0.55;
+}
+
+.stock-table tr.row-low td.num strong {
+  color: var(--warning);
+}
+
+.sku {
+  font-size: 0.75rem;
+  background: #f1f5f9;
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  color: #475569;
+}
+
+.finished-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.finished-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.finished-card .card-header {
+  padding: 1.1rem 1.1rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.finished-card .card-hint {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 400;
+  max-width: 52rem;
+}
+
+.finished-summary {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.85rem 1.1rem;
+  background: #fafafa;
+  border-bottom: 1px solid var(--border);
+}
+
+.finished-summary .card-total {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+.finished-summary .card-sub {
+  margin: 0;
+}
+
+.pool-box {
+  padding: 0.75rem 1.1rem;
+  background: #fffbeb;
+  border-bottom: 1px solid #fde68a;
+  font-size: 0.85rem;
+}
+
+.pool-label {
+  display: block;
+  font-weight: 600;
+  color: #92400e;
+  margin-bottom: 0.35rem;
+}
+
+.pool-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: #78350f;
+}
+
+.bottleneck {
+  display: inline-block;
+  margin-top: 0.2rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 0.75rem;
+}
+
+.breakdown {
+  display: block;
+  margin-bottom: 0.15rem;
+  color: var(--muted);
+}
+
 .section {
   margin-bottom: 2rem;
 }
