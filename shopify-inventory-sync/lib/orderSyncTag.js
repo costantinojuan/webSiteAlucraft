@@ -20,6 +20,16 @@ const TAGS_ADD_MUTATION = `
   }
 `;
 
+const ORDER_TAGS_QUERY = `
+  query OrderTags($id: ID!) {
+    order(id: $id) {
+      id
+      name
+      tags
+    }
+  }
+`;
+
 async function markOrderInventorySynced(orderId) {
   const { shopifyGraphQL } = require("../shopifyAdmin");
   const { orderGid } = require("../gids");
@@ -39,8 +49,28 @@ async function markOrderInventorySynced(orderId) {
   return true;
 }
 
+async function fetchOrderTags(orderId) {
+  const { shopifyGraphQL } = require("../shopifyAdmin");
+  const { orderGid } = require("../gids");
+
+  const data = await shopifyGraphQL(ORDER_TAGS_QUERY, {
+    id: orderGid(orderId),
+  });
+
+  if (!data.order) {
+    throw new Error(`Order not found: ${orderId}`);
+  }
+
+  return {
+    id: orderId,
+    name: data.order.name,
+    tags: data.order.tags || [],
+  };
+}
+
 module.exports = {
   INVENTORY_SYNC_TAG,
   orderHasSyncTag,
   markOrderInventorySynced,
+  fetchOrderTags,
 };

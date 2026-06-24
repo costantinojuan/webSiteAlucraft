@@ -8,7 +8,8 @@
     "dev": "node --watch server.js",
     "start": "node server.js",
     "list-ids": "node scripts/list-config-ids.js",
-    "test-deduct": "node scripts/test-order-deduct.js"
+    "test-deduct": "node scripts/test-order-deduct.js",
+    "test-restock": "node scripts/test-refund-restock.js"
   },
   "engines": {
     "node": ">=18"

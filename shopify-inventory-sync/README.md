@@ -104,6 +104,8 @@ Las alertas tienen cooldown de 6 horas por variante para no spamear.
 - `read_inventory`
 - `write_inventory`
 - `read_products`
+- `read_orders`
+- `write_orders`
 
 (No requiere `read_orders`: los pedidos se ven en Shopify Admin desde un link en el panel.)
 
@@ -114,7 +116,8 @@ Las alertas tienen cooldown de 6 horas por variante para no spamear.
 | `GET /admin/login` | Login privado |
 | `GET /admin` | Dashboard (requiere sesión) |
 | `POST /admin/api/sync` | Recalcular stock de juegos |
-| `POST /webhooks/orders-paid` | Webhook Shopify (HMAC) |
+| `POST /webhooks/orders-paid` | Webhook Shopify — venta pagada (HMAC) |
+| `POST /webhooks/refunds-create` | Webhook Shopify — cancelación/reembolso con restock (HMAC) |
 | `GET /health` | Health check |
 
 ## Webhook `orders/paid`
@@ -127,7 +130,19 @@ Las alertas tienen cooldown de 6 horas por variante para no spamear.
 
 Pedidos duplicados (reintentos de Shopify) se ignoran: tag en la orden + id de webhook.
 
-La app necesita scope **`write_orders`** (solo para agregar tag `alucraft-inventory-synced` y evitar doble descuento).
+## Webhook `refunds/create`
+
+Cuando cancelás o reembolsás un pedido **con restock** (devolver al inventario), Shopify restockea los productos terminados pero no los componentes. Este webhook lo corrige:
+
+1. Shopify envía el reembolso (con `refund_line_items` y `restock_type`)
+2. Solo procesa ítems con restock (`cancel`, `return`, `legacy_restock` — no `no_restock`)
+3. Solo si el pedido tiene tag `alucraft-inventory-synced` (fue descontado por la app)
+4. **Devuelve componentes** según el mismo BOM de la venta
+5. Recalcula productos terminados en Shopify
+
+Reembolsos parciales devuelven solo la cantidad reembolsada con restock.
+
+La app necesita scopes **`write_orders`** (tag `alucraft-inventory-synced`) y **`read_orders`** (leer tags al cancelar/reembolsar).
 
 **Importante:** desactivá el Flow viejo que descontaba componentes al vender el Juego — si no, se descuenta dos veces.
 
@@ -135,6 +150,7 @@ La app necesita scope **`write_orders`** (solo para agregar tag `alucraft-invent
 
 ```bash
 node scripts/test-order-deduct.js
+node scripts/test-refund-restock.js
 ```
 
 ## Desarrollo local
@@ -172,14 +188,17 @@ En el proyecto de Vercel:
 URLs de producción:
 
 - Panel: `https://TU-PROYECTO.vercel.app/admin`
-- Webhook: `https://TU-PROYECTO.vercel.app/webhooks/orders-paid`
+- Webhook ventas: `https://TU-PROYECTO.vercel.app/webhooks/orders-paid`
+- Webhook reembolsos: `https://TU-PROYECTO.vercel.app/webhooks/refunds-create`
 
-## Configurar webhook en Shopify
+## Configurar webhooks en Shopify
 
 1. **Settings → Notifications → Webhooks**
-2. Event: **Order payment** (`orders/paid`)
-3. URL: `https://TU-PROYECTO.vercel.app/webhooks/orders-paid`
-4. Secret → `SHOPIFY_WEBHOOK_SECRET`
+2. Agregar **Order payment** (`orders/paid`):
+   - URL: `https://TU-PROYECTO.vercel.app/webhooks/orders-paid`
+3. Agregar **Refund create** (`refunds/create`):
+   - URL: `https://TU-PROYECTO.vercel.app/webhooks/refunds-create`
+4. Mismo **Secret** en ambos → `SHOPIFY_WEBHOOK_SECRET`
 
 ## Panel admin
 
