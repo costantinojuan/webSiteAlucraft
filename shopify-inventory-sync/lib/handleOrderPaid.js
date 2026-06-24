@@ -2,6 +2,8 @@ const { getSyncConfig, getInventorySyncMode } = require("./config");
 const { buildOrderDeductions } = require("./bom/buildOrderDeductions");
 const { applyComponentDeductions } = require("./bom/applyComponentDeductions");
 const { wasOrderProcessed, markOrderProcessed } = require("./processedOrders");
+const { wasWebhookProcessed, markWebhookProcessed } = require("./processedWebhooks");
+const { orderHasSyncTag, markOrderInventorySynced } = require("./orderSyncTag");
 const { runInventorySync } = require("./inventorySync");
 const { recordSync } = require("./syncState");
 const { getDashboardStockSummary } = require("./dashboardData");
@@ -12,19 +14,55 @@ function parseOrderBody(rawBody) {
   return JSON.parse(text);
 }
 
-async function handleOrderPaid(rawBody, shop) {
+function skipResult(reason, orderId, orderName, extra = {}) {
+  return {
+    ok: true,
+    skipped: true,
+    reason,
+    orderId,
+    orderName,
+    ...extra,
+  };
+}
+
+async function claimOrderForProcessing(order, shop, webhookId) {
+  if (orderHasSyncTag(order)) {
+    return skipResult("order_tagged", order.id, order.name, { webhookId });
+  }
+
+  if (webhookId && wasWebhookProcessed(webhookId)) {
+    return skipResult("webhook_duplicate", order.id, order.name, { webhookId });
+  }
+
+  if (wasOrderProcessed(shop, order.id)) {
+    return skipResult("already_processed", order.id, order.name, { webhookId });
+  }
+
+  try {
+    await markOrderInventorySynced(order.id);
+  } catch (error) {
+    console.warn("Order tag failed (¿falta scope write_orders?):", error.message);
+    if (orderHasSyncTag(order)) {
+      return skipResult("order_tagged", order.id, order.name, { webhookId });
+    }
+  }
+
+  if (webhookId) {
+    markWebhookProcessed(webhookId);
+  }
+  markOrderProcessed(shop, order.id);
+
+  return null;
+}
+
+async function handleOrderPaid(rawBody, shop, webhookId = null) {
   const order = parseOrderBody(rawBody);
   const orderId = order.id;
   const orderName = order.name || `#${orderId}`;
 
-  if (wasOrderProcessed(shop, orderId)) {
-    return {
-      ok: true,
-      skipped: true,
-      reason: "already_processed",
-      orderId,
-      orderName,
-    };
+  const skipped = await claimOrderForProcessing(order, shop, webhookId);
+  if (skipped) {
+    return skipped;
   }
 
   const config = getSyncConfig();
@@ -50,13 +88,12 @@ async function handleOrderPaid(rawBody, shop) {
   const stock = await getDashboardStockSummary();
   const alertResult = await checkAndSendStockAlerts(stock.products);
 
-  markOrderProcessed(shop, orderId);
-
   return {
     ok: true,
     skipped: false,
     orderId,
     orderName,
+    webhookId,
     mode,
     lineItemCount: (order.line_items || []).length,
     deductionItems,

@@ -125,7 +125,9 @@ Las alertas tienen cooldown de 6 horas por variante para no spamear.
 4. Se recalculan productos terminados en Shopify
 5. Opcionalmente alertas WhatsApp si hay stock bajo
 
-Pedidos duplicados (reintentos de Shopify) se ignoran por ~7 días (memoria de instancia).
+Pedidos duplicados (reintentos de Shopify) se ignoran: tag en la orden + id de webhook.
+
+La app necesita scope **`write_orders`** (solo para agregar tag `alucraft-inventory-synced` y evitar doble descuento).
 
 **Importante:** desactivá el Flow viejo que descontaba componentes al vender el Juego — si no, se descuenta dos veces.
 

@@ -57,15 +57,18 @@ function createApp() {
           console.warn("Unexpected webhook topic", { topic, shop });
         }
 
+        const webhookId = req.get("X-Shopify-Webhook-Id");
         const { handleOrderPaid } = require("./handleOrderPaid");
-        const result = await handleOrderPaid(req.body, shop);
+        const result = await handleOrderPaid(req.body, shop, webhookId);
 
         console.log("Order paid processed", {
           shop,
           topic,
+          webhookId,
           orderId: result.orderId,
           orderName: result.orderName,
           skipped: result.skipped,
+          skipReason: result.reason,
           deductions: result.deductions?.length ?? 0,
           errors: result.deductionErrors?.length ?? 0,
         });
