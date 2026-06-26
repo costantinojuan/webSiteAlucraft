@@ -36,26 +36,34 @@ async function handleRefundCreate(rawBody, shop, webhookId = null) {
   try {
     order = await fetchOrderTags(orderId);
   } catch (error) {
-    console.warn("fetchOrderTags failed (¿falta scope read_orders?):", error.message);
+    console.warn("fetchOrderTags failed:", error.message);
     return skipResult("order_fetch_failed", orderId, { refundId, error: error.message });
-  }
-
-  if (!orderHasSyncTag(order)) {
-    return skipResult("order_not_synced", orderId, {
-      refundId,
-      orderName: order.name,
-    });
   }
 
   const config = getSyncConfig();
   const mode = getInventorySyncMode();
+  const builtPreview =
+    mode === "components" ? buildRefundRestocks(refund, config.productIds) : { lines: [], items: [] };
+
+  if (!orderHasSyncTag(order)) {
+    if (builtPreview.lines.length === 0) {
+      return skipResult("order_not_synced", orderId, {
+        refundId,
+        orderName: order.name,
+      });
+    }
+    console.warn("Restock sin tag alucraft-inventory-synced — pedido legacy o tag falló al vender", {
+      orderId,
+      orderName: order.name,
+    });
+  }
 
   let restockItems = [];
   let restockErrors = [];
   let restocks = null;
+  let built = builtPreview;
 
   if (mode === "components") {
-    const built = buildRefundRestocks(refund, config.productIds);
     restockItems = built.items;
     restockErrors = built.items.filter((item) => item.error);
 

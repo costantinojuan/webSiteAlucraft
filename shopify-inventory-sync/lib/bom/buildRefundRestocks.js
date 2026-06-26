@@ -7,7 +7,14 @@ const { mergeRecipeLines } = require("./recipes");
 
 function shouldRestockRefundLine(refundLineItem) {
   const restockType = String(refundLineItem.restock_type || "").trim().toLowerCase();
-  return restockType.length > 0 && restockType !== "no_restock";
+  if (restockType === "no_restock") {
+    return false;
+  }
+  if (restockType.length > 0) {
+    return true;
+  }
+  // Algunos payloads de Shopify omiten restock_type pero incluyen location_id al restockear.
+  return Boolean(refundLineItem.location_id);
 }
 
 /**

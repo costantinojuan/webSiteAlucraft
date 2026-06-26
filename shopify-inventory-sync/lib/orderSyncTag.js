@@ -31,8 +31,8 @@ const ORDER_TAGS_QUERY = `
 `;
 
 async function markOrderInventorySynced(orderId) {
-  const { shopifyGraphQL } = require("../shopifyAdmin");
-  const { orderGid } = require("../gids");
+  const { shopifyGraphQL } = require("./shopifyAdmin");
+  const { orderGid } = require("./gids");
 
   const data = await shopifyGraphQL(TAGS_ADD_MUTATION, {
     id: orderGid(orderId),
@@ -50,8 +50,8 @@ async function markOrderInventorySynced(orderId) {
 }
 
 async function fetchOrderTags(orderId) {
-  const { shopifyGraphQL } = require("../shopifyAdmin");
-  const { orderGid } = require("../gids");
+  const { shopifyGraphQL } = require("./shopifyAdmin");
+  const { orderGid } = require("./gids");
 
   const data = await shopifyGraphQL(ORDER_TAGS_QUERY, {
     id: orderGid(orderId),
