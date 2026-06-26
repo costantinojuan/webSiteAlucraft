@@ -12,10 +12,28 @@ const { renderLoginPage, renderDashboardPage } = require("./views/adminPages");
 
 function whatsappStatusLabel() {
   const cfg = getWhatsAppConfig();
-  if (!cfg.provider) return "No configurado";
-  if (cfg.misconfigured) return "Incompleto";
-  if (cfg.unknownProvider) return "Proveedor inválido";
-  if (cfg.enabled) return `Activo (${cfg.provider})`;
+  const provider = process.env.WHATSAPP_PROVIDER?.trim().toLowerCase() || "";
+
+  if (!provider) {
+    return "No configurado — agregá WHATSAPP_PROVIDER y WHATSAPP_TO en Vercel";
+  }
+  if (!process.env.WHATSAPP_TO?.trim()) {
+    return "Incompleto — falta WHATSAPP_TO";
+  }
+  if (cfg.unknownProvider) {
+    return `Proveedor inválido (${provider}) — usá twilio o cloud_api`;
+  }
+  if (cfg.misconfigured) {
+    if (cfg.provider === "twilio") {
+      return "Incompleto — faltan TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN o TWILIO_WHATSAPP_FROM";
+    }
+    if (cfg.provider === "cloud_api") {
+      return "Incompleto — faltan WHATSAPP_CLOUD_TOKEN o WHATSAPP_CLOUD_PHONE_NUMBER_ID";
+    }
+  }
+  if (cfg.enabled) {
+    return `Activo (${cfg.provider})`;
+  }
   return "No configurado";
 }
 

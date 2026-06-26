@@ -292,7 +292,7 @@ function renderDashboardPage({
           whatsappEnabled
             ? `<button type="button" id="whatsapp-test-btn" class="link-btn">Probar</button>
                <span id="whatsapp-test-result" class="muted"></span>`
-            : ""
+            : `<span class="muted">Configurá variables en Vercel y redeploy</span>`
         }
       </footer>
     </div>
