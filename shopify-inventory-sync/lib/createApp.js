@@ -3,10 +3,12 @@ const { mountAdmin, runSyncWithAlerts } = require("./adminRoutes");
 const { createShopifyWebhookHandler } = require("./webhookRouter");
 const { handleOrderPaid } = require("./handleOrderPaid");
 const { handleRefundCreate } = require("./handleRefundCreate");
+const { handleOrderCancelled } = require("./handleOrderCancelled");
 
 const shopifyWebhookHandler = createShopifyWebhookHandler({
   "orders/paid": handleOrderPaid,
   "refunds/create": handleRefundCreate,
+  "orders/cancelled": handleOrderCancelled,
 });
 
 function createApp() {
@@ -25,7 +27,7 @@ function createApp() {
 <body style="font-family:system-ui;max-width:32rem;margin:3rem auto;padding:0 1rem">
   <h1>App conectada</h1>
   <p>Al pagarse un pedido, la app descuenta <strong>componentes</strong> y recalcula stock en la tienda (webhook <code>orders/paid</code>).</p>
-  <p>Al cancelar o reembolsar con <strong>restock</strong>, devuelve componentes y recalcula (webhook <code>refunds/create</code>).</p>
+  <p>Al cancelar o reembolsar con <strong>restock</strong>, devuelve componentes y recalcula (webhooks <code>refunds/create</code> y <code>orders/cancelled</code>).</p>
   <p>Panel admin: <a href="/admin">/admin</a></p>
   <p>Copiá el <strong>Admin API access token</strong> en el Partner Dashboard → esta app → API credentials → y pegalo en Vercel como <code>SHOPIFY_ADMIN_ACCESS_TOKEN</code>.</p>
   <p>Podés cerrar esta pestaña.</p>

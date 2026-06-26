@@ -1,4 +1,5 @@
 const INVENTORY_SYNC_TAG = "alucraft-inventory-synced";
+const INVENTORY_RESTOCK_TAG = "alucraft-inventory-restocked";
 
 function orderHasSyncTag(order) {
   const tags = order.tags;
@@ -7,6 +8,17 @@ function orderHasSyncTag(order) {
   }
   if (typeof tags === "string") {
     return tags.split(",").map((t) => t.trim()).includes(INVENTORY_SYNC_TAG);
+  }
+  return false;
+}
+
+function orderHasRestockTag(order) {
+  const tags = order.tags;
+  if (Array.isArray(tags)) {
+    return tags.includes(INVENTORY_RESTOCK_TAG);
+  }
+  if (typeof tags === "string") {
+    return tags.split(",").map((t) => t.trim()).includes(INVENTORY_RESTOCK_TAG);
   }
   return false;
 }
@@ -49,6 +61,25 @@ async function markOrderInventorySynced(orderId) {
   return true;
 }
 
+async function markOrderInventoryRestocked(orderId) {
+  const { shopifyGraphQL } = require("./shopifyAdmin");
+  const { orderGid } = require("./gids");
+
+  const data = await shopifyGraphQL(TAGS_ADD_MUTATION, {
+    id: orderGid(orderId),
+    tags: [INVENTORY_RESTOCK_TAG],
+  });
+
+  const errors = data.tagsAdd?.userErrors || [];
+  if (errors.length > 0) {
+    const error = new Error(`tagsAdd failed: ${errors.map((e) => e.message).join("; ")}`);
+    error.userErrors = errors;
+    throw error;
+  }
+
+  return true;
+}
+
 async function fetchOrderTags(orderId) {
   const { shopifyGraphQL } = require("./shopifyAdmin");
   const { orderGid } = require("./gids");
@@ -70,7 +101,10 @@ async function fetchOrderTags(orderId) {
 
 module.exports = {
   INVENTORY_SYNC_TAG,
+  INVENTORY_RESTOCK_TAG,
   orderHasSyncTag,
+  orderHasRestockTag,
   markOrderInventorySynced,
+  markOrderInventoryRestocked,
   fetchOrderTags,
 };

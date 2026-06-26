@@ -4,6 +4,7 @@ const {
   saleRecipeForProduct,
 } = require("./buildOrderDeductions");
 const { mergeRecipeLines } = require("./recipes");
+const { collectRefundLineItems } = require("./normalizeRefundPayload");
 
 function shouldRestockRefundLine(refundLineItem) {
   const restockType = String(refundLineItem.restock_type || "").trim().toLowerCase();
@@ -13,7 +14,6 @@ function shouldRestockRefundLine(refundLineItem) {
   if (restockType.length > 0) {
     return true;
   }
-  // Algunos payloads de Shopify omiten restock_type pero incluyen location_id al restockear.
   return Boolean(refundLineItem.location_id);
 }
 
@@ -24,8 +24,9 @@ function buildRefundRestocks(refund, productIds) {
   const productKeyById = buildProductKeyById(productIds);
   const allLines = [];
   const items = [];
+  const refundLineItems = collectRefundLineItems(refund);
 
-  for (const refundLineItem of refund.refund_line_items || []) {
+  for (const refundLineItem of refundLineItems) {
     if (!shouldRestockRefundLine(refundLineItem)) {
       continue;
     }
