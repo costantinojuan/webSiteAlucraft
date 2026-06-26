@@ -65,7 +65,38 @@ function skuForFabric(kind, colorLabel) {
   return `${prefix}-${code}`;
 }
 
-/** Todos los SKUs esperados de componentes (23 variantes). */
+/** Cajas y manuales: un SKU por tipo de producto (sin variante de color). */
+const BOX_SKU_BY_PRODUCT = {
+  sillon1: "CAJA-S1",
+  sillon3: "CAJA-S3",
+  mesa: "CAJA-MES",
+  reposera: "CAJA-REP",
+};
+
+const MANUAL_SKU_BY_PRODUCT = {
+  sillon1: "MAN-S1",
+  sillon3: "MAN-S3",
+  mesa: "MAN-MES",
+  reposera: "MAN-REP",
+};
+
+function skuForBox(productKey) {
+  const sku = BOX_SKU_BY_PRODUCT[productKey];
+  if (!sku) {
+    throw new Error(`Tipo de caja desconocido: ${productKey}`);
+  }
+  return sku;
+}
+
+function skuForManual(productKey) {
+  const sku = MANUAL_SKU_BY_PRODUCT[productKey];
+  if (!sku) {
+    throw new Error(`Tipo de manual desconocido: ${productKey}`);
+  }
+  return sku;
+}
+
+/** Todos los SKUs esperados de componentes (23 variantes + 8 packaging). */
 function allExpectedComponentSkus() {
   const structureColors = ["Marrón", "Negro Microtexturado"];
   const fabricColors = ["Beige", "Gris Claro", "Gris Oscuro"];
@@ -86,6 +117,11 @@ function allExpectedComponentSkus() {
     skus.push(skuForFabric("reposera", color));
   }
 
+  for (const productKey of Object.keys(BOX_SKU_BY_PRODUCT)) {
+    skus.push(skuForBox(productKey));
+    skus.push(skuForManual(productKey));
+  }
+
   return skus;
 }
 
@@ -95,6 +131,10 @@ module.exports = {
   fabricToCode,
   skuForStructure,
   skuForFabric,
+  skuForBox,
+  skuForManual,
+  BOX_SKU_BY_PRODUCT,
+  MANUAL_SKU_BY_PRODUCT,
   allExpectedComponentSkus,
   STRUCTURE_CODE_BY_COLOR,
   FABRIC_CODE_BY_COLOR,

@@ -12,7 +12,7 @@ Usa **Shopify Admin GraphQL API**.
 
 Por defecto (`INVENTORY_SYNC_MODE=components`):
 
-1. Lee stock de **9 productos componente** (estructuras + almohadones + mesa draft)
+1. Lee stock de **productos componente** (estructuras + almohadones + mesa + cajas + manuales)
 2. Calcula cuántos sillones, reposeras y mesas se pueden fabricar (`min` de piezas)
 3. Actualiza stock de productos **terminados** en Shopify
 4. Calcula el Juego Living: `min(floor(sillon1/2), sillon3, mesa)`
@@ -21,11 +21,28 @@ Modo legacy (`INVENTORY_SYNC_MODE=legacy`): solo recalcula Juego Living leyendo 
 
 ### Componentes esperados
 
-Creá 9 productos en **borrador** con variantes por color. SKUs sugeridos (ver `npm run list-ids`):
+Creá productos en **borrador** con variantes por color (estructuras/almohadones) o una sola variante (cajas/manuales). SKUs sugeridos (ver `npm run list-ids`):
 
 - Estructuras: `EST-S1-MR`, `EST-S3-NM`, etc.
 - Almohadones: `ALM-B1-658010-BE`, `ALM-R3-924412-GO`, etc.
 - Mesa componente (draft): `MES-RAT-MR`, `MES-RAT-NM`
+- **Cajas** (sin color): `CAJA-S1`, `CAJA-S3`, `CAJA-MES`, `CAJA-REP`
+- **Manuales físicos** (sin color): `MAN-S1`, `MAN-S3`, `MAN-MES`, `MAN-REP`
+
+Productos packaging sugeridos en Shopify (borrador, 1 variante, asignar SKU):
+
+| Título en Shopify | SKU |
+|-------------------|-----|
+| Caja Sillón 1 Cuerpo | `CAJA-S1` |
+| Caja Sillón 3 Cuerpos | `CAJA-S3` |
+| Caja Mesa Ratona | `CAJA-MES` |
+| Caja Reposera | `CAJA-REP` |
+| Manual físico Sillón 1 Cuerpo | `MAN-S1` |
+| Manual físico Sillón 3 Cuerpos | `MAN-S3` |
+| Manual físico Mesa Ratona | `MAN-MES` |
+| Manual físico Reposera | `MAN-REP` |
+
+El **Juego** no tiene caja propia: al vender 1 juego se descuentan **2× caja S1 + 1× S3 + 1× mesa** (y los manuales igual).
 
 Variantes terminadas: título `"Marrón / Beige"` (estructura / tela).
 

@@ -1,5 +1,5 @@
 const { normalizeColor } = require("./colors");
-const { skuForStructure, skuForFabric } = require("./colors");
+const { skuForStructure, skuForFabric, skuForBox, skuForManual } = require("./colors");
 
 /**
  * Detecta productos componente en el catálogo por título.
@@ -65,9 +65,65 @@ const COMPONENT_PRODUCT_RULES = [
   {
     key: "mesa_comp",
     label: "Mesa Ratona (componente)",
-    match: (title, status) => /mesa/i.test(title) && /ratona/i.test(title) && status === "DRAFT",
+    match: (title, status) => /mesa/i.test(title) && /ratona/i.test(title) && status === "DRAFT" && !/caja|manual/i.test(title),
     variantSku: (variantTitle) => skuForStructure("mesa", variantTitle),
     variantKind: "structure",
+  },
+  {
+    key: "caja_s1",
+    label: "Caja Sillón 1",
+    match: (title) => /caja/i.test(title) && /sill[oó]n/i.test(title) && /\b1\b/.test(title),
+    variantSku: () => skuForBox("sillon1"),
+    variantKind: "packaging",
+  },
+  {
+    key: "caja_s3",
+    label: "Caja Sillón 3",
+    match: (title) => /caja/i.test(title) && /sill[oó]n/i.test(title) && /\b3\b/.test(title),
+    variantSku: () => skuForBox("sillon3"),
+    variantKind: "packaging",
+  },
+  {
+    key: "caja_mes",
+    label: "Caja Mesa Ratona",
+    match: (title) => /caja/i.test(title) && /mesa/i.test(title) && /ratona/i.test(title),
+    variantSku: () => skuForBox("mesa"),
+    variantKind: "packaging",
+  },
+  {
+    key: "caja_rep",
+    label: "Caja Reposera",
+    match: (title) => /caja/i.test(title) && /reposera/i.test(title),
+    variantSku: () => skuForBox("reposera"),
+    variantKind: "packaging",
+  },
+  {
+    key: "man_s1",
+    label: "Manual físico Sillón 1",
+    match: (title) => /manual/i.test(title) && /sill[oó]n/i.test(title) && /\b1\b/.test(title),
+    variantSku: () => skuForManual("sillon1"),
+    variantKind: "packaging",
+  },
+  {
+    key: "man_s3",
+    label: "Manual físico Sillón 3",
+    match: (title) => /manual/i.test(title) && /sill[oó]n/i.test(title) && /\b3\b/.test(title),
+    variantSku: () => skuForManual("sillon3"),
+    variantKind: "packaging",
+  },
+  {
+    key: "man_mes",
+    label: "Manual físico Mesa Ratona",
+    match: (title) => /manual/i.test(title) && /mesa/i.test(title) && /ratona/i.test(title),
+    variantSku: () => skuForManual("mesa"),
+    variantKind: "packaging",
+  },
+  {
+    key: "man_rep",
+    label: "Manual físico Reposera",
+    match: (title) => /manual/i.test(title) && /reposera/i.test(title),
+    variantSku: () => skuForManual("reposera"),
+    variantKind: "packaging",
   },
 ];
 

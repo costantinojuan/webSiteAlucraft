@@ -1,4 +1,19 @@
-const { skuForStructure, skuForFabric } = require("./colors");
+const { skuForStructure, skuForFabric, skuForBox, skuForManual } = require("./colors");
+
+function packagingLines(productKey, productLabel) {
+  return [
+    {
+      sku: skuForBox(productKey),
+      qty: 1,
+      label: `Caja ${productLabel}`,
+    },
+    {
+      sku: skuForManual(productKey),
+      qty: 1,
+      label: `Manual físico ${productLabel}`,
+    },
+  ];
+}
 
 /**
  * Líneas BOM: { sku, qty, label } por unidad fabricable.
@@ -21,6 +36,7 @@ function recipeSillon1(parsed) {
       qty: 1,
       label: `Almohadón respaldo S1 (${fabricColor})`,
     },
+    ...packagingLines("sillon1", "Sillón 1"),
   ];
 }
 
@@ -42,6 +58,7 @@ function recipeSillon3(parsed) {
       qty: 2,
       label: `Almohadón respaldo S3 (${fabricColor})`,
     },
+    ...packagingLines("sillon3", "Sillón 3"),
   ];
 }
 
@@ -58,6 +75,7 @@ function recipeReposera(parsed) {
       qty: 1,
       label: `Almohadón Reposera (${fabricColor})`,
     },
+    ...packagingLines("reposera", "Reposera"),
   ];
 }
 
@@ -69,6 +87,7 @@ function recipeMesa(parsed) {
       qty: 1,
       label: `Mesa Ratona componente (${structureColor})`,
     },
+    ...packagingLines("mesa", "Mesa ratona"),
   ];
 }
 
