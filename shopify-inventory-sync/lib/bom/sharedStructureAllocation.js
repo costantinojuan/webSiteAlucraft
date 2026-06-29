@@ -57,9 +57,16 @@ function allocateSharedStructurePool(structureStock, variants) {
 
 /**
  * Calcula stock por variante cuando la estructura se comparte entre telas.
+ *
+ * Cada variante muestra su MÁXIMO potencial individual: min(almohadones de su
+ * tela, estructuras totales del color), sin repartir la estructura entre telas.
+ * Esto puede sobre-contar (dos telas pueden mostrar stock contra la misma
+ * estructura), pero refleja "qué puedo armar" por color, que es lo deseado para
+ * un negocio a pedido. La sobreventa eventual se maneja manualmente.
  */
 function calculateWithSharedStructure(variants, stockBySku, getRecipe) {
-  const byStructure = new Map();
+  const fabricableByTitle = new Map();
+  const metaByTitle = new Map();
 
   for (const variant of variants) {
     const recipe = getRecipe(variant.parsed);
@@ -69,84 +76,19 @@ function calculateWithSharedStructure(variants, stockBySku, getRecipe) {
     }
 
     const structureColor = variant.parsed.structureColor;
-    const cushionCap = cushionCapFromRecipe(recipe, stockBySku);
     const structureStock = stockBySku.get(structureLine.sku) ?? 0;
+    const cushionCap = cushionCapFromRecipe(recipe, stockBySku);
 
-    if (!byStructure.has(structureColor)) {
-      byStructure.set(structureColor, {
-        structureLine,
-        structureStock,
-        variants: [],
-      });
-    }
+    const { fabricable, bottleneck } = calculateFabricable(stockBySku, recipe);
+    fabricableByTitle.set(variant.title, fabricable);
 
-    byStructure.get(structureColor).variants.push({
-      title: variant.title,
-      fabricColor: variant.parsed.fabricColor,
+    metaByTitle.set(variant.title, {
       cushionCap,
-      recipe,
+      structureColor,
+      structureStock,
+      structureShared: true,
+      bottleneck,
     });
-  }
-
-  const fabricableByTitle = new Map();
-  const metaByTitle = new Map();
-
-  for (const [structureColor, group] of byStructure.entries()) {
-    const allocated = allocateSharedStructurePool(group.structureStock, group.variants);
-    const totalCushionCap = group.variants.reduce((sum, v) => sum + v.cushionCap, 0);
-    const totalAllocated = [...allocated.values()].reduce((sum, n) => sum + n, 0);
-    const structureLimited = totalAllocated < totalCushionCap;
-
-    for (const variant of group.variants) {
-      const fabricable = allocated.get(variant.title) ?? 0;
-      fabricableByTitle.set(variant.title, fabricable);
-
-      let bottleneck = null;
-      if (fabricable === 0) {
-        if (variant.cushionCap === 0) {
-          const cushionOnly = calculateFabricable(
-            stockBySku,
-            variant.recipe.filter((line) => !isStructureSku(line.sku))
-          );
-          bottleneck = cushionOnly.bottleneck;
-        } else if (structureLimited || group.structureStock === 0) {
-          bottleneck = {
-            sku: group.structureLine.sku,
-            label: `${group.structureLine.label} (compartida, ${group.structureStock} total)`,
-            available: group.structureStock,
-            qtyPerUnit: 1,
-          };
-        } else {
-          bottleneck = {
-            sku: group.structureLine.sku,
-            label: group.structureLine.label,
-            available: group.structureStock,
-            qtyPerUnit: 1,
-          };
-        }
-      } else if (fabricable < variant.cushionCap) {
-        bottleneck = {
-          sku: group.structureLine.sku,
-          label: `${group.structureLine.label} (compartida entre telas ${structureColor})`,
-          available: group.structureStock,
-          qtyPerUnit: 1,
-        };
-      } else {
-        const cushionOnly = calculateFabricable(
-          stockBySku,
-          variant.recipe.filter((line) => !isStructureSku(line.sku))
-        );
-        bottleneck = cushionOnly.bottleneck;
-      }
-
-      metaByTitle.set(variant.title, {
-        cushionCap: variant.cushionCap,
-        structureColor,
-        structureStock: group.structureStock,
-        structureShared: true,
-        bottleneck,
-      });
-    }
   }
 
   return { fabricableByTitle, metaByTitle };
