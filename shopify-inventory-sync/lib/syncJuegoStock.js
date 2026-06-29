@@ -7,10 +7,12 @@ const {
   setAvailableQuantity,
 } = require("./shopifyAdmin");
 
-const { mesaColorFromJuegoTitle } = require("./bom/parseVariant");
+const { mesaColorFromJuegoTitle, parseVariantTitle } = require("./bom/parseVariant");
+const { getJuegoSaleRecipe } = require("./bom/recipes");
+const { calculateFabricable } = require("./bom/calculate");
 
 /**
- * stockJuego = min(floor(sillon1/2), sillon3, mesa)
+ * stockJuego = min(floor(sillon1/2), sillon3, mesa) — fórmula legacy desde terminados.
  */
 function calculateJuegoStock(stockSillon1, stockSillon3, stockMesa) {
   const s1 = Number(stockSillon1) || 0;
@@ -18,6 +20,16 @@ function calculateJuegoStock(stockSillon1, stockSillon3, stockMesa) {
   const mesa = Number(stockMesa) || 0;
 
   return Math.min(Math.floor(s1 / 2), s3, mesa);
+}
+
+/**
+ * Cuántos juegos se pueden armar leyendo componentes del depósito (BOM completo).
+ * Evita el error de usar stock ya repartido de S1/S3 por estructura compartida.
+ */
+function calculateJuegoFabricableFromComponents(stockBySku, juegoVariantTitle) {
+  const parsed = parseVariantTitle(juegoVariantTitle);
+  const recipe = getJuegoSaleRecipe(parsed);
+  return calculateFabricable(stockBySku, recipe);
 }
 
 function indexVariantsByTitle(variants) {
@@ -125,4 +137,9 @@ async function syncJuegoLivingStock() {
   };
 }
 
-module.exports = { calculateJuegoStock, syncJuegoLivingStock, mesaColorFromJuegoTitle };
+module.exports = {
+  calculateJuegoStock,
+  calculateJuegoFabricableFromComponents,
+  syncJuegoLivingStock,
+  mesaColorFromJuegoTitle,
+};

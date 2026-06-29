@@ -1,5 +1,5 @@
 const { getSyncConfig } = require("./config");
-const { calculateJuegoStock } = require("./syncJuegoStock");
+const { calculateJuegoFabricableFromComponents } = require("./syncJuegoStock");
 const {
   getProductWithVariants,
   getAvailableQuantities,
@@ -158,12 +158,16 @@ async function syncAllStock() {
   for (const variant of juegoProduct.variants) {
     const title = variant.title;
     const mesaColor = mesaColorFromJuegoTitle(title);
+    const previousJuego = juegoPrevious.get(variant.inventoryItemGid) ?? 0;
+
+    const { fabricable: stockJuego, bottleneck } = calculateJuegoFabricableFromComponents(
+      stockBySku,
+      title
+    );
 
     const stockSillon1 = sillon1Result.calculatedByTitle.get(title) ?? 0;
     const stockSillon3 = sillon3Result.calculatedByTitle.get(title) ?? 0;
     const stockMesa = mesaResult.calculatedByTitle.get(mesaColor) ?? 0;
-    const previousJuego = juegoPrevious.get(variant.inventoryItemGid) ?? 0;
-    const stockJuego = calculateJuegoStock(stockSillon1, stockSillon3, stockMesa);
 
     const updated = await setAvailableQuantity(
       variant.inventoryItemGid,
@@ -179,6 +183,7 @@ async function syncAllStock() {
         sillon3: { title, calculated: stockSillon3 },
         mesa: { title: mesaColor, calculated: stockMesa },
       },
+      recipeBottleneck: bottleneck,
       previousAvailable: previousJuego,
       calculated: stockJuego,
       available: updated.quantity,

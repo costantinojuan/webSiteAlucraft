@@ -4,7 +4,7 @@ const { loadComponentStock } = require("./bom/loadComponentStock");
 const { getRecipe } = require("./bom/recipes");
 const { calculateFabricable } = require("./bom/calculate");
 const { calculateWithSharedStructure } = require("./bom/sharedStructureAllocation");
-const { calculateJuegoStock } = require("./syncJuegoStock");
+const { calculateJuegoFabricableFromComponents } = require("./syncJuegoStock");
 const {
   parseVariantTitle,
   parseMesaVariantTitle,
@@ -74,7 +74,7 @@ const FINISHED_META = {
   },
   juego: {
     title: PRODUCT_LABELS.juego,
-    hint: "1 juego = 2 sillones 1 + 1 sillón 3 + 1 mesa + cajas/manuales de cada pieza (2+1+1). Sin caja de juego.",
+    hint: "1 juego = BOM completo (2× S1 + 1× S3 + 1× mesa). Se calcula directo desde componentes, no desde stock de sillones sueltos.",
     sharedStructure: false,
   },
 };
@@ -221,32 +221,19 @@ async function getDashboardBomView() {
   let juego = null;
   if (config.productIds.juego) {
     const juegoProduct = await getProductWithVariants(config.productIds.juego);
-    const s1Map = new Map(sillon1.variants.map((v) => [v.title, v.fabricable]));
-    const s3Map = new Map(sillon3.variants.map((v) => [v.title, v.fabricable]));
-    const mesaMap = new Map(mesa.variants.map((v) => [v.title, v.fabricable]));
 
     const variants = juegoProduct.variants.map((v) => {
       const mesaColor = mesaColorFromJuegoTitle(v.title);
-      const s1 = s1Map.get(v.title) ?? 0;
-      const s3 = s3Map.get(v.title) ?? 0;
-      const mesaStock = mesaMap.get(mesaColor) ?? 0;
-      const fabricable = calculateJuegoStock(s1, s3, mesaStock);
-
-      const limits = [
-        { label: `Sillón 1 (${s1} → usa ${Math.floor(s1 / 2)} juegos)`, value: Math.floor(s1 / 2) },
-        { label: `Sillón 3 (${s3})`, value: s3 },
-        { label: `Mesa ${mesaColor} (${mesaStock})`, value: mesaStock },
-      ];
-      const minLimit = Math.min(...limits.map((l) => l.value));
-      const bottleneck = limits.find((l) => l.value === minLimit && fabricable === minLimit);
+      const { fabricable, bottleneck } = calculateJuegoFabricableFromComponents(stockBySku, v.title);
+      const s1 = sillon1.variants.find((x) => x.title === v.title)?.fabricable ?? 0;
+      const s3 = sillon3.variants.find((x) => x.title === v.title)?.fabricable ?? 0;
+      const mesaStock = mesa.variants.find((x) => x.title === mesaColor)?.fabricable ?? 0;
 
       return {
         title: v.title,
         fabricable,
         breakdown: { sillon1: s1, sillon3: s3, mesa: mesaStock, mesaColor },
-        bottleneck: bottleneck
-          ? { label: bottleneck.label, available: bottleneck.value, qtyPerUnit: 1 }
-          : null,
+        bottleneck,
       };
     });
 
