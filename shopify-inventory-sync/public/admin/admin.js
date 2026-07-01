@@ -25,17 +25,6 @@
     });
   }
 
-  document.querySelectorAll(".show-all-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const key = btn.dataset.target;
-      const all = document.querySelector(`[data-all="${key}"]`);
-      if (all) {
-        all.classList.remove("hidden");
-        btn.hidden = true;
-      }
-    });
-  });
-
   function showToast(message, type) {
     if (!syncToast) return;
     syncToast.hidden = false;

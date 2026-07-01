@@ -136,10 +136,6 @@ function renderTiendaRow(product, thresholds) {
     </div>
     <div class="tienda-row-pills">
       ${renderVariantPills(variants)}
-      ${variants.some((v) => v.fabricable === 0) ? `<button type="button" class="link-btn show-all-btn" data-target="${escapeHtml(product.key)}">+ ver sin stock</button>` : ""}
-      <div class="tienda-row-pills-all hidden" data-all="${escapeHtml(product.key)}">
-        ${renderVariantPills(variants, { showZero: true })}
-      </div>
     </div>
   </article>`;
 }
