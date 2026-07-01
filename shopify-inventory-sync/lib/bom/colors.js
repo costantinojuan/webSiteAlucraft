@@ -10,12 +10,14 @@ function normalizeColor(value) {
 const STRUCTURE_CODE_BY_COLOR = {
   marron: "MR",
   "negro microtexturado": "NM",
+  arena: "AR",
 };
 
 const FABRIC_CODE_BY_COLOR = {
   beige: "BE",
   "gris claro": "GC",
   "gris oscuro": "GO",
+  tostado: "TO",
 };
 
 function structureToCode(colorLabel) {
@@ -65,10 +67,10 @@ function skuForFabric(kind, colorLabel) {
   return `${prefix}-${code}`;
 }
 
-/** Todos los SKUs esperados de componentes (23 variantes). */
+/** Todos los SKUs esperados de componentes (3 estructuras × 4 + 4 telas × 5 = 32). */
 function allExpectedComponentSkus() {
-  const structureColors = ["Marrón", "Negro Microtexturado"];
-  const fabricColors = ["Beige", "Gris Claro", "Gris Oscuro"];
+  const structureColors = ["Marrón", "Negro Microtexturado", "Arena"];
+  const fabricColors = ["Beige", "Gris Claro", "Gris Oscuro", "Tostado"];
   const skus = [];
 
   for (const color of structureColors) {
