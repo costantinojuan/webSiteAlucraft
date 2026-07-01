@@ -84,6 +84,8 @@ function colorClass(name) {
   if (n.includes("beige")) return "c-beige";
   if (n.includes("claro")) return "c-gray-l";
   if (n.includes("oscuro")) return "c-gray-d";
+  if (n.includes("arena")) return "c-arena";
+  if (n.includes("tostado")) return "c-tostado";
   return "c-default";
 }
 

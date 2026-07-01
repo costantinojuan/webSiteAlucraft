@@ -406,12 +406,11 @@ a { color: var(--accent); }
 .c-beige { background: #d6c4a8; }
 .c-gray-l { background: #d6d3d1; }
 .c-gray-d { background: #78716c; }
+.c-arena { background: #c2a878; }
+.c-tostado { background: #a9743f; }
 .c-default { background: #a8a29e; }
 
 .vpill-label {
-  max-width: 140px;
-  overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
