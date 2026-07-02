@@ -37,27 +37,33 @@ const COMPONENT_GROUPS = [
     hint: "Almohadón único por color de tela.",
     keys: ["alm_rep"],
   },
+  {
+    id: "packaging_boxes",
+    title: "Cajas",
+    hint: "Una caja por unidad vendida. El juego usa 2× caja S1 + 1× S3 + 1× mesa (sin caja propia).",
+    keys: ["caja_s1", "caja_s3", "caja_mes", "caja_rep"],
+  },
 ];
 
 const FINISHED_META = {
   sillon1: {
     title: PRODUCT_LABELS.sillon1,
-    hint: "1 sillón = 1 estructura + 1 base + 1 respaldo. La estructura se reparte entre telas del mismo color.",
+    hint: "1 sillón = 1 estructura + 1 base + 1 respaldo + 1 caja. La estructura se reparte entre telas del mismo color.",
     sharedStructure: true,
   },
   sillon3: {
     title: PRODUCT_LABELS.sillon3,
-    hint: "1 sillón = 1 estructura + 1 base + 2 respaldos. La estructura se reparte entre telas del mismo color.",
+    hint: "1 sillón = 1 estructura + 1 base + 2 respaldos + 1 caja. La estructura se reparte entre telas del mismo color.",
     sharedStructure: true,
   },
   mesa: {
     title: PRODUCT_LABELS.mesa,
-    hint: "1 mesa = 1 componente mesa del mismo color de estructura.",
+    hint: "1 mesa = 1 componente mesa + 1 caja (mismo color de estructura).",
     sharedStructure: false,
   },
   reposera: {
     title: PRODUCT_LABELS.reposera,
-    hint: "1 reposera = 1 estructura + 1 almohadón. Estructura compartida entre telas.",
+    hint: "1 reposera = 1 estructura + 1 almohadón + 1 caja. Estructura compartida entre telas.",
     sharedStructure: true,
   },
   juego: {
