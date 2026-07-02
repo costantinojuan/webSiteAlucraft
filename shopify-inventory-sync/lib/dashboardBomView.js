@@ -43,6 +43,12 @@ const COMPONENT_GROUPS = [
     hint: "Una caja por unidad vendida. El juego usa 2× caja S1 + 1× S3 + 1× mesa (sin caja propia).",
     keys: ["caja_s1", "caja_s3", "caja_mes", "caja_rep"],
   },
+  {
+    id: "packaging_allen",
+    title: "Llaves Allen",
+    hint: "Una llave por unidad vendida. El juego consume 4 (una por pieza). SKU único compartido.",
+    keys: ["llave_allen"],
+  },
 ];
 
 const FINISHED_META = {

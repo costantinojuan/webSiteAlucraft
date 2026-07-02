@@ -1,4 +1,4 @@
-const { skuForStructure, skuForFabric, skuForBox } = require("./colors");
+const { skuForStructure, skuForFabric, skuForBox, skuForAllen } = require("./colors");
 
 function packagingLines(productKey, productLabel) {
   return [
@@ -6,6 +6,11 @@ function packagingLines(productKey, productLabel) {
       sku: skuForBox(productKey),
       qty: 1,
       label: `Caja ${productLabel}`,
+    },
+    {
+      sku: skuForAllen(),
+      qty: 1,
+      label: `Llave Allen (${productLabel})`,
     },
   ];
 }

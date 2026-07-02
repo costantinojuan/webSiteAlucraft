@@ -83,7 +83,14 @@ function skuForBox(productKey) {
   return sku;
 }
 
-/** Todos los SKUs esperados de componentes (3 estructuras × 4 + 4 telas × 5 + 4 cajas = 36). */
+/** Llave Allen: SKU único compartido por todos los productos. */
+const ALLEN_SKU = "LLAVE-ALLEN";
+
+function skuForAllen() {
+  return ALLEN_SKU;
+}
+
+/** Todos los SKUs esperados de componentes (3 estructuras × 4 + 4 telas × 5 + 4 cajas + 1 llave = 37). */
 function allExpectedComponentSkus() {
   const structureColors = ["Marrón", "Negro Microtexturado", "Arena"];
   const fabricColors = ["Beige", "Gris Claro", "Gris Oscuro", "Tostado"];
@@ -108,6 +115,8 @@ function allExpectedComponentSkus() {
     skus.push(skuForBox(productKey));
   }
 
+  skus.push(skuForAllen());
+
   return skus;
 }
 
@@ -118,7 +127,9 @@ module.exports = {
   skuForStructure,
   skuForFabric,
   skuForBox,
+  skuForAllen,
   BOX_SKU_BY_PRODUCT,
+  ALLEN_SKU,
   allExpectedComponentSkus,
   STRUCTURE_CODE_BY_COLOR,
   FABRIC_CODE_BY_COLOR,

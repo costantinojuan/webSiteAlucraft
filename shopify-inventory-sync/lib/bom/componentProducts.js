@@ -1,5 +1,5 @@
 const { normalizeColor } = require("./colors");
-const { skuForStructure, skuForFabric, skuForBox } = require("./colors");
+const { skuForStructure, skuForFabric, skuForBox, skuForAllen } = require("./colors");
 
 /**
  * Detecta productos componente en el catálogo por título.
@@ -95,6 +95,13 @@ const COMPONENT_PRODUCT_RULES = [
     label: "Caja Reposera",
     match: (title) => /caja/i.test(title) && /reposera/i.test(title),
     variantSku: () => skuForBox("reposera"),
+    variantKind: "packaging",
+  },
+  {
+    key: "llave_allen",
+    label: "Llave Allen",
+    match: (title) => /llave/i.test(title) && /allen/i.test(title),
+    variantSku: () => skuForAllen(),
     variantKind: "packaging",
   },
 ];
