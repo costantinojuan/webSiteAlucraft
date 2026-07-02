@@ -498,6 +498,42 @@ a { color: var(--accent); }
   color: var(--text);
 }
 
+.box-ico {
+  vertical-align: -2px;
+  color: var(--accent);
+}
+
+.depo-block h3 .box-ico {
+  width: 14px;
+  height: 14px;
+  vertical-align: -1px;
+  margin-right: 0.15rem;
+}
+
+.depo-item-pkg h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.depo-pkg-body {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.depo-pkg-body strong {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1;
+}
+
+.depo-pkg-body span {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
 /* ── Misc ── */
 .alert {
   padding: 0.75rem 1rem;
