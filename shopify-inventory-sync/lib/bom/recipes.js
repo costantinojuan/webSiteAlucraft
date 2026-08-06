@@ -14,7 +14,7 @@ function packagingLines(productKey, productLabel) {
     },
   ];
 }
-
+  
 /**
  * Líneas BOM: { sku, qty, label } por unidad fabricable.
  */

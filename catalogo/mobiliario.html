@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alucraft Outdoor · Living de Exterior 2026</title>
+<link rel="shortcut icon" href="../Logos/alucraft-logo.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700&family=Roboto:wght@100;300;400;500;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --muted: #6a6a6a;
+    --line: #e3e1dc;
+    --soft: #f4f2ee;
+    --accent: #1d2b24;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0; padding: 0;
+    background: #55565a;
+    font-family: "Roboto", sans-serif;
+    color: var(--ink);
+  }
+
+  /* ---------- PAGE FRAME ---------- */
+  .page {
+    position: relative;
+    width: 210mm; height: 297mm;
+    margin: 12mm auto;
+    background: #fff;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+    padding: 18mm;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .kicker {
+    font-family: "Source Sans 3", sans-serif;
+    text-transform: uppercase; letter-spacing: 3px;
+    font-size: 10.5px; font-weight: 600; color: var(--accent);
+  }
+
+  h1, h2, h3 { font-weight: 300; margin: 0; }
+  .sectionTitle { font-size: 34px; font-weight: 200; margin: 6px 0 4px; }
+  .sectionSub { font-size: 14px; color: var(--muted); margin-bottom: 8mm; }
+
+  .pageFoot {
+    margin-top: auto; padding-top: 8mm;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: "Source Sans 3", sans-serif; font-size: 10px; letter-spacing: 1px;
+    color: var(--muted); text-transform: uppercase;
+  }
+  .pageFoot .ig { color: var(--accent); font-weight: 600; }
+
+  /* ---------- PHOTO ---------- */
+  .photo {
+    position: relative; width: 100%;
+    background: var(--soft); border: 1px solid var(--line);
+    overflow: hidden; display: flex; align-items: center; justify-content: center;
+  }
+  .photo::after {
+    content: attr(data-label); font-family: "Source Sans 3", sans-serif;
+    font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: #a8a59c; text-align: center; padding: 0 10px;
+  }
+  .photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+  /* ---------- COVER ---------- */
+  .cover {
+    padding: 0; justify-content: flex-end; color: #fff;
+    background: linear-gradient(160deg, #20211f 0%, #33352f 55%, #1d2b24 100%);
+  }
+  .cover .coverImg { position: absolute; inset: 0; }
+  .cover .coverImg img { width: 100%; height: 100%; object-fit: cover; }
+  .cover .coverImg::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(15,17,15,.92) 8%, rgba(15,17,15,.35) 55%, rgba(15,17,15,.15) 100%);
+  }
+  .cover .coverContent { position: relative; z-index: 2; padding: 20mm 18mm; }
+  .cover .brandRow { display: flex; align-items: center; gap: 12px; position: absolute; top: 18mm; left: 18mm; z-index: 2; }
+  .cover .brandRow img { height: 42px; filter: brightness(0) invert(1); }
+  .cover .brandRow .sub {
+    font-family: "Source Sans 3", sans-serif; text-transform: uppercase;
+    letter-spacing: 3px; font-size: 12px; padding-left: 12px; border-left: 1px solid rgba(255,255,255,.4);
+  }
+  .cover h1 { font-size: 54px; line-height: 1.03; font-weight: 200; margin-bottom: 14px; }
+  .cover .coverContent p { font-size: 16px; font-weight: 300; color: rgba(255,255,255,.85); max-width: 330px; line-height: 1.5; }
+  .cover .coverTags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+  .cover .coverTags span {
+    font-family: "Source Sans 3", sans-serif; font-size: 11px; letter-spacing: 1px;
+    text-transform: uppercase; border: 1px solid rgba(255,255,255,.4);
+    padding: 6px 13px; border-radius: 20px; color: rgba(255,255,255,.92);
+  }
+  .cover .coverBottom {
+    margin-top: 24px; display: flex; justify-content: space-between; align-items: center;
+    font-family: "Source Sans 3", sans-serif; font-size: 12px; letter-spacing: 1px; color: rgba(255,255,255,.85);
+  }
+
+  /* ---------- INTRO ---------- */
+  .lead { font-size: 15px; line-height: 1.75; color: #333; }
+  .lead strong { color: var(--accent); font-weight: 600; }
+  .pillars { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-top: 12mm; }
+  .pillar { background: var(--soft); border: 1px solid var(--line); border-radius: 10px; padding: 18px 16px; }
+  .pillar h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+  .pillar p { font-size: 12.5px; line-height: 1.6; color: var(--muted); margin: 0; }
+
+  /* ---------- COLLECTION HERO ---------- */
+  .heroPhoto { height: 118mm; border-radius: 12px; }
+  .heroCaption { display: grid; grid-template-columns: 1.4fr 1fr; gap: 18px; margin-top: 8mm; align-items: start; }
+  .heroCaption .txt p { font-size: 13.5px; line-height: 1.7; color: #333; margin: 0; }
+  .includes { border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; background: var(--soft); }
+  .includes h4 { font-family: "Source Sans 3", sans-serif; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin: 0 0 10px; }
+  .includes ul { margin: 0; padding-left: 16px; }
+  .includes li { font-size: 13px; line-height: 1.8; color: #333; }
+
+  /* ---------- PIECES GRID ---------- */
+  .pieces { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .piece { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+  .piece .photo { height: 62mm; }
+  .piece .pt { padding: 14px 16px 16px; }
+  .piece .pt h3 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+  .piece .pt .med { font-family: "Source Sans 3", sans-serif; font-size: 11.5px; letter-spacing: .5px; color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+  .piece .pt p { font-size: 12px; line-height: 1.55; color: var(--muted); margin: 0; }
+
+  /* ---------- ENCASTRABLE ---------- */
+  .benefits { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .benefit { display: flex; gap: 14px; padding: 15px; border: 1px solid var(--line); border-radius: 10px; }
+  .benefit .n { flex: 0 0 32px; width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; font-family: "Source Sans 3", sans-serif; }
+  .benefit h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .benefit p { font-size: 12px; line-height: 1.55; color: var(--muted); margin: 0; }
+  .assembleBar { margin-top: 10mm; background: var(--accent); color: #fff; border-radius: 12px; padding: 20px 24px; }
+  .assembleBar h3 { font-size: 19px; font-weight: 300; }
+  .assembleBar p { font-size: 12.5px; color: rgba(255,255,255,.82); margin: 6px 0 0; line-height: 1.6; }
+
+  /* ---------- COLORS ---------- */
+  .colorGroup { margin-bottom: 11mm; }
+  .colorGroup h3 { font-size: 20px; font-weight: 300; margin-bottom: 3px; }
+  .colorGroup .cs { font-size: 12.5px; color: var(--muted); margin-bottom: 14px; }
+  .swatches { display: flex; gap: 20px; flex-wrap: wrap; }
+  .swatch { text-align: center; }
+  .swatch .chip { width: 72px; height: 72px; border-radius: 10px; border: 1px solid rgba(0,0,0,.12);
+    box-shadow: inset 0 -6px 14px rgba(0,0,0,.15); margin-bottom: 8px; }
+  .swatch span { font-family: "Source Sans 3", sans-serif; font-size: 11.5px; color: #444; }
+
+  /* ---------- CONTACT ---------- */
+  .contactWrap { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 4mm; }
+  .steps { counter-reset: st; list-style: none; padding: 0; margin: 0; }
+  .steps li { position: relative; padding: 0 0 16px 44px; }
+  .steps li::before { counter-increment: st; content: counter(st); position: absolute; left: 0; top: -2px;
+    width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; font-family: "Source Sans 3", sans-serif; }
+  .steps h4 { font-size: 15px; margin: 3px 0 4px; font-weight: 600; }
+  .steps p { font-size: 12.5px; color: var(--muted); margin: 0; line-height: 1.5; }
+  .contactCard { background: var(--soft); border: 1px solid var(--line); border-radius: 12px; padding: 22px; }
+  .contactCard h3 { font-size: 20px; font-weight: 300; margin-bottom: 14px; }
+  .contactCard .row { font-size: 13.5px; color: #333; margin-bottom: 10px; }
+  .contactCard .row b { display: block; font-family: "Source Sans 3", sans-serif; font-size: 10.5px;
+    letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin-bottom: 2px; font-weight: 600; }
+
+  /* ---------- BACK ---------- */
+  .back { background: linear-gradient(160deg, #1d2b24 0%, #20211f 100%); color: #fff;
+    justify-content: center; align-items: center; text-align: center; }
+  .back img { height: 58px; filter: brightness(0) invert(1); margin-bottom: 20px; }
+  .back h2 { font-size: 32px; font-weight: 200; margin-bottom: 10px; }
+  .back p { font-size: 14px; color: rgba(255,255,255,.8); letter-spacing: 1px; }
+  .back .ig { margin-top: 22px; font-family: "Source Sans 3", sans-serif; letter-spacing: 2px; }
+
+  /* ---------- PRINT ---------- */
+  .toolbar { position: fixed; top: 16px; right: 16px; z-index: 99; }
+  .toolbar button { font-family: "Source Sans 3", sans-serif; background: var(--accent); color: #fff;
+    border: none; padding: 12px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,.3); }
+
+  @media print {
+    html, body { background: #fff; }
+    .toolbar { display: none; }
+    .page { margin: 0; box-shadow: none; page-break-after: always; }
+    .page:last-child { page-break-after: auto; }
+  }
+  @page { size: A4; margin: 0; }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="window.print()">Imprimir / Guardar como PDF</button>
+</div>
+
+<!-- 1. PORTADA -->
+<section class="page cover">
+  <div class="coverImg"><img src="./img/juego.jpg" alt="Living de exterior Alucraft" onerror="this.remove()"></div>
+  <div class="brandRow">
+    <img src="../Logos/alucraftLogo.png" alt="Alucraft">
+    <span class="sub">Outdoor</span>
+  </div>
+  <div class="coverContent">
+    <h1>Living de<br>exterior<br>en aluminio</h1>
+    <p>Una colección encastrable de sillones, mesa y reposera que combinan entre sí.</p>
+    <div class="coverTags">
+      <span>Encastrable</span>
+      <span>Apto intemperie</span>
+      <span>Tapizados de exterior</span>
+    </div>
+    <div class="coverBottom">
+      <span>@alucraft.outdoor · Buenos Aires</span>
+      <span>Catálogo 2026</span>
+    </div>
+  </div>
+</section>
+
+<!-- 2. INTRO -->
+<section class="page">
+  <span class="kicker">Alucraft Outdoor</span>
+  <h1 class="sectionTitle">Una colección para vivir el exterior</h1>
+  <p class="lead" style="margin-top:14px">
+    Alucraft Outdoor presenta una <strong>colección de living de exterior en aluminio</strong>: un sillón individual,
+    un sofá de tres cuerpos, una mesa ratona y una reposera, todos con la misma línea de diseño para que combinen
+    entre sí. Podés llevar el juego completo o sumar las piezas de a una. Todo en aluminio apto intemperie, con
+    tapizados de alta resistencia y un sistema <strong>encastrable</strong> que llega en caja y se arma en minutos.
+  </p>
+  <div class="pillars">
+    <div class="pillar">
+      <h3>Apto intemperie</h3>
+      <p>El aluminio no se oxida y soporta sol, lluvia y humedad todo el año.</p>
+    </div>
+    <div class="pillar">
+      <h3>Encastrable</h3>
+      <p>Piezas que se ensamblan entre sí. Viaja en caja, se arma fácil y se guarda sin ocupar lugar.</p>
+    </div>
+    <div class="pillar">
+      <h3>Combinable</h3>
+      <p>Todas las piezas comparten diseño: armás tu living sumando lo que necesites.</p>
+    </div>
+  </div>
+  <div class="pageFoot"><span>Alucraft Outdoor</span><span class="ig">@alucraft.outdoor</span><span>02</span></div>
+</section>
+
+<!-- 3. LA COLECCION (HERO JUEGO) -->
+<section class="page">
+  <span class="kicker">La colección completa</span>
+  <h1 class="sectionTitle">El juego de living</h1>
+  <p class="sectionSub">El conjunto completo para transformar tu terraza en un living al aire libre.</p>
+  <div class="photo heroPhoto" data-label="Foto: img/juego.jpg">
+    <img src="./img/juego.jpg" alt="Juego de living exterior" onerror="this.remove()">
+  </div>
+  <div class="heroCaption">
+    <div class="txt">
+      <p>Sofá, sillones y mesa que combinan entre sí para crear un espacio cómodo y elegante al aire libre.
+      Estructura de aluminio con tapizados de exterior, en el color que elijas.</p>
+    </div>
+    <div class="includes">
+      <h4>El juego incluye</h4>
+      <ul>
+        <li>1 Sillón 3 Cuerpos</li>
+        <li>2 Sillones 1 Cuerpo</li>
+        <li>1 Mesa Ratona</li>
+      </ul>
+    </div>
+  </div>
+  <div class="pageFoot"><span>Alucraft Outdoor</span><span class="ig">@alucraft.outdoor</span><span>03</span></div>
+</section>
+
+<!-- 4. LAS PIEZAS -->
+<section class="page">
+  <span class="kicker">Componé tu living</span>
+  <h1 class="sectionTitle">Las piezas de la colección</h1>
+  <p class="sectionSub">Llevá el juego completo o sumá las piezas de a una. Todas combinan entre sí.</p>
+  <div class="pieces">
+    <div class="piece">
+      <div class="photo" data-label="Foto: img/sillon1.jpg"><img src="./img/sillon1.jpg" alt="Sillón 1 Cuerpo" onerror="this.remove()"></div>
+      <div class="pt">
+        <h3>Sillón 1 Cuerpo</h3>
+        <div class="med">80 × 80 × 75 cm · asiento 40 cm</div>
+        <p>Butaca individual de aluminio con almohadones de exterior.</p>
+      </div>
+    </div>
+    <div class="piece">
+      <div class="photo" data-label="Foto: img/sillon3.jpg"><img src="./img/sillon3.jpg" alt="Sillón 3 Cuerpos" onerror="this.remove()"></div>
+      <div class="pt">
+        <h3>Sillón 3 Cuerpos</h3>
+        <div class="med">200 × 80 × 75 cm · asiento 40 cm</div>
+        <p>Sofá de tres plazas, el corazón del living exterior.</p>
+      </div>
+    </div>
+    <div class="piece">
+      <div class="photo" data-label="Foto: img/mesa.jpg"><img src="./img/mesa.jpg" alt="Mesa Ratona" onerror="this.remove()"></div>
+      <div class="pt">
+        <h3>Mesa Ratona</h3>
+        <div class="med">120 × 60 × 40 cm</div>
+        <p>Complemento bajo, resistente e impermeable.</p>
+      </div>
+    </div>
+    <div class="piece">
+      <div class="photo" data-label="Foto: img/reposera.jpg"><img src="./img/reposera.jpg" alt="Reposera" onerror="this.remove()"></div>
+      <div class="pt">
+        <h3>Reposera</h3>
+        <div class="med">Medidas a confirmar</div>
+        <p>Para descansar al sol. Robusta, liviana y apta intemperie.</p>
+      </div>
+    </div>
+  </div>
+  <div class="pageFoot"><span>Alucraft Outdoor</span><span class="ig">@alucraft.outdoor</span><span>04</span></div>
+</section>
+
+<!-- 5. VENTAJAS ENCASTRABLE -->
+<section class="page">
+  <span class="kicker">Por qué encastrable</span>
+  <h1 class="sectionTitle">Las ventajas de un living que se encastra</h1>
+  <p class="sectionSub">Un sistema pensado para que comprar, recibir y armar sea simple.</p>
+  <div class="benefits">
+    <div class="benefit"><div class="n">1</div><div><h3>Envío más simple y económico</h3><p>Viaja desarmado en caja plana: ocupa menos y abarata el flete a todo el país.</p></div></div>
+    <div class="benefit"><div class="n">2</div><div><h3>Armado en minutos</h3><p>Las piezas encastran y se fijan con una llave Allen incluida. Sin herramientas especiales.</p></div></div>
+    <div class="benefit"><div class="n">3</div><div><h3>Fácil de mover y guardar</h3><p>Se desarma para trasladarlo, guardarlo en invierno o reubicarlo.</p></div></div>
+    <div class="benefit"><div class="n">4</div><div><h3>Estructura firme</h3><p>El encastre en aluminio mantiene el conjunto estable con el uso diario.</p></div></div>
+    <div class="benefit"><div class="n">5</div><div><h3>Combinable</h3><p>Sumá sillones, sofá y mesa para armar el living que necesitás.</p></div></div>
+    <div class="benefit"><div class="n">6</div><div><h3>Personalizable</h3><p>Elegí el color de la estructura y del tapizado.</p></div></div>
+  </div>
+  <div class="assembleBar">
+    <h3>Se arma con una llave Allen</h3>
+    <p>Cada envío llega en caja con sus tornillos y la llave Allen incluida. Seguís el instructivo y en pocos pasos queda listo para usar.</p>
+  </div>
+  <div class="pageFoot"><span>Alucraft Outdoor</span><span class="ig">@alucraft.outdoor</span><span>05</span></div>
+</section>
+
+<!-- 6. TERMINACIONES Y COLORES -->
+<section class="page">
+  <span class="kicker">Personalización</span>
+  <h1 class="sectionTitle">Terminaciones y colores</h1>
+  <p class="sectionSub">Elegí el color de la estructura y del tapizado. Disponibilidad sujeta a stock.</p>
+  <div class="colorGroup">
+    <h3>Estructura de aluminio</h3>
+    <p class="cs">Pintura horneada de alta durabilidad.</p>
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:#5b4636"></div><span>Marrón</span></div>
+      <div class="swatch"><div class="chip" style="background:#1c1c1c"></div><span>Negro microtexturado</span></div>
+      <div class="swatch"><div class="chip" style="background:#c9b48f"></div><span>Arena</span></div>
+    </div>
+  </div>
+  <div class="colorGroup">
+    <h3>Tapizados</h3>
+    <p class="cs">Telas de alta resistencia para exterior.</p>
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:#d9cbb2"></div><span>Beige</span></div>
+      <div class="swatch"><div class="chip" style="background:#c7c7c7"></div><span>Gris claro</span></div>
+      <div class="swatch"><div class="chip" style="background:#6f6f6f"></div><span>Gris oscuro</span></div>
+      <div class="swatch"><div class="chip" style="background:#b98a5e"></div><span>Tostado</span></div>
+    </div>
+  </div>
+  <div class="pageFoot"><span>Alucraft Outdoor</span><span class="ig">@alucraft.outdoor</span><span>06</span></div>
+</section>
+
+<!-- 7. COMO COMPRAR -->
+<section class="page">
+  <span class="kicker">Comprar</span>
+  <h1 class="sectionTitle">Cómo comprar</h1>
+  <p class="sectionSub">Elegí tus piezas y coordinamos la entrega en pocos pasos.</p>
+  <div class="contactWrap">
+    <ol class="steps">
+      <li><h4>Elegí las piezas</h4><p>El juego completo o las piezas sueltas que quieras.</p></li>
+      <li><h4>Elegí colores</h4><p>Color de estructura y tapizado según tu espacio.</p></li>
+      <li><h4>Confirmá el pedido</h4><p>Coordinamos pago, plazo de fabricación y envío.</p></li>
+      <li><h4>Recibí y armá</h4><p>Llega en caja y lo armás en minutos con la llave Allen incluida.</p></li>
+    </ol>
+    <div class="contactCard">
+      <h3>Contacto</h3>
+      <div class="row"><b>WhatsApp</b>+54 11 3212 2439</div>
+      <div class="row"><b>Email</b>craft.aluminio@gmail.com</div>
+      <div class="row"><b>Instagram</b>@alucraft.outdoor</div>
+      <div class="row"><b>Ubicación</b>Rodolfo López 1684, Quilmes, Buenos Aires</div>
+      <div class="row"><b>Tienda online</b>alucraft.com.ar</div>
+    </div>
+  </div>
+  <div class="pageFoot"><span>Alucraft Outdoor</span><span class="ig">@alucraft.outdoor</span><span>07</span></div>
+</section>
+
+<!-- 8. CONTRAPORTADA -->
+<section class="page back">
+  <img src="../Logos/alucraftLogo.png" alt="Alucraft">
+  <h2>Living de exterior en aluminio</h2>
+  <p>Encastrable · liviano · apto intemperie</p>
+  <div class="ig">@alucraft.outdoor</div>
+</section>
+
+</body>
+</html>

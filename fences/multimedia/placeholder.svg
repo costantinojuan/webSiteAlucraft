@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800">
+  <rect width="800" height="800" fill="#e9e9e7"/>
+  <rect x="1" y="1" width="798" height="798" fill="none" stroke="#cfcfcc" stroke-width="2"/>
+  <g fill="#a6a6a2" font-family="Roboto, Arial, sans-serif" text-anchor="middle">
+    <text x="400" y="380" font-size="44" font-weight="600" letter-spacing="4">ALUCRAFT FENCES</text>
+    <text x="400" y="440" font-size="26" letter-spacing="2">Foto del modelo</text>
+  </g>
+</svg>

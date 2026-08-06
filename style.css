@@ -54,8 +54,13 @@ body {
 }
 
 .listBar .contact a {
-	background: #000;
+	background: #e6e6e6;
 	border-radius: 8px;
+	color: #111;
+}
+
+.listBar .contact a:hover {
+	background: #000;
 	color: #fff;
 }
 
@@ -87,10 +92,28 @@ body {
 	padding: 0 18px;
 }
 
+.brand {
+	display: flex;
+	align-items: center;
+	gap: 9px;
+	text-decoration: none;
+	margin-left: 10px;
+}
+
 .logoNav {
 	height: 42px;
-	margin-left: 10px;
 	align-self: center;
+}
+
+.brandSub {
+	font-family: "Source Sans 3", sans-serif;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	font-size: 13px;
+	font-weight: 600;
+	color: #1d2b24;
+	padding-left: 9px;
+	border-left: 1px solid #e6e6e3;
 }
 
 .hamburger {
@@ -241,8 +264,8 @@ main {
 
 .content a {
 	display: inline-block;
-	background: white;
-	color: black;
+	background: #e6e6e6;
+	color: #111;
 	padding: 10px 20px;
 	border-radius: 6px;
 	text-decoration: none;
@@ -250,7 +273,7 @@ main {
 }
 
 .content a:hover{
-	background: #353535;
+	background: #000;
 	color: white;
 	transition: all 0.3s ease;
 }
@@ -341,8 +364,8 @@ main {
 	transition: transform 0.6s ease;
 }
 
-.mueblesPic:hover img {
-	transform: scale(1.03);
+.mueblesPic img {
+	transform: none;
 }
 
 .mueblesBtn {
@@ -385,8 +408,8 @@ main {
 
 .mueblesBtn a {
 	display: inline-block;
-	background: white;
-	color: black;
+	background: #e6e6e6;
+	color: #111;
 	padding: 10px 20px;
 	border-radius: 6px;
 	text-decoration: none;
@@ -395,7 +418,7 @@ main {
 }
 
 .mueblesBtn a:hover {
-	background: #353535;
+	background: #000;
 	color: white;
 	transition: all 0.3s ease;
 }
@@ -409,8 +432,8 @@ main {
 
 .mueblesBtnMobile a {
 	display: inline-block;
-	background: rgb(0, 0, 0);
-	color: rgb(255, 255, 255);
+	background: #e6e6e6;
+	color: #111;
 	padding: 10px 20px;
 	border-radius: 6px;
 	text-decoration: none;
@@ -420,7 +443,7 @@ main {
 }
 
 .mueblesBtnMobile a:hover {
-	background: #818181;
+	background: #000;
 	color: white;
 	transition: all 0.3s ease;
 }
@@ -448,8 +471,8 @@ main {
 
 .aboutText a {
 	display: inline-block;
-	background: white;
-	color: black;
+	background: #e6e6e6;
+	color: #111;
 	padding: 10px 20px;
 	border-radius: 6px;
 	text-decoration: none;
@@ -457,7 +480,7 @@ main {
 }
 
 .aboutText a:hover {
-	background: black;
+	background: #000;
 	color: white;
 	transition: all 0.3s ease;
 }
@@ -557,18 +580,35 @@ main {
 
 @media (max-width: 768px) {
 	.footer {
-		padding: 50px 25px 25px;
+		padding: 34px 22px 20px;
 	}
 
 	.footer-container {
-		grid-template-columns: 1fr;
-		gap: 35px;
+		grid-template-columns: 1fr 1fr;
+		gap: 20px 24px;
+	}
+
+	.footer h3 {
+		font-size: 18px;
+		margin-bottom: 10px;
+	}
+
+	.footer h4 {
+		margin-bottom: 10px;
+	}
+
+	.footer p,
+	.footer a {
+		font-size: 13px;
+		line-height: 1.55;
 	}
 
 	.footer-bottom {
 		flex-direction: column;
 		align-items: flex-start;
-		margin-top: 40px;
+		margin-top: 22px;
+		padding-top: 16px;
+		gap: 12px;
 	}
 
 	.footer-social {
@@ -595,31 +635,42 @@ main {
 }
 
 @media (max-width: 680px) {
-	body.menu-open {
-		overflow: hidden;
+	body {
+		overflow-x: hidden;
+	}
+
+	body.menu-open::after {
+		content: "";
+		position: fixed;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.45);
+		z-index: 980;
 	}
 
 	.navBar .listBar {
-		display: none;
+		display: flex;
 		position: fixed;
-		top: 64px;
-		left: 12px;
-		right: 12px;
-		width: auto;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		height: 100vh;
+		width: 62%;
+		max-width: 210px;
 		background: white;
 		flex-direction: column;
-		padding: 0;
-		border-radius: 14px;
-		box-shadow: 0 16px 28px rgba(0, 0, 0, 0.16);
-		pointer-events: none;
+		padding: 60px 0 24px;
+		box-shadow: -14px 0 34px rgba(0, 0, 0, 0.22);
 		gap: 0;
 		justify-content: flex-start;
 		align-items: stretch;
+		transform: translateX(100%);
+		transition: transform 0.3s ease;
+		z-index: 990;
+		overflow-y: auto;
 	}
 
 	.navBar .listBar.active {
-		display: flex;
-		pointer-events: auto;
+		transform: translateX(0);
 	}
 
 	.navBar .listBar li {
@@ -629,7 +680,7 @@ main {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		border-bottom: 1px solid #ededed;
+		border-bottom: none;
 		flex: 0 0 auto;
 	}
 
