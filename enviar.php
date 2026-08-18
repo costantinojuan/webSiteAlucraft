@@ -40,19 +40,28 @@ if (
     exit;
 }
 
+$configPath = __DIR__ . '/config.mail.php';
+if (!is_file($configPath)) {
+    header('Location: pagina4/contacto.html?status=error');
+    exit;
+}
+$cfg = require $configPath;
+
 $mail = new PHPMailer(true);
 
 try {
     $mail->isSMTP();
-    $mail->Host       = 'smtp.gmail.com';
+    $mail->Host       = $cfg['host'];
     $mail->SMTPAuth   = true;
-    $mail->Username   = 'craft.aluminio@gmail.com';
-    $mail->Password   = 'ripj larf ycod bwny';
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-    $mail->Port       = 465;
+    $mail->Username   = $cfg['username'];
+    $mail->Password   = $cfg['password'];
+    $mail->SMTPSecure = ($cfg['secure'] === 'starttls')
+        ? PHPMailer::ENCRYPTION_STARTTLS
+        : PHPMailer::ENCRYPTION_SMTPS;
+    $mail->Port       = (int)$cfg['port'];
 
-    $mail->setFrom('craft.aluminio@gmail.com', 'Alucraft');
-    $mail->addAddress('craft.aluminio@gmail.com', 'Alucraft');
+    $mail->setFrom($cfg['from_email'], $cfg['from_name']);
+    $mail->addAddress($cfg['to_email'], $cfg['to_name']);
     $mail->CharSet = 'UTF-8';
 
     $mail->isHTML(true);

@@ -126,74 +126,74 @@ reveals.forEach(el => observer.observe(el));
     {
       title: "M1",
       images: [
-        "../multimedia/2.webp",
-        "../multimedia/1.webp"
+        "/multimedia/2.webp",
+        "/multimedia/1.webp"
       ]
     },
     {
       title: "M2",
       images: [
-        "./multimedia/m2/1.webp",
-        "./multimedia/m2/2.webp",
-        "./multimedia/m2/3.webp",
-        "./multimedia/m2/4.webp",
-        "./multimedia/m2/5.webp",
-        "./multimedia/m2/6.webp",
-        "./multimedia/m2/7.webp",
-        "./multimedia/m2/8.webp",
-        "./multimedia/m2/9.webp"
+        "/pagina2/multimedia/m2/1.webp",
+        "/pagina2/multimedia/m2/2.webp",
+        "/pagina2/multimedia/m2/3.webp",
+        "/pagina2/multimedia/m2/4.webp",
+        "/pagina2/multimedia/m2/5.webp",
+        "/pagina2/multimedia/m2/6.webp",
+        "/pagina2/multimedia/m2/7.webp",
+        "/pagina2/multimedia/m2/8.webp",
+        "/pagina2/multimedia/m2/9.webp"
       ]
     },
     {
       title: "M3",
       images: [
-        "./multimedia/m3/1.webp",
-        "./multimedia/m3/2.webp",
-        "./multimedia/m3/3.webp",
-        "./multimedia/m3/4.webp",
-        "./multimedia/m3/5.webp"
+        "/pagina2/multimedia/m3/1.webp",
+        "/pagina2/multimedia/m3/2.webp",
+        "/pagina2/multimedia/m3/3.webp",
+        "/pagina2/multimedia/m3/4.webp",
+        "/pagina2/multimedia/m3/5.webp"
       ]
     },
     {
       title: "M4",
       images: [
-        "./multimedia/m4/1.webp",
-        "./multimedia/m4/2.webp"
+        "/pagina2/multimedia/m4/1.webp",
+        "/pagina2/multimedia/m4/2.webp"
       ]
     },
     {
       title: "F1",
       images: [
-        "./multimedia/f1/1.webp",
-        "./multimedia/f1/2.webp",
-        "./multimedia/f1/3.webp",
-        "./multimedia/f1/4.webp"
+        "/pagina2/multimedia/f1/1.webp",
+        "/pagina2/multimedia/f1/2.webp",
+        "/pagina2/multimedia/f1/3.webp",
+        "/pagina2/multimedia/f1/4.webp"
       ]
     },
     {
       title: "F2",
       images: [
-        "./multimedia/f2/1.webp",
-        "./multimedia/f2/2.webp",
-        "./multimedia/f2/3.webp",
-        "./multimedia/f2/4.webp",
-        "./multimedia/f2/5.webp"
+        "/pagina2/multimedia/f2/1.webp",
+        "/pagina2/multimedia/f2/2.webp",
+        "/pagina2/multimedia/f2/3.webp",
+        "/pagina2/multimedia/f2/4.webp",
+        "/pagina2/multimedia/f2/5.webp"
       ]
     },
     {
       title: "F3",
       images: [
-        "./multimedia/f3/1.webp",
-        "./multimedia/f3/2.webp",
-        "./multimedia/f3/3.webp",
-        "./multimedia/f3/4.webp",
-        "./multimedia/f3/5.webp",
-        "./multimedia/f3/6.webp",
-        "./multimedia/f3/7.webp",
-        "./multimedia/f3/8.webp",
-        "./multimedia/f3/9.webp",
-        "./multimedia/f3/10.webp",
-        "./multimedia/f3/11.webp"
+        "/pagina2/multimedia/f3/1.webp",
+        "/pagina2/multimedia/f3/2.webp",
+        "/pagina2/multimedia/f3/3.webp",
+        "/pagina2/multimedia/f3/4.webp",
+        "/pagina2/multimedia/f3/5.webp",
+        "/pagina2/multimedia/f3/6.webp",
+        "/pagina2/multimedia/f3/7.webp",
+        "/pagina2/multimedia/f3/8.webp",
+        "/pagina2/multimedia/f3/9.webp",
+        "/pagina2/multimedia/f3/10.webp",
+        "/pagina2/multimedia/f3/11.webp"
       ]
     }
   ];

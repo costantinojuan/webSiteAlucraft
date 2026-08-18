@@ -9,6 +9,14 @@ RewriteRule ^ https://alucraft.com.ar/%1 [R=301,L]
 # Quitar index.html de la URL
 RewriteRule ^index\.html$ / [R=301,L]
 
+# Redirigir rutas viejas .html a las URLs limpias (301, evita URLs duplicadas)
+RewriteCond %{THE_REQUEST} \s/+pagina2/pergolas\.html[\s?] [NC]
+RewriteRule ^ /pergolas/ [R=301,L]
+RewriteCond %{THE_REQUEST} \s/+pagina3/mobiliarioExterior\.html[\s?] [NC]
+RewriteRule ^ /mobiliarioExterior/ [R=301,L]
+RewriteCond %{THE_REQUEST} \s/+pagina4/contacto\.html[\s?] [NC]
+RewriteRule ^ /contacto/ [R=301,L]
+
 # Reescritura de URLs limpias a archivos reales
 RewriteRule ^pergolas/?$ pagina2/pergolas.html [L]
 RewriteRule ^mobiliarioExterior/?$ pagina3/mobiliarioExterior.html [L]

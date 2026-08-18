@@ -1,0 +1,6 @@
+# Secretos (no subir al repo)
+config.mail.php
+
+# macOS
+.DS_Store
+**/.DS_Store
