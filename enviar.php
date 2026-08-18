@@ -7,8 +7,23 @@ require __DIR__ . '/PHPMailer/src/Exception.php';
 require __DIR__ . '/PHPMailer/src/PHPMailer.php';
 require __DIR__ . '/PHPMailer/src/SMTP.php';
 
+// TEMPORAL: en true muestra el motivo del error en pantalla.
+// Cuando el envío funcione, poné $DEBUG = false;
+$DEBUG = false;
+
+function fail($reason) {
+    global $DEBUG;
+    if ($DEBUG) {
+        header('Content-Type: text/plain; charset=utf-8');
+        echo "DEBUG ERROR: " . $reason;
+    } else {
+        header('Location: /contacto/?status=error');
+    }
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: pagina4/contacto.html');
+    header('Location: /contacto/');
     exit;
 }
 
@@ -25,8 +40,7 @@ $formStart = (int)($_POST['form_start'] ?? 0);
 
 // Honeypot y tiempo minimo de llenado para frenar bots.
 if ($website !== '' || $formStart <= 0 || (time() - $formStart) < 3) {
-    header('Location: pagina4/contacto.html?status=error');
-    exit;
+    fail('anti-bot (honeypot/tiempo). form_start=' . $formStart . ' diff=' . (time() - $formStart));
 }
 
 if (
@@ -36,14 +50,12 @@ if (
     strlen($email) > 120 ||
     strlen($message) < 10 || strlen($message) > 1200
 ) {
-    header('Location: pagina4/contacto.html?status=error');
-    exit;
+    fail('validacion de campos (revisa nombre/telefono/email/mensaje)');
 }
 
 $configPath = __DIR__ . '/config.mail.php';
 if (!is_file($configPath)) {
-    header('Location: pagina4/contacto.html?status=error');
-    exit;
+    fail('falta config.mail.php en el servidor (subilo por FTP a la misma carpeta que enviar.php)');
 }
 $cfg = require $configPath;
 
@@ -53,8 +65,8 @@ try {
     $mail->isSMTP();
     $mail->Host       = $cfg['host'];
     $mail->SMTPAuth   = true;
-    $mail->Username   = $cfg['username'];
-    $mail->Password   = $cfg['password'];
+    $mail->Username   = trim((string)$cfg['username']);
+    $mail->Password   = preg_replace('/\s+/', '', (string)$cfg['password']);
     $mail->SMTPSecure = ($cfg['secure'] === 'starttls')
         ? PHPMailer::ENCRYPTION_STARTTLS
         : PHPMailer::ENCRYPTION_SMTPS;
@@ -77,10 +89,8 @@ try {
     $mail->send();
 
     // Redirigir a pagina de exito
-    header("Location: gracias.html");
+    header("Location: /gracias.html");
     exit;
 } catch (Exception $e) {
-    // Redirigir a contacto con estado de error
-    header("Location: pagina4/contacto.html?status=error");
-    exit;
+    fail('SMTP: ' . $mail->ErrorInfo);
 }
