@@ -1,7 +1,7 @@
 const { normalizeColor } = require("./colors");
 
 /**
- * Variante terminada: "Marrón / Beige" → { structureColor, fabricColor, title }
+ * Variante terminada: "Arena / Beige" → { structureColor, fabricColor, title }
  */
 function parseVariantTitle(title) {
   const raw = String(title || "").trim();
@@ -17,7 +17,7 @@ function parseVariantTitle(title) {
   return { structureColor, fabricColor, title: raw };
 }
 
-/** "Marrón / Gris oscuro" → "Marrón" (para matchear mesa ratona terminada) */
+/** "Arena / Gris oscuro" → "Arena" (para matchear mesa ratona terminada) */
 function mesaColorFromJuegoTitle(juegoVariantTitle) {
   const title = String(juegoVariantTitle || "").trim();
   if (title.includes(" / ")) {

@@ -50,8 +50,8 @@ function findVariantByTitle(variantsByTitle, title, productLabel) {
 
 /**
  * Sincroniza cada variante del Juego Living según la combinación de color.
- * Ej.: Juego "Marrón / Gris oscuro" usa Sillón1 y Sillón3 con el mismo título
- * y Mesa "Marrón".
+ * Ej.: Juego "Arena / Gris oscuro" usa Sillón1 y Sillón3 con el mismo título
+ * y Mesa "Arena".
  */
 async function syncJuegoLivingStock() {
   const config = getSyncConfig();

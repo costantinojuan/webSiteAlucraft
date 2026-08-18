@@ -8,7 +8,6 @@ function normalizeColor(value) {
 }
 
 const STRUCTURE_CODE_BY_COLOR = {
-  marron: "MR",
   "negro microtexturado": "NM",
   arena: "AR",
 };
@@ -90,9 +89,9 @@ function skuForAllen() {
   return ALLEN_SKU;
 }
 
-/** Todos los SKUs esperados de componentes (3 estructuras × 4 + 4 telas × 5 + 4 cajas + 1 llave = 37). */
+/** Todos los SKUs esperados de componentes (2 estructuras × 4 + 4 telas × 5 + 4 cajas + 1 llave = 33). */
 function allExpectedComponentSkus() {
-  const structureColors = ["Marrón", "Negro Microtexturado", "Arena"];
+  const structureColors = ["Negro Microtexturado", "Arena"];
   const fabricColors = ["Beige", "Gris Claro", "Gris Oscuro", "Tostado"];
   const skus = [];
 

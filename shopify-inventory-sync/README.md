@@ -23,11 +23,11 @@ Modo legacy (`INVENTORY_SYNC_MODE=legacy`): solo recalcula Juego Living leyendo 
 
 Creá 9 productos en **borrador** con variantes por color. SKUs sugeridos (ver `npm run list-ids`):
 
-- Estructuras: `EST-S1-MR`, `EST-S3-NM`, etc.
+- Estructuras: `EST-S1-NM`, `EST-S3-AR`, etc.
 - Almohadones: `ALM-B1-658010-BE`, `ALM-R3-924412-GO`, etc.
-- Mesa componente (draft): `MES-RAT-MR`, `MES-RAT-NM`
+- Mesa componente (draft): `MES-RAT-NM`, `MES-RAT-AR`
 
-Variantes terminadas: título `"Marrón / Beige"` (estructura / tela).
+Variantes terminadas: título `"Arena / Beige"` (estructura / tela).
 
 ## Fórmula del Juego
 

@@ -152,7 +152,7 @@ body {
 .hero {
 	height: 90vh;
 	min-height: 480px;
-	background-image: url("/multimedia/juegoJardin.jpeg");
+	background-image: url("/fotosSeleccionadas/juegoSillon.webp");
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
@@ -288,7 +288,7 @@ main {
 .separadorImagen {
 	width: 100%;
 	height: 400px;
-	background-image: url("/multimedia/IMG_3451.webp");
+	background-image: url("/fotosSeleccionadas/paralax.webp");
 	background-size: cover;
 	background-position: center;
 	background-attachment: fixed;

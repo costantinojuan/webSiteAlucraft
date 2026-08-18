@@ -19,7 +19,7 @@ const sampleOrder = {
       product_id: Number(config.productIds.juego),
       variant_id: 1,
       title: "Juego living exterior",
-      variant_title: "Marrón / Beige",
+      variant_title: "Arena / Beige",
       quantity: 1,
     },
     {

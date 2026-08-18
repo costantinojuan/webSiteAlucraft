@@ -87,7 +87,7 @@ async function main() {
     console.log(`PRODUCT_ID_MESA_COMPONENT=${mesaComp.productId}  # ${mesaComp.title}`);
   }
 
-  console.log("\n=== SKUs de componentes (23 esperados) ===");
+  console.log("\n=== SKUs de componentes (33 esperados) ===");
   const expectedSkus = allExpectedComponentSkus();
   const foundSkus = new Map();
 
