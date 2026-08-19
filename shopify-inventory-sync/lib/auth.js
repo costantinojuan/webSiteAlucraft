@@ -55,7 +55,8 @@ function requireAdmin(req, res, next) {
 function adminNotConfiguredPage() {
   return `<!DOCTYPE html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin no configurado</title></head>
+<title>Admin no configurado</title>
+<link rel="icon" href="/admin/static/alucraft-logo.png" type="image/png"></head>
 <body style="font-family:system-ui;max-width:28rem;margin:3rem auto;padding:0 1rem;color:#334155">
   <h1>Panel admin no disponible</h1>
   <p>Configurá <code>ADMIN_USERNAME</code>, <code>ADMIN_PASSWORD</code> y <code>SESSION_SECRET</code> en Vercel.</p>

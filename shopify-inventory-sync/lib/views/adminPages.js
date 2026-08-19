@@ -29,6 +29,8 @@ function layout({ title, body, extraHead = "" }) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(title)} — Alucraft</title>
+  <link rel="icon" href="/admin/static/alucraft-logo.png" type="image/png">
+  <link rel="apple-touch-icon" href="/admin/static/alucraft-logo.png">
   <link rel="stylesheet" href="/admin/static/admin.css">
   ${extraHead}
 </head>

@@ -23,7 +23,8 @@ function createApp() {
     // Shopify redirige acá al instalar (hmac, host en query)
     if (req.query.host || req.query.hmac) {
       return res.status(200).type("html").send(`<!DOCTYPE html>
-<html lang="es"><head><meta charset="utf-8"><title>Alucraft Inventory Sync</title></head>
+<html lang="es"><head><meta charset="utf-8"><title>Alucraft Inventory Sync</title>
+<link rel="icon" href="/admin/static/alucraft-logo.png" type="image/png"></head>
 <body style="font-family:system-ui;max-width:32rem;margin:3rem auto;padding:0 1rem">
   <h1>App conectada</h1>
   <p>Al pagarse un pedido, la app descuenta <strong>componentes</strong> y recalcula stock en la tienda (webhook <code>orders/paid</code>).</p>
