@@ -284,6 +284,36 @@ main {
 	gap: 100px;
 }
 
+.productosColeccion {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 28px;
+	align-items: start;
+	max-width: 1200px;
+	margin: 8px auto 80px;
+	padding: 0 24px;
+	box-sizing: border-box;
+}
+
+.productosColeccion > div {
+	width: 100%;
+	min-width: 0;
+}
+
+.productosColeccion .shopify-buy__product {
+	margin: 0 !important;
+	max-width: 100% !important;
+	width: 100% !important;
+}
+
+.productosColeccion .shopify-buy__product-img-wrapper {
+	min-height: 220px;
+}
+
+.productosColeccion .shopify-buy__btn {
+	width: 100%;
+}
+
 /* ── Separador imagen ───────────────────────── */
 .separadorImagen {
 	width: 100%;
@@ -376,6 +406,122 @@ main {
 
 .footer-social a:hover {
 	color: #fff;
+}
+
+/* ── Pérgolas teaser (home) ─────────────────── */
+.pergolasCompare {
+	text-align: center;
+	padding: 20px 24px 80px;
+	max-width: 1400px;
+	margin: 0 auto;
+	box-sizing: border-box;
+}
+
+.pergolasCompare h2 {
+	color: black;
+	font-size: 18px;
+	margin-bottom: 30px;
+	opacity: 0.6;
+	font-weight: 400;
+}
+
+.pergolasCompare .sub {
+	margin-bottom: 48px;
+	font-size: 36px;
+	line-height: 1.2;
+	font-weight: 100;
+	color: #646464;
+}
+
+.pergolasCompare .compareContainer {
+	display: flex;
+	height: 500px;
+	overflow: hidden;
+	border-radius: 14px;
+}
+
+.pergolasCompare .panel {
+	flex: 1;
+	position: relative;
+	background-size: cover;
+	background-position: center;
+	display: flex;
+	align-items: flex-end;
+	transition: flex 0.6s ease;
+	cursor: pointer;
+	text-decoration: none;
+	color: inherit;
+}
+
+.pergolasCompare .panel::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.4), transparent);
+}
+
+.pergolasCompare .panel:hover {
+	flex: 2;
+}
+
+.pergolasCompare .content {
+	position: relative;
+	z-index: 2;
+	color: white;
+	padding: 40px;
+	text-align: left;
+	max-width: 550px;
+}
+
+.pergolasCompare .panel.fija .content {
+	text-align: right;
+	margin-left: auto;
+}
+
+.pergolasCompare .content h3 {
+	font-size: 32px;
+	margin: 0 0 10px;
+}
+
+.pergolasCompare .content p {
+	opacity: 0.9;
+	margin: 0 0 20px;
+}
+
+.pergolasCompare .content span {
+	display: inline-block;
+	background: #e6e6e6;
+	color: #111;
+	padding: 10px 20px;
+	border-radius: 6px;
+	font-weight: 600;
+}
+
+.pergolasCompare .panel:hover .content span {
+	background: #000;
+	color: #fff;
+}
+
+.pergolasCompare .movil {
+	background-image: url("/multimedia/1.webp");
+}
+
+.pergolasCompare .fija {
+	background-image: url("/multimedia/IMG_3704.webp");
+}
+
+@media (max-width: 1100px) {
+	.productosColeccion {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.pergolasCompare .sub {
+		font-size: 28px;
+	}
+
+	.pergolasCompare .content h3 {
+		font-size: 26px;
+	}
 }
 
 @media (max-width: 900px) {
@@ -577,6 +723,30 @@ main {
 		flex-direction: column;
 		align-items: center;
 		gap: 20px;
+	}
+
+	.productosColeccion {
+		grid-template-columns: 1fr;
+		gap: 28px;
+		margin: 32px auto 48px;
+	}
+
+	.pergolasCompare .compareContainer {
+		flex-direction: column;
+		height: auto;
+	}
+
+	.pergolasCompare .panel {
+		height: 320px;
+	}
+
+	.pergolasCompare .panel:hover {
+		flex: 1;
+	}
+
+	.pergolasCompare .sub {
+		font-size: 24px;
+		margin-bottom: 28px;
 	}
 }
 

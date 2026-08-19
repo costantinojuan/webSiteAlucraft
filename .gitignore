@@ -4,3 +4,6 @@ config.mail.php
 # macOS
 .DS_Store
 **/.DS_Store
+
+# Paquete de subida a hosting (se regenera)
+alucraft-web.zip
