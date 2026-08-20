@@ -373,6 +373,16 @@ h1, h2, h3 {
 }
 
 @media (max-width: 768px) {
+	.formulario {
+		padding: 88px 12px 40px;
+	}
+
+	.contact-form-container {
+		max-width: none;
+		padding: 28px 18px;
+		border-radius: 12px;
+	}
+
 	.footer {
 		padding: 34px 22px 20px;
 	}
@@ -523,16 +533,12 @@ h1, h2, h3 {
 }
 
 @media (max-width:400px) {
-	main {
-		margin: 20px;
-	}
-
 	.formulario {
-		padding: 80px 16px 28px;
+		padding: 88px 10px 28px;
 	}
 
 	.contact-form-container {
-		padding: 24px 18px;
+		padding: 22px 14px;
 	}
 
 	.contact-form-container h2 {

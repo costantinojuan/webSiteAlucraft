@@ -1,3 +1,7 @@
+html {
+	scroll-padding-top: 64px;
+}
+
 body {
 	font-family: "Roboto", sans-serif;
 	margin: 0;
@@ -279,19 +283,19 @@ h1, h2, h3 {
 
 @media (max-width: 900px) {
 	.pergolaTypes {
-		padding: 80px 60px;
+		padding: 80px 24px 30px;
 	}
 	.pergolaTypeContent {
 		left: 16px;
-		right: 16px;
+		right: auto;
 		bottom: 16px;
-		max-width: none;
+		max-width: min(340px, 62%);
 		padding: 14px 16px;
 	}
 	.pergolaTypes .pergolaType:nth-of-type(even) .pergolaTypeContent {
-		left: 16px;
+		left: auto;
 		right: 16px;
-		text-align: right;
+		text-align: left;
 	}
 	.pergolaTypesHeader h2 {
 		font-size: 32px;
@@ -300,19 +304,37 @@ h1, h2, h3 {
 
 @media (max-width: 600px) {
 	.pergolaTypes {
-		padding: 60px 40px;
+		padding: 88px 20px 40px;
 	}
 	.pergolaTypesHeader {
-		margin-bottom: 60px;
+		margin-bottom: 36px;
 	}
 	.pergolaTypesHeader h2 {
 		font-size: 28px;
 	}
 	.pergolaTypeImage {
-		aspect-ratio: 4 / 3;
+		aspect-ratio: 16 / 10;
+	}
+	.pergolaTypeContent {
+		position: static;
+		left: auto;
+		right: auto;
+		bottom: auto;
+		max-width: none;
+		margin-top: 14px;
+		padding: 0 2px 8px;
+		background: none;
+		backdrop-filter: none;
+		box-shadow: none;
+		border-radius: 0;
+	}
+	.pergolaTypes .pergolaType:nth-of-type(even) .pergolaTypeContent {
+		left: auto;
+		right: auto;
+		text-align: left;
 	}
 	.pergolaTypeContent h2 {
-		font-size: 24px;
+		font-size: 22px;
 		margin-bottom: 8px;
 	}
 	.pergolaTypeText {
