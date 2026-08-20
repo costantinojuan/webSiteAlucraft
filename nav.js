@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-
   const hamburger = document.getElementById("hamburger");
   const navMenu = document.getElementById("navMenu");
   const navBar = document.querySelector(".navBar");
@@ -27,30 +26,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
     hamburger.addEventListener("click", toggleMenu);
 
-    navMenu.querySelectorAll("a").forEach((link) => {
+    navMenu.querySelectorAll("a").forEach(function (link) {
       link.addEventListener("click", closeMenu);
     });
 
     document.addEventListener("click", function (event) {
-      if (window.innerWidth > 680) {
-        return;
-      }
-
-      if (!navMenu.classList.contains("active") && !navMenu.contains(event.target) && !hamburger.contains(event.target)) {
+      if (window.innerWidth > 680) return;
+      if (navMenu.classList.contains("active") && !navMenu.contains(event.target) && !hamburger.contains(event.target)) {
         closeMenu();
       }
     });
 
     document.addEventListener("keydown", function (event) {
-      if (event.key === "Escape") {
-        closeMenu();
-      }
+      if (event.key === "Escape") closeMenu();
     });
 
     window.addEventListener("resize", function () {
-      if (window.innerWidth > 680) {
-        closeMenu();
-      }
+      if (window.innerWidth > 680) closeMenu();
     });
   }
 
@@ -58,11 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const onScrollNav = function () {
       navBar.classList.toggle("scrolled", window.scrollY > 16);
     };
-
     onScrollNav();
     window.addEventListener("scroll", onScrollNav);
   }
-
 });
-
-

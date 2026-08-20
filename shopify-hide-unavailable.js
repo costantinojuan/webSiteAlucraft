@@ -1,7 +1,10 @@
 (function () {
   function optionMap(variant) {
     var map = {};
-    var opts = variant.optionValues || variant.selectedOptions || [];
+    var opts = variant.optionValues;
+    if (!opts || !opts.length) {
+      opts = variant.selectedOptions || [];
+    }
     for (var i = 0; i < opts.length; i++) {
       map[opts[i].name] = opts[i].value;
     }
@@ -79,15 +82,21 @@
         required[option.name] = valueName;
         for (var n = 0; n < variants.length; n++) {
           if (matches(variants[n], required)) {
-            valid[valueName] = true;
+            valid[String(valueName).trim()] = true;
             break;
           }
         }
       }
 
       var optionEls = Array.prototype.slice.call(select.options);
+      var remaining = optionEls.filter(function (optEl) {
+        var optValue = String(optEl.value || optEl.textContent || "").trim();
+        return valid[optValue];
+      });
+      if (!remaining.length) continue;
       for (var o = 0; o < optionEls.length; o++) {
-        if (!valid[optionEls[o].value]) {
+        var optValue = String(optionEls[o].value || optionEls[o].textContent || "").trim();
+        if (!valid[optValue]) {
           optionEls[o].parentNode.removeChild(optionEls[o]);
         }
       }

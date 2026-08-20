@@ -3,6 +3,10 @@ body {
 	margin: 0;
 }
 
+h1, h2, h3 {
+	font-family: "Roboto", sans-serif;
+}
+
 @media (max-width: 900px) {
 	.portfolioContainer { padding: 0 24px; }
 	.portfolioHeader h2 { font-size: 36px; }
@@ -183,7 +187,7 @@ body {
 }
 
 .hero h1 {
-	font-weight: 100;
+	font-weight: 700;
 	position: relative;
 	color: white;
 	font-size: 48px;
@@ -203,6 +207,7 @@ body {
 .pergolaTypesHeader h2 {
 	font-size: 36px;
 	margin: 0;
+	font-weight: 700;
 }
 
 .pergolaTypes .pergolaType {
@@ -252,6 +257,7 @@ body {
 .pergolaTypeContent h2 {
 	font-size: 32px;
 	margin: 0 0 14px;
+	font-weight: 700;
 }
 
 .pergolaTypeText {
@@ -334,6 +340,7 @@ body {
 .whyContainer h2 {
 	font-size: 36px;
 	margin-bottom: 40px;
+	font-weight: 700;
 }
 
 .whyGrid {
@@ -409,7 +416,7 @@ body {
 .portfolioHeader h2 {
 	font-size: 44px;
 	margin: 0 0 8px;
-	font-weight: 600;
+	font-weight: 700;
 	color: #111;
 }
 
@@ -430,7 +437,7 @@ body {
 }
 
 .album h2 {
-	font-weight: 600;
+	font-weight: 700;
 	font-size: 22px;
 	letter-spacing: 0.4px;
 	margin: 0 0 8px;
@@ -639,7 +646,7 @@ body {
 	margin: 0;
 	font-size: 42px;
 	line-height: 1.15;
-	font-weight: 300;
+	font-weight: 700;
 	color: #111;
 }
 
