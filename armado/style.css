@@ -41,6 +41,47 @@ h1,h2,h3{font-family:"Roboto",sans-serif}
   .card-media img{height:180px}
 }
 
+.video-slot{
+  margin:18px 0;
+  background:#fff;
+  border-radius:12px;
+  min-height:280px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--muted);
+  border:1px dashed #d4d4d4;
+}
+.manual-slot{
+  margin:18px 0 32px;
+  background:#fff;
+  padding:12px;
+  border-radius:12px;
+}
+.manual-slot img{
+  width:100%;
+  height:auto;
+  display:block;
+  border-radius:8px;
+}
+.manual-download{
+  margin-top:16px;
+  text-align:center;
+}
+.manual-download .btn{
+  display:inline-block;
+  padding:12px 24px;
+  border-radius:6px;
+  background:#000;
+  color:#fff;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:500;
+}
+.manual-download .btn:hover{
+  background:#333;
+}
+
 /* Utility */
 .small{font-size:13px}
 
