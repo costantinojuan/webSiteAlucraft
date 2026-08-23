@@ -7,3 +7,7 @@ config.mail.php
 
 # Paquete de subida a hosting (se regenera)
 alucraft-web.zip
+
+# BMAD
+**/__pycache__/
+*.pyc
