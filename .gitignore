@@ -1,5 +1,6 @@
 # Secretos (no subir al repo)
 config.mail.php
+error_log
 
 # macOS
 .DS_Store
@@ -7,6 +8,7 @@ config.mail.php
 
 # Paquete de subida a hosting (se regenera)
 alucraft-web.zip
+config-mail-nPower.zip
 
 # BMAD
 **/__pycache__/

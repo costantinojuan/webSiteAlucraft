@@ -1,4 +1,29 @@
+# Bloquear acceso HTTP a secretos y metadatos.
+# PHP sigue pudiendo leer config.mail.php con require (enviar.php no cambia).
+<FilesMatch "^(config\.mail\.php|error_log)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+<FilesMatch "^\.env">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
 RewriteEngine On
+
+# Bloquear el directorio .git si alguna vez queda dentro de public_html
+RewriteRule (^|/)\.git - [F,L]
 
 # Redirigir de HTTP a HTTPS y eliminar 'www' utilizando THE_REQUEST
 RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s/(.*)\sHTTP/ [NC]
