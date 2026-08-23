@@ -37,7 +37,7 @@ h1, h2, h3 {
 	list-style: none;
 	display: flex;
 	font-size: 13px;
-	margin: 0;
+	margin: 0 0 0 auto;
 	padding: 0;
 	align-items: center;
 	justify-content: center;
@@ -149,6 +149,104 @@ h1, h2, h3 {
 
 .hamburger.open span:nth-child(3) {
 	transform: translateY(-6px) rotate(-45deg);
+}
+
+.navCartToggle,
+#navCartToggle {
+	flex: 0 0 44px;
+	width: 44px;
+	height: 44px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-left: 4px;
+	position: relative;
+	z-index: 1100;
+	padding: 0;
+	overflow: visible;
+	transform: none;
+}
+
+.navCartToggle .shopify-buy-frame--toggle,
+#navCartToggle .shopify-buy-frame--toggle {
+	display: flex !important;
+	position: static !important;
+	transform: none !important;
+	width: 44px;
+	height: 44px;
+	padding: 0 !important;
+	overflow: visible;
+}
+
+.navCartToggle .shopify-buy__cart-toggle,
+#navCartToggle .shopify-buy__cart-toggle {
+	width: 44px;
+	height: 44px;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	border-radius: 8px;
+}
+
+.navCartToggle .shopify-buy__cart-toggle:hover,
+#navCartToggle .shopify-buy__cart-toggle:hover {
+	background: #f0f0f0;
+}
+
+.navCartToggle .shopify-buy__cart-toggle:focus,
+#navCartToggle .shopify-buy__cart-toggle:focus {
+	outline: none;
+}
+
+.navCartToggle .shopify-buy__cart-toggle:focus-visible,
+#navCartToggle .shopify-buy__cart-toggle:focus-visible {
+	outline: 2px solid #111;
+	outline-offset: 2px;
+	background: #f0f0f0;
+}
+
+.navCartToggle .shopify-buy__icon-cart,
+.navCartToggle svg,
+#navCartToggle .shopify-buy__icon-cart,
+#navCartToggle svg {
+	width: 22px;
+	height: 22px;
+	fill: #111;
+	display: block;
+}
+
+.navCartToggle .shopify-buy__cart-toggle__count,
+#navCartToggle .shopify-buy__cart-toggle__count {
+	position: absolute;
+	top: 4px;
+	right: 2px;
+	min-width: 16px;
+	height: 16px;
+	padding: 0 4px;
+	box-sizing: border-box;
+	border-radius: 8px;
+	background: #111;
+	color: #fff !important;
+	font-size: 10px;
+	font-family: "Roboto", sans-serif;
+	line-height: 16px;
+	text-align: center;
+}
+
+.shopify-buy-frame--toggle.is-sticky {
+	display: none !important;
+}
+
+.navCartToggle.shopify-buy-frame--toggle.is-sticky,
+#navCartToggle.shopify-buy-frame--toggle.is-sticky,
+.navCartToggle .shopify-buy-frame--toggle.is-sticky,
+#navCartToggle .shopify-buy-frame--toggle.is-sticky {
+	display: flex !important;
 }
 
 .formulario {
@@ -528,6 +626,12 @@ h1, h2, h3 {
 
 	.hamburger {
 		display: flex;
+	}
+
+	.navCartToggle,
+	#navCartToggle {
+		margin-left: auto;
+		margin-right: 2px;
 	}
 
 }

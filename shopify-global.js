@@ -44,25 +44,42 @@
 
     ShopifyBuy.UI.onReady(client).then(function (ui) {
 
-      ui.createComponent('cart', {
+      var toggleNode = document.getElementById('navCartToggle');
+      var cartConfig = {
         node: document.body.appendChild(document.createElement('div')),
         options: {
 
           toggle: {
+            iframe: false,
+            sticky: false,
+            contents: {
+              icon: true,
+              count: true,
+              title: false
+            },
             styles: {
               toggle: {
                 "font-family": "Roboto, sans-serif",
-                "background-color": "#272727",
+                "background-color": "transparent",
                 ":hover": {
-                  "background-color": "#424242"
+                  "background-color": "#f0f0f0"
                 },
                 ":focus": {
-                  "background-color": "#424242"
+                  "background-color": "#f0f0f0"
                 }
               },
               count: {
-                "font-size": "18px"
+                "font-size": "11px"
+              },
+              icon: {
+                "fill": "#111111"
+              },
+              iconPath: {
+                "fill": "#111111"
               }
+            },
+            text: {
+              title: "Carrito"
             },
             googleFonts: ["Roboto"]
           },
@@ -96,7 +113,15 @@
           }
 
         }
-      });
+      };
+
+      if (toggleNode) {
+        cartConfig.toggles = [{ node: toggleNode }];
+      } else {
+        cartConfig.toggles = [];
+      }
+
+      ui.createComponent('cart', cartConfig);
 
       signalReady(ui);
 
