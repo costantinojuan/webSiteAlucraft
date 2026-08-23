@@ -13,3 +13,4 @@ config-mail-nPower.zip
 # BMAD
 **/__pycache__/
 *.pyc
+test-bmad/
