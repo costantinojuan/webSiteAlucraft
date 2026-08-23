@@ -1,5 +1,4 @@
 (function () {
-  var SCRIPT_URL = "https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js";
   var MONEY_FORMAT = "%24%7B%7Bamount_with_comma_separator%7D%7D";
 
   var PRODUCTS = [
@@ -157,79 +156,42 @@
           select: { "font-family": "Roboto, sans-serif" }
         },
         googleFonts: ["Roboto"]
-      },
-      cart: {
-        styles: {
-          button: {
-            "font-family": "Roboto, sans-serif",
-            "font-size": "18px",
-            "padding-top": "17px",
-            "padding-bottom": "17px",
-            ":hover": { "background-color": "#424242" },
-            "background-color": "#272727",
-            ":focus": { "background-color": "#424242" },
-            "border-radius": "10px"
-          }
-        },
-        text: {
-          title: "Carrito de compras",
-          total: "Subtotal",
-          empty: "Tu carrito está vacío",
-          notice: "Envio Gratis a TODO el país",
-          button: "Pagar"
-        },
-        popup: false,
-        googleFonts: ["Roboto"]
-      },
-      toggle: {
-        styles: {
-          toggle: {
-            "font-family": "Roboto, sans-serif",
-            "background-color": "#272727",
-            ":hover": { "background-color": "#424242" },
-            ":focus": { "background-color": "#424242" }
-          },
-          count: { "font-size": "18px" }
-        },
-        googleFonts: ["Roboto"]
       }
     };
   }
 
-  function mountProducts() {
+  function mountProducts(ui) {
+    if (!ui) return;
     var nodes = PRODUCTS.filter(function (product) {
       return document.getElementById(product.nodeId);
     });
     if (!nodes.length) return;
 
-    var client = ShopifyBuy.buildClient({
-      domain: "v4apub-im.myshopify.com",
-      storefrontAccessToken: "e7abe6f448d4477a4827e9884e0cf515"
-    });
-
-    ShopifyBuy.UI.onReady(client).then(function (ui) {
-      nodes.forEach(function (product) {
+    nodes.forEach(function (product) {
+      try {
         ui.createComponent("product", {
           id: product.id,
           node: document.getElementById(product.nodeId),
           moneyFormat: MONEY_FORMAT,
           options: productOptions(product.layout)
         });
-      });
+      } catch (err) {
+        if (typeof console !== "undefined" && console.error) {
+          console.error("Alucraft Shopify product mount failed", product.nodeId, err);
+        }
+      }
     });
   }
 
-  function loadScript() {
-    var script = document.createElement("script");
-    script.async = true;
-    script.src = SCRIPT_URL;
-    script.onload = mountProducts;
-    document.head.appendChild(script);
+  var started = false;
+  function onShopifyReady() {
+    if (started || !window.AlucraftShopifyUI) return;
+    started = true;
+    document.removeEventListener("alucraft:shopify-ready", onShopifyReady);
+    mountProducts(window.AlucraftShopifyUI);
   }
 
-  if (window.ShopifyBuy && window.ShopifyBuy.UI) {
-    mountProducts();
-  } else {
-    loadScript();
-  }
+  document.addEventListener("alucraft:shopify-ready", onShopifyReady);
+  onShopifyReady();
 })();
+
