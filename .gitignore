@@ -1,5 +1,7 @@
 # Secretos (no subir al repo)
 config.mail.php
+error_log
+
 
 # macOS
 .DS_Store

@@ -1,3 +1,14 @@
+# Bloquear HTTP a logs de PHP (pueden incluir path de hosting y datos del form).
+<FilesMatch "^error_log$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
 RewriteEngine On
 
 # Redirigir de HTTP a HTTPS y eliminar 'www' utilizando THE_REQUEST
