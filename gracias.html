@@ -2,10 +2,13 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Mensaje enviado</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mensaje enviado — Alucraft Outdoor</title>
+<link rel="shortcut icon" href="/Logos/alucraft-logo.png" type="image/png">
+<link rel="stylesheet" href="/pagina4/style.css?v=typo6">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11148252614"></script>
@@ -23,33 +26,108 @@
     'send_to': 'AW-11148252614/y5LaCIieuLYYEMar88Mp'
   });
 </script>
-
-<style>
-    body {
-        font-family: "Roboto", sans-serif;
-        background: #f7f7f7;
-        text-align: center;
-        padding: 50px;
-    }
-    .box {
-        background: white;
-        padding: 20px;
-        max-width: 400px;
-        margin: auto;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    h1 { color: green; }
-    a { color: #333; text-decoration: none; }
-</style>
+<script>
+   function gtag_report_conversion(url) {
+     var callback = function () {
+       if (typeof(url) != 'undefined') {
+         window.location = url;
+       }
+     };
+     gtag('event', 'conversion', {
+         'send_to': 'AW-11148252614/H7fJCPyduLYYEMar88Mp',
+         'event_callback': callback
+     });
+     return false;
+   }
+</script>
 </head>
 
 <body>
-<div class="box">
-    <h1>✅ Mensaje enviado con éxito</h1>
-    <p>Gracias por contactarnos. Te responderemos a la brevedad.</p>
-    <a href="/">Volver al inicio</a>
-</div>
-      <script src="/shopify-global.js?v=navcart1"></script>
+      <header>
+         <div class="navBar">
+            <a class="brand" href="/">
+               <img class="logoNav" src="/Logos/alucraftLogo.png" alt="Alucraft">
+               <span class="brandSub">Outdoor</span>
+            </a>
+            <ul class="listBar" id="navMenu">
+               <li class="mobiliario">
+                  <a href="/">
+                     <p>Mobiliario</p>
+                  </a>
+               </li>
+               <li class="pergolas">
+                  <a href="/pergolas/">
+                     <p>Pérgolas</p>
+                  </a>
+               </li>
+               <li class="contact">
+                  <a href="/contacto/">
+                     <p>Contacto</p>
+                  </a>
+               </li>
+            </ul>
+            <div id="navCartToggle" class="navCartToggle" aria-label="Carrito"></div>
+            <button class="hamburger" id="hamburger" aria-label="Abrir menu" aria-controls="navMenu" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+            </button>
+         </div>
+      </header>
+      <main class="graciasMain">
+         <div class="graciasBox">
+            <h1>Mensaje enviado</h1>
+            <p>Gracias por contactarnos. Te respondemos en menos de 24 hs.</p>
+            <a href="/" class="boton">Volver al inicio</a>
+         </div>
+      </main>
+      <footer class="footer">
+        <div class="footer-container">
+
+          <div class="footer-col footer-brand">
+            <h3>Alucraft</h3>
+            <p>Muebles y pérgolas de aluminio para exterior.</p>
+          </div>
+
+          <div class="footer-col">
+            <h4>Productos</h4>
+            <a href="/pergolas/">Pérgolas</a>
+            <a href="/">Mobiliario exterior</a>
+          </div>
+
+          <div class="footer-col">
+            <h4>Ayuda</h4>
+            <a href="/armado/">Centro de armado</a>
+            <a href="/catalogo/Alucraft-Outdoor-Living-2026.pdf" download="Alucraft-Outdoor-Living-2026.pdf">Descargar catálogo</a>
+            <a href="/preguntas-frecuentes/">Preguntas frecuentes</a>
+          </div>
+
+          <div class="footer-col">
+            <h4>Contacto</h4>
+            <p>craft.aluminio@gmail.com</p>
+            <p>+54 11 3212 2439</p>
+            <p>Rodolfo López 1684, Quilmes, Buenos Aires, Argentina</p>
+          </div>
+
+        </div>
+
+        <div class="footer-bottom">
+          <div class="footer-social">
+            <a href="#">Facebook</a>
+            <a href="https://www.instagram.com/alucraft.outdoor/">Instagram</a>
+            <a href="#">YouTube</a>
+          </div>
+
+          <p>© 2026 Alucraft. Todos los derechos reservados.</p>
+        </div>
+      </footer>
+
+      <div class="whatsappIcon">
+        <a href="https://wa.me/5491132122439" target="_blank" onclick="return gtag_report_conversion('https://wa.me/5491132122439')">
+        <img src="/multimedia-items/logo-whatsapp-verde.png" alt="WhatsApp">
+        </a>
+      </div>
+      <script src="/nav.js"></script>
+      <script src="/shopify-global.js?v=navcart2"></script>
 </body>
 </html>

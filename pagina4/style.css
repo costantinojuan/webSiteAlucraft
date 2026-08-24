@@ -241,6 +241,11 @@ h1, h2, h3 {
 	text-align: center;
 }
 
+.navCartToggle .shopify-buy__cart-toggle__count:not(.is-visible),
+#navCartToggle .shopify-buy__cart-toggle__count:not(.is-visible) {
+	display: none !important;
+}
+
 .shopify-buy-frame--toggle.is-sticky {
 	display: none !important;
 }
@@ -669,4 +674,41 @@ h1, h2, h3 {
 		font-size: 24px;
 	}
 
+}
+
+.graciasMain {
+	min-height: calc(100vh - 56px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 96px 24px 80px;
+	box-sizing: border-box;
+}
+
+.graciasBox {
+	max-width: 480px;
+	text-align: center;
+}
+
+.graciasBox h1 {
+	font-family: "Source Sans 3", "Roboto", sans-serif;
+	font-weight: 600;
+	font-size: 32px;
+	line-height: 1.2;
+	color: #111;
+	margin: 0 0 12px;
+}
+
+.graciasBox p {
+	font-size: 16px;
+	line-height: 1.55;
+	color: #555;
+	margin: 0 0 28px;
+}
+
+.graciasBox .boton {
+	display: inline-block;
+	text-decoration: none;
+	width: auto;
+	padding: 14px 28px;
 }

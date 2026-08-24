@@ -261,6 +261,11 @@ h1, h2, h3 {
 	text-align: center;
 }
 
+.navCartToggle .shopify-buy__cart-toggle__count:not(.is-visible),
+#navCartToggle .shopify-buy__cart-toggle__count:not(.is-visible) {
+	display: none !important;
+}
+
 .shopify-buy-frame--toggle.is-sticky {
 	display: none !important;
 }

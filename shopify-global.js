@@ -126,6 +126,47 @@
 
       ui.createComponent('cart', cartConfig);
 
+      function parseCartCount(text) {
+        var n = parseInt(String(text || '').replace(/[^\d]/g, ''), 10);
+        return isNaN(n) ? 0 : n;
+      }
+
+      function syncCartCountVisibility(root) {
+        if (!root) return;
+        var counts = root.querySelectorAll('.shopify-buy__cart-toggle__count');
+        for (var i = 0; i < counts.length; i++) {
+          if (parseCartCount(counts[i].textContent) > 0) {
+            counts[i].classList.add('is-visible');
+          } else {
+            counts[i].classList.remove('is-visible');
+          }
+        }
+      }
+
+      function watchCartCount(root) {
+        if (!root || root.getAttribute('data-alucraft-count-watch') === '1') return;
+        root.setAttribute('data-alucraft-count-watch', '1');
+        syncCartCountVisibility(root);
+        var observer = new MutationObserver(function () {
+          syncCartCountVisibility(root);
+        });
+        observer.observe(root, {
+          childList: true,
+          subtree: true,
+          characterData: true
+        });
+      }
+
+      if (toggleNode) {
+        watchCartCount(toggleNode);
+        requestAnimationFrame(function () {
+          syncCartCountVisibility(toggleNode);
+        });
+        setTimeout(function () {
+          syncCartCountVisibility(toggleNode);
+        }, 400);
+      }
+
       signalReady(ui);
 
     });
