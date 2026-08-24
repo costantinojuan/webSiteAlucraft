@@ -279,7 +279,7 @@ h1, h2, h3 {
 
 .hero {
 	height: 90vh;
-	background-image: url("/./pagina2/multimedia/f3/1.webp");
+	background-image: url("/pagina2/multimedia/f3/1.webp");
 	background-size: cover;
 	background-position: 50% 20%;
 	position: relative;
@@ -302,6 +302,11 @@ h1, h2, h3 {
 	color: white;
 	font-size: 48px;
 	z-index: 2;
+	max-width: min(720px, 100%);
+	width: auto;
+	box-sizing: border-box;
+	padding: 0 24px;
+	text-align: center;
 }
 
 .pergolaTypes {
@@ -521,6 +526,14 @@ h1, h2, h3 {
 @media (max-width: 560px) {
 	.whyGrid {
 		grid-template-columns: 1fr;
+	}
+
+	.whyContainer {
+		padding: 0 20px;
+	}
+
+	.whyChoose {
+		padding: 48px 0;
 	}
 }
 
@@ -746,8 +759,9 @@ h1, h2, h3 {
 
 
 .ctaSection {
-	padding: 90px 0;
+	padding: 90px 24px;
 	background: #f8f9fa;
+	box-sizing: border-box;
 }
 
 .ctaContainer {
@@ -759,6 +773,7 @@ h1, h2, h3 {
 	border: 1px solid rgba(0, 0, 0, 0.08);
 	border-radius: 24px;
 	box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+	box-sizing: border-box;
 }
 
 .ctaEyebrow {
@@ -801,6 +816,10 @@ h1, h2, h3 {
 	text-decoration: none;
 	transition: all 0.25s ease;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+	box-sizing: border-box;
+	max-width: 100%;
+	white-space: normal;
+	text-align: center;
 }
 
 .ctaButton:hover {
@@ -962,7 +981,7 @@ h1, h2, h3 {
 
 @media (max-width: 680px) {
 	body {
-		overflow-x: hidden;
+		overflow-x: clip;
 	}
 
 	body.menu-open::after {
@@ -979,7 +998,8 @@ h1, h2, h3 {
 		top: 0;
 		right: 0;
 		bottom: 0;
-		height: 100vh;
+		height: 100%;
+		height: 100dvh;
 		width: 62%;
 		max-width: 210px;
 		background: white;
@@ -990,13 +1010,17 @@ h1, h2, h3 {
 		justify-content: flex-start;
 		align-items: stretch;
 		transform: translateX(100%);
-		transition: transform 0.3s ease;
+		transition: transform 0.3s ease, visibility 0.3s ease;
 		z-index: 990;
 		overflow-y: auto;
+		visibility: hidden;
+		pointer-events: none;
 	}
 
 	.navBar .listBar.active {
 		transform: translateX(0);
+		visibility: visible;
+		pointer-events: auto;
 	}
 
 	.navBar .listBar li {
@@ -1061,7 +1085,9 @@ h1, h2, h3 {
 
 @media (max-width: 900px) {
 	.hero h1 {
-		width: 600px;
+		width: auto;
+		max-width: 100%;
+		font-size: 32px;
 		text-align: center;
 	}
 }
@@ -1080,28 +1106,28 @@ h1, h2, h3 {
 	}
 
 	.ctaSection {
-		padding: 70px 24px 90px;
+		padding: 32px 16px 28px;
 	}
 
 	.ctaContainer {
-		padding: 30px 22px;
+		padding: 24px 18px;
 		border-radius: 16px;
 	}
 
 	.ctaContainer h2 {
-		font-size: 32px;
+		font-size: 24px;
 	}
 
 	.ctaText {
-		font-size: 16px;
-		margin-bottom: 24px;
+		font-size: 15px;
+		margin: 12px auto 18px;
 	}
 
 	.ctaButton {
-		width: 100%;
-		max-width: 340px;
-		font-size: 17px;
-		padding: 13px 20px;
+		width: auto;
+		max-width: 100%;
+		font-size: 16px;
+		padding: 12px 18px;
 	}
 
 }
