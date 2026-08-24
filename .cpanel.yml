@@ -1,0 +1,7 @@
+---
+# Despliegue Git de cPanel: actualiza public_html con paths públicos versionados.
+# El destino no se vacía; los persistentes del hosting se mantienen.
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/alucraf1/public_html/
+    - /usr/bin/rsync -a .htaccess index.html gracias.html enviar.php config.mail.example.php nav.js shopify-global.js shopify-hide-unavailable.js shopify-products.js style.css Logos PHPMailer armado catalogo fences fotosSeleccionadas manualDeArmado multimedia multimedia-items pagina2 pagina3 pagina4 pagina5 $DEPLOYPATH
