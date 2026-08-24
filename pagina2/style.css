@@ -211,6 +211,9 @@ h1, h2, h3 {
 	justify-content: center;
 	position: relative;
 	border-radius: 8px;
+	font-size: 0;
+	line-height: 0;
+	color: #111;
 }
 
 .navCartToggle .shopify-buy__cart-toggle:hover,

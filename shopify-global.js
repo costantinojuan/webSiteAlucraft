@@ -57,6 +57,9 @@
               count: true,
               title: false
             },
+            templates: {
+              icon: '<svg class="shopify-buy__icon-cart" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zM7.17 14.75l.03.01L19 14.5c.7 0 1.31-.4 1.59-1.03l3.24-7.38A1 1 0 0 0 22.92 4.8H6.21l-.94-2H1v2h2l3.6 7.59-1.35 2.44C4.52 15.87 5.48 17.5 7 17.5h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.11.97-1.39z"/></svg>'
+            },
             styles: {
               toggle: {
                 "font-family": "Roboto, sans-serif",
