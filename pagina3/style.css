@@ -535,10 +535,8 @@ main {
 .terminacionesFotos img {
 	display: block;
 	width: 100%;
-	height: 56vh;
-	min-height: 320px;
-	max-height: 620px;
-	object-fit: cover;
+	height: auto;
+	object-fit: contain;
 }
 
 .terminacionesFotos figcaption {
@@ -842,11 +840,6 @@ main {
 
 	.terminacionesFotos {
 		grid-template-columns: 1fr;
-	}
-
-	.terminacionesFotos img {
-		height: 42vh;
-		min-height: 240px;
 	}
 }
 
