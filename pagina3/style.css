@@ -322,7 +322,7 @@ h1, h2, h3 {
 	color: rgba(255,255,255,0.85);
 	margin: 0 0 28px;
 	line-height: 1.5;
-	max-width: 540px;
+	max-width: 480px;
 }
 
 .heroBtn {
@@ -330,13 +330,11 @@ h1, h2, h3 {
 	background: #e6e6e6;
 	color: #111;
 	padding: 13px 28px;
-	border: 1px solid transparent;
 	border-radius: 8px;
 	text-decoration: none;
 	font-weight: 600;
 	font-size: 15px;
-	box-sizing: border-box;
-	transition: background 0.25s, color 0.25s, border-color 0.25s;
+	transition: background 0.25s, color 0.25s;
 }
 
 .heroBtn:hover {
@@ -344,27 +342,9 @@ h1, h2, h3 {
 	color: #fff;
 }
 
-.heroActions {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 12px;
-}
-
-.hero .heroBtnGhost {
-	background: transparent;
-	color: #fff;
-	border: 1px solid rgba(255, 255, 255, 0.5);
-}
-
-.hero .heroBtnGhost:hover {
-	background: #fff;
-	color: #111;
-	border-color: #fff;
-}
-
-/* ── Acceso / armado (Home) ─────────────────── */
+/* ── Acceso ─────────────────────────────────── */
 .acceso {
-	padding: 8px 0 24px;
+	padding: 8px 0 8px;
 }
 
 .accesoCompare {
@@ -372,8 +352,8 @@ h1, h2, h3 {
 	grid-template-columns: 1fr 1fr;
 	gap: 0;
 	max-width: 920px;
-	margin: 0 auto 12px;
-	padding: 0 24px 40px;
+	margin: 0 auto;
+	padding: 0 24px 32px;
 	box-sizing: border-box;
 }
 
@@ -400,155 +380,28 @@ h1, h2, h3 {
 	color: #333;
 }
 
-.accesoSteps {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 32px;
-	list-style: none;
-	max-width: 1100px;
-	margin: 0 auto 48px;
-	padding: 0 24px 8px;
+.accesoFotos {
+	display: none;
+	grid-template-columns: 1fr 1fr;
+	gap: 8px;
+	max-width: 920px;
+	margin: 0 auto 24px;
+	padding: 0 24px 16px;
 	box-sizing: border-box;
 }
 
-.accesoSteps li {
+.accesoFotos:has(img) {
+	display: grid;
+}
+
+.accesoFotos figure {
 	margin: 0;
 }
 
-.accesoStepN {
-	display: block;
-	font-size: 13px;
-	letter-spacing: 0.14em;
-	color: #8a8a8a;
-	margin-bottom: 12px;
-}
-
-.accesoSteps h3 {
-	margin: 0 0 8px;
-	font-size: 20px;
-	font-weight: 700;
-	color: #111;
-}
-
-.accesoSteps p {
-	margin: 0;
-	font-size: 15px;
-	line-height: 1.55;
-	color: #555;
-}
-
-.assetSlot {
-	margin-top: 20px;
-}
-
-.assetSlot img,
-.assetSlot video {
+.accesoFotos img {
 	display: block;
 	width: 100%;
 	height: auto;
-	max-height: 420px;
-	object-fit: cover;
-}
-
-.assetSlot--video {
-	max-width: 920px;
-	margin: 24px auto 8px;
-	padding: 0 24px;
-	box-sizing: border-box;
-}
-
-.accesoMedidas {
-	padding-bottom: 16px;
-}
-
-.accesoMedidasGrid {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 24px;
-	max-width: 920px;
-	margin: 0 auto 48px;
-	padding: 0 24px;
-	box-sizing: border-box;
-}
-
-.accesoMedidasGrid dt {
-	font-size: 11px;
-	letter-spacing: 0.14em;
-	text-transform: uppercase;
-	color: #6b6b6b;
-	margin-bottom: 8px;
-}
-
-.accesoMedidasGrid dd {
-	margin: 0;
-	font-size: 18px;
-	color: #111;
-}
-
-.homeFaq {
-	padding: 8px 0 56px;
-}
-
-.homeFaqList {
-	max-width: 720px;
-	margin: 0 auto;
-	padding: 0 24px;
-}
-
-.homeFaqList details {
-	border-top: 1px solid #e6e3dc;
-}
-
-.homeFaqList details:last-child {
-	border-bottom: 1px solid #e6e3dc;
-}
-
-.homeFaqList summary {
-	cursor: pointer;
-	list-style: none;
-	padding: 18px 28px 18px 0;
-	font-size: 16px;
-	font-weight: 600;
-	color: #111;
-	position: relative;
-}
-
-.homeFaqList summary::-webkit-details-marker {
-	display: none;
-}
-
-.homeFaqList summary::after {
-	content: "+";
-	position: absolute;
-	right: 0;
-	top: 18px;
-	color: #8a8a8a;
-	font-weight: 400;
-}
-
-.homeFaqList details[open] summary::after {
-	content: "–";
-}
-
-.homeFaqList details p {
-	margin: 0 0 18px;
-	font-size: 15px;
-	line-height: 1.55;
-	color: #555;
-}
-
-.homeFaqList a {
-	color: #1d2b24;
-}
-
-.homeFaqMore {
-	text-align: center;
-	margin: 24px 0 0;
-	font-size: 14px;
-}
-
-.homeFaqMore a {
-	color: #555;
 }
 
 /* ── Main layout ────────────────────────────── */
@@ -1022,7 +875,7 @@ main {
 /* ── Responsive ─────────────────────────────── */
 @media (max-width: 768px) {
 	.heroTitle {
-		font-size: 32px;
+		font-size: 36px;
 	}
 
 	.heroContent {
@@ -1048,13 +901,7 @@ main {
 		padding-top: 28px;
 	}
 
-	.accesoSteps {
-		grid-template-columns: 1fr;
-		gap: 28px;
-		margin-bottom: 32px;
-	}
-
-	.accesoMedidasGrid {
+	.accesoFotos {
 		grid-template-columns: 1fr;
 	}
 
@@ -1195,14 +1042,6 @@ main {
 	.heroContent {
 		text-align: center;
 		padding: 0 20px;
-	}
-
-	.heroActions {
-		justify-content: center;
-	}
-
-	.heroTitle {
-		font-size: 28px;
 	}
 
 	.heroSub {
