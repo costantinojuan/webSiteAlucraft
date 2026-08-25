@@ -15,3 +15,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-cpanel-git-deploy.md`
   summary: Un clone sucio en cPanel deja Deploy deshabilitado hasta limpiar el working tree.
   evidence: Comportamiento de Git Version Control, no del `.cpanel.yml`. Si Deploy no aparece, `git status` en el clone.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-titulo-terminaciones-overlay.md`
+  summary: DESIGN.md y EXPERIENCE.md del run UX 2026-08-24 están vacíos (solo frontmatter).
+  evidence: Preexistente; la auditoría vive en auditoria-ux-ui.md. Este overlay se ancló a esa auditoría, no a los spines.
