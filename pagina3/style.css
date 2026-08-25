@@ -518,27 +518,11 @@ main {
 
 /* ── Terminaciones (reemplaza el parallax) ───── */
 .terminaciones {
-	position: relative;
 	margin: 0;
 }
 
-.terminacionesTitulo {
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 0;
-	z-index: 2;
-	margin: 0;
-	padding: 36px 24px 72px;
-	font-family: "Roboto", sans-serif;
-	font-size: 34px;
-	font-weight: 700;
-	line-height: 1.15;
-	text-align: center;
-	color: #fff;
-	text-shadow: 0 1px 18px rgba(0, 0, 0, 0.4);
-	background: linear-gradient(to bottom, rgba(22, 22, 22, 0.5) 0%, rgba(22, 22, 22, 0.12) 55%, transparent 100%);
-	pointer-events: none;
+.terminaciones .categoriaHeader {
+	padding: 48px 20px;
 }
 
 .terminacionesFotos {
@@ -868,11 +852,6 @@ main {
 	.terminacionesFotos img {
 		height: 42vh;
 		min-height: 240px;
-	}
-
-	.terminacionesTitulo {
-		font-size: 24px;
-		padding: 28px 20px 56px;
 	}
 }
 
