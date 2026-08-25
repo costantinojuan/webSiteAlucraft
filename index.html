@@ -5,8 +5,8 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Alucraft Outdoor — Mobiliario de exterior</title>
       <link rel="shortcut icon" href="/Logos/alucraft-logo.png" type="image/png">
-      <meta name="description" content="Muebles de exterior de aluminio: juegos de living, sillones, reposeras y mesas. Diseño y durabilidad Alucraft.">
-      <link rel="stylesheet" href="/pagina3/style.css?v=typo13">
+      <meta name="description" content="Sillones de exterior de aluminio para terraza, balcón y patio. Llegan en cajas, pasan por accesos reducidos y se arman en destino.">
+      <link rel="stylesheet" href="/pagina3/style.css?v=typo14">
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,400;0,500;0,700;1,400&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -69,15 +69,91 @@
          <section class="hero">
             <div class="heroContent">
                <span class="heroLabel">Colección 2026</span>
-               <h1 class="heroTitle">Mobiliario Exterior</h1>
-               <p class="heroSub">Diseños de aluminio para el exterior. Se arma en casa, en minutos.</p>
-               <a href="#productos" class="heroBtn">Ver colección</a>
+               <h1 class="heroTitle">El sillón que entra donde otros no entran.</h1>
+               <p class="heroSub">Llega en cajas compactas. Lo llevás hasta la terraza, el balcón o el patio y lo armás con una llave Allen.</p>
+               <div class="heroActions">
+                  <a href="#productos" class="heroBtn">Ver colección</a>
+                  <a href="#como-funciona" class="heroBtn heroBtnGhost">Cómo funciona</a>
+               </div>
             </div>
          </section>
       </header>
-      <main id="productos">
+      <main>
 
-         <div class="categoriaHeader">
+         <!--
+           HOME PLACEHOLDERS — unique source.
+           Fill the JSON below. Empty string = slot stays hidden (no fake media).
+           VIDEO_HERO_ALUCRAFT: replace #video-hero-alucraft with a real <video> when ready.
+           VIDEO_ARMADO_ALUCRAFT: same for #video-armado-alucraft.
+           FOTO_CAJA_ALUCRAFT / FOTO_ESCALERA_ACCESO: img URLs.
+           MEDIDA_*: e.g. "80 × 75 × 70 cm" — do not invent numbers.
+         -->
+         <script type="application/json" id="home-placeholders">{
+           "VIDEO_HERO_ALUCRAFT": "",
+           "FOTO_CAJA_ALUCRAFT": "",
+           "FOTO_ESCALERA_ACCESO": "",
+           "VIDEO_ARMADO_ALUCRAFT": "",
+           "MEDIDA_SILLON_ARMADO": "",
+           "MEDIDA_CAJA_1": "",
+           "MEDIDA_CAJA_2": ""
+         }</script>
+
+         <section class="acceso" id="como-funciona" aria-label="Cómo llega y se arma">
+            <div id="video-hero-alucraft" class="assetSlot assetSlot--video" data-ph="VIDEO_HERO_ALUCRAFT" data-ph-type="video" hidden>
+               <!-- PLACEHOLDER — VIDEO HERO: Caja → traslado → armado → sillón terminado -->
+            </div>
+
+            <div class="categoriaHeader">
+               <span class="categoriaTag">Acceso</span>
+               <h2>El tamaño de tu acceso ya no determina el tamaño de tu sillón.</h2>
+            </div>
+
+            <div class="accesoCompare">
+               <article class="accesoCompareCol">
+                  <p class="accesoKicker">Sillón tradicional</p>
+                  <p>Tiene que ingresar prácticamente armado: escalera, ascensor, puerta o terraza marcan el límite.</p>
+                  <div class="assetSlot" data-ph="FOTO_ESCALERA_ACCESO" data-ph-type="img" hidden>
+                     <!-- PLACEHOLDER — FOTO ESCALERA / ACCESO ANGOSTO -->
+                  </div>
+               </article>
+               <article class="accesoCompareCol">
+                  <p class="accesoKicker">Alucraft</p>
+                  <p>Se transporta en piezas y se arma en destino. Llevás las cajas hasta el lugar y recién ahí encastra.</p>
+                  <div class="assetSlot" data-ph="FOTO_CAJA_ALUCRAFT" data-ph-type="img" hidden>
+                     <!-- PLACEHOLDER — FOTO CAJA ALUCRAFT -->
+                  </div>
+               </article>
+            </div>
+
+            <div class="categoriaHeader">
+               <span class="categoriaTag">Así de simple</span>
+               <h2>Recibir. Llevar. Armar.</h2>
+            </div>
+
+            <ol class="accesoSteps">
+               <li>
+                  <span class="accesoStepN">01</span>
+                  <h3>Recibilo</h3>
+                  <p>Tu Alucraft llega desarmado y protegido en cajas.</p>
+               </li>
+               <li>
+                  <span class="accesoStepN">02</span>
+                  <h3>Llevá las piezas</h3>
+                  <p>Subilo por escaleras, ascensores y accesos donde un sillón armado no pasaría.</p>
+               </li>
+               <li>
+                  <span class="accesoStepN">03</span>
+                  <h3>Armalo</h3>
+                  <p>Encastrá las piezas, ajustá con llave Allen y listo. Armado simple y diseñado para ser sencillo.</p>
+               </li>
+            </ol>
+
+            <div id="video-armado-alucraft" class="assetSlot assetSlot--video" data-ph="VIDEO_ARMADO_ALUCRAFT" data-ph-type="video" hidden>
+               <!-- PLACEHOLDER — VIDEO DE ARMADO ALUCRAFT. Insert <video> here when the file exists. -->
+            </div>
+         </section>
+
+         <div class="categoriaHeader" id="productos">
             <span class="categoriaTag">Destacado</span>
             <h2>Juego de Living Exterior</h2>
             <p>El conjunto perfecto para transformar tu terraza en un living al aire libre.</p>
@@ -102,14 +178,61 @@
          <section class="armadoBand">
             <div class="armadoBandPhoto" role="img" aria-label="Living Alucraft en terraza"></div>
             <div class="armadoBandCopy">
-               <span class="categoriaTag">Armado simple</span>
-               <h2>Llega en caja.<br>Se arma en minutos.</h2>
-               <p>El living viaja desarmado y se arma en casa con una llave Allen. Sillones, mesa y reposera combinan entre sí: el conjunto o cada pieza por separado.</p>
+               <span class="categoriaTag">Aluminio</span>
+               <h2>Hecho para el exterior.</h2>
+               <p>Estructura de aluminio, uso intemperie y bajo mantenimiento. El living se arma en destino con llave Allen: el conjunto o cada pieza por separado.</p>
                <div class="plusActions">
                   <a href="/armado/" class="heroBtn">Ver instructivos</a>
                   <a class="heroBtn heroBtnGhost" href="/catalogo/Alucraft-Outdoor-Living-2026.pdf" download="Alucraft-Outdoor-Living-2026.pdf">Descargar catálogo</a>
                </div>
             </div>
+         </section>
+
+         <section class="accesoMedidas" id="medidas-empaque" data-ph-section="medidas" hidden>
+            <div class="categoriaHeader">
+               <span class="categoriaTag">Empaque</span>
+               <h2>Cómo llega, comparado con el sillón armado.</h2>
+            </div>
+            <dl class="accesoMedidasGrid">
+               <div>
+                  <dt>Sillón armado</dt>
+                  <dd data-ph="MEDIDA_SILLON_ARMADO" data-ph-type="text"></dd>
+               </div>
+               <div>
+                  <dt>Caja 1</dt>
+                  <dd data-ph="MEDIDA_CAJA_1" data-ph-type="text"></dd>
+               </div>
+               <div>
+                  <dt>Caja 2</dt>
+                  <dd data-ph="MEDIDA_CAJA_2" data-ph-type="text"></dd>
+               </div>
+            </dl>
+         </section>
+
+         <section class="homeFaq" aria-label="Preguntas frecuentes">
+            <div class="categoriaHeader">
+               <span class="categoriaTag">Preguntas</span>
+               <h2>Antes de elegir el 3 cuerpos.</h2>
+            </div>
+            <div class="homeFaqList">
+               <details>
+                  <summary>¿El sillón llega armado?</summary>
+                  <p>No. Llega en piezas pensadas para facilitar el transporte y el ingreso al lugar donde va a usarse.</p>
+               </details>
+               <details>
+                  <summary>¿Qué necesito para armarlo?</summary>
+                  <p>Una llave Allen y los elementos que vienen con el producto. Los instructivos están en el <a href="/armado/">Centro de armado</a>.</p>
+               </details>
+               <details>
+                  <summary>¿Es difícil armarlo?</summary>
+                  <p>El sistema es encastrable y está diseñado para un armado sencillo. No hace falta experiencia previa.</p>
+               </details>
+               <details>
+                  <summary>¿Sirve para departamentos?</summary>
+                  <p>El diseño facilita el traslado por escaleras, ascensores, puertas y accesos reducidos, frente a mover un sillón grande ya armado.</p>
+               </details>
+            </div>
+            <p class="homeFaqMore"><a href="/preguntas-frecuentes/">Más preguntas</a></p>
          </section>
 
          <section class="terminaciones" aria-label="Terminaciones">
@@ -198,5 +321,54 @@
       <script src="/shopify-global.js?v=navcart2"></script>
       <script src="/shopify-products.js"></script>
       <script src="/nav.js"></script>
+      <script>
+         (function () {
+            var node = document.getElementById("home-placeholders");
+            if (!node) return;
+            var data;
+            try { data = JSON.parse(node.textContent); } catch (e) { return; }
+            function val(key) {
+               var v = data[key];
+               return v && String(v).trim() ? String(v).trim() : "";
+            }
+            document.querySelectorAll("[data-ph]").forEach(function (el) {
+               var key = el.getAttribute("data-ph");
+               var type = el.getAttribute("data-ph-type");
+               var src = val(key);
+               if (!src) return;
+               if (type === "video") {
+                  var video = document.createElement("video");
+                  video.setAttribute("controls", "");
+                  video.setAttribute("playsinline", "");
+                  video.setAttribute("preload", "metadata");
+                  video.src = src;
+                  el.appendChild(video);
+                  el.hidden = false;
+               } else if (type === "img") {
+                  var img = document.createElement("img");
+                  img.src = src;
+                  img.alt = "";
+                  img.loading = "lazy";
+                  img.decoding = "async";
+                  el.appendChild(img);
+                  el.hidden = false;
+               } else if (type === "text") {
+                  el.textContent = src;
+               }
+            });
+            var medidas = document.querySelector("[data-ph-section=medidas]");
+            if (medidas) {
+               var any = false;
+               medidas.querySelectorAll("[data-ph]").forEach(function (el) {
+                  if (el.textContent.trim()) {
+                     any = true;
+                  } else if (el.parentElement) {
+                     el.parentElement.hidden = true;
+                  }
+               });
+               if (any) medidas.hidden = false;
+            }
+         })();
+      </script>
    </body>
 </html>
