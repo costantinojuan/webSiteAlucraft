@@ -35,10 +35,17 @@
     margin: 12mm auto;
     background: var(--paper);
     overflow: hidden;
-    box-shadow: 0 12px 40px rgba(0,0,0,.32);
+    box-shadow: 0 4px 18px rgba(0,0,0,.18);
     padding: 16mm 18mm 14mm;
     display: flex;
     flex-direction: column;
+    content-visibility: auto;
+    contain-intrinsic-size: 210mm 297mm;
+  }
+
+  .page.cover,
+  .page.back {
+    content-visibility: visible;
   }
 
   .kicker {
@@ -88,8 +95,8 @@
     height: 100%;
     object-fit: cover;
   }
-  .photo.studio { background: #f6f5f1; }
-  .photo.studio img { object-fit: contain; padding: 6px; }
+  .photo.studio { background: #fff; }
+  .photo.studio img { object-fit: contain; padding: 0; }
 
   /* Cover */
   .cover { padding: 0; color: #fff; }
@@ -156,7 +163,7 @@
   /* Pieces */
   .pieces { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 14px; }
   .piece { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: #fff; }
-  .piece .photo { height: 68mm; }
+  .piece .photo { height: 68mm; background: #fff; }
   .piece .pt { padding: 12px 14px 14px; }
   .piece .pt h3 { font-size: 17px; font-weight: 500; margin-bottom: 3px; }
   .piece .pt .med {
@@ -266,7 +273,7 @@
 
 <!-- 1. PORTADA -->
 <section class="page cover">
-  <div class="coverImg"><img src="./img/cover.jpg" alt="Juego de living exterior Alucraft"></div>
+  <div class="coverImg"><img src="./img/cover.jpg" alt="Juego de living exterior Alucraft" fetchpriority="high"></div>
   <div class="brandRow">
     <img src="../Logos/alucraftLogo.png" alt="Alucraft">
     <span class="sub">Outdoor</span>
@@ -295,7 +302,7 @@
     un sillón individual, un sofá de tres cuerpos, una mesa ratona y una reposera.
     Misma línea de diseño, para que puedas armar el living completo o sumar las piezas de a una.
     Aluminio apto intemperie, tapizados de alta resistencia y un sistema <strong>encastrable</strong>
-    que llega en caja y se arma con una llave Allen.
+    que llega en caja y se arma con una llave Allen. Las partes estructurales van soldadas, sin ningún tornillo a la vista.
   </p>
   <div class="pillars">
     <div class="pillar">
@@ -319,7 +326,7 @@
   <span class="kicker">La colección completa</span>
   <h1 class="sectionTitle">El juego de living</h1>
   <p class="sectionSub">El conjunto para transformar la terraza en un living al aire libre.</p>
-  <div class="photo heroPhoto"><img src="./img/juego-hero.jpg" alt="Juego de living exterior en arena junto a la pileta"></div>
+  <div class="photo heroPhoto"><img src="./img/juego-hero.jpg" alt="Juego de living exterior en arena junto a la pileta" loading="lazy" decoding="async"></div>
   <div class="heroCaption">
     <div class="txt">
       <p>Sofá, sillones y mesa con la misma geometría de aluminio. Elegís color de estructura y tapizado, y el conjunto queda coherente. La reposera se suma aparte, con la misma línea.</p>
@@ -340,10 +347,10 @@
 <section class="page">
   <span class="kicker">Componé tu living</span>
   <h1 class="sectionTitle">Las piezas de la colección</h1>
-  <p class="sectionSub">Llevá el juego completo o cada pieza por separado. Todas combinan entre sí.</p>
+  <p class="sectionSub">Llevá el juego completo o cada pieza por separado. Todas combinan entre sí. Estructura soldada, sin tornillos a la vista.</p>
   <div class="pieces">
     <article class="piece">
-      <div class="photo studio"><img src="./img/sillon1.jpg" alt="Sillón 1 cuerpo"></div>
+      <div class="photo studio"><img src="./img/sillon1.jpg" alt="Sillón 1 cuerpo" loading="lazy" decoding="async"></div>
       <div class="pt">
         <h3>Sillón 1 cuerpo</h3>
         <div class="med">80 × 80 × 75 cm · asiento 40 cm</div>
@@ -351,7 +358,7 @@
       </div>
     </article>
     <article class="piece">
-      <div class="photo studio"><img src="./img/sillon3.jpg" alt="Sillón 3 cuerpos"></div>
+      <div class="photo studio"><img src="./img/sillon3.jpg" alt="Sillón 3 cuerpos" loading="lazy" decoding="async"></div>
       <div class="pt">
         <h3>Sillón 3 cuerpos</h3>
         <div class="med">200 × 80 × 75 cm · asiento 40 cm</div>
@@ -359,7 +366,7 @@
       </div>
     </article>
     <article class="piece">
-      <div class="photo studio"><img src="./img/mesa.jpg" alt="Mesa ratona"></div>
+      <div class="photo studio"><img src="./img/mesa.jpg" alt="Mesa ratona" loading="lazy" decoding="async"></div>
       <div class="pt">
         <h3>Mesa ratona</h3>
         <div class="med">120 × 60 × 40 cm</div>
@@ -367,7 +374,7 @@
       </div>
     </article>
     <article class="piece">
-      <div class="photo studio"><img src="./img/reposera.jpg" alt="Reposera"></div>
+      <div class="photo studio"><img src="./img/reposera.jpg" alt="Reposera" loading="lazy" decoding="async"></div>
       <div class="pt">
         <h3>Reposera</h3>
         <div class="med">Respaldo reclinable</div>
@@ -384,8 +391,8 @@
   <h1 class="sectionTitle">Dos terminaciones, una colección</h1>
   <p class="sectionSub">Negro microtexturado o arena. El tapizado cambia el carácter del living.</p>
   <div class="lifeGrid">
-    <div class="photo"><img src="./img/contexto-arena.jpg" alt="Sillón 1 cuerpo en arena junto a la pileta"></div>
-    <div class="photo"><img src="./img/contexto-negro.jpg" alt="Sillón 1 cuerpo en negro microtexturado"></div>
+    <div class="photo"><img src="./img/contexto-arena.jpg" alt="Sillón 1 cuerpo en arena junto a la pileta" loading="lazy" decoding="async"></div>
+    <div class="photo"><img src="./img/contexto-negro.jpg" alt="Sillón 1 cuerpo en negro microtexturado" loading="lazy" decoding="async"></div>
   </div>
   <div class="lifeCap">
     <p><strong style="color:var(--ink)">Arena.</strong> Más cálido: se integra al deck y a la pileta. El tapizado tostado o beige termina el conjunto.</p>
@@ -403,13 +410,13 @@
     <div class="benefit"><div class="n">1</div><div><h3>Envío más simple</h3><p>Viaja desarmado en caja plana: ocupa menos y llega a todo el país.</p></div></div>
     <div class="benefit"><div class="n">2</div><div><h3>Armado en minutos</h3><p>Las piezas encastran y se fijan con la llave Allen incluida.</p></div></div>
     <div class="benefit"><div class="n">3</div><div><h3>Fácil de mover</h3><p>Se desarma para guardarlo, mudarlo o reubicarlo en la terraza.</p></div></div>
-    <div class="benefit"><div class="n">4</div><div><h3>Estructura firme</h3><p>El encastre en aluminio mantiene el conjunto estable con el uso diario.</p></div></div>
+    <div class="benefit"><div class="n">4</div><div><h3>Estructura firme</h3><p>Las partes estructurales van soldadas, sin ningún tornillo a la vista.</p></div></div>
     <div class="benefit"><div class="n">5</div><div><h3>Combinable</h3><p>Sumá sillones, sofá, mesa y reposera según el espacio.</p></div></div>
     <div class="benefit"><div class="n">6</div><div><h3>Personalizable</h3><p>Color de estructura y tapizado, según las combinaciones disponibles.</p></div></div>
   </div>
   <div class="assembleBar">
     <h3>Se arma con una llave Allen</h3>
-    <p>Cada envío llega en caja con tornillos y la llave. En el centro de armado de alucraft.com.ar está el instructivo de cada pieza.</p>
+    <p>Se arma con llave Allen. Las partes estructurales van soldadas, sin ningún tornillo a la vista. En el centro de armado de alucraft.com.ar está el instructivo de cada pieza.</p>
   </div>
   <div class="pageFoot"><span>Alucraft Outdoor</span><span class="ig">@alucraft.outdoor</span><span>06</span></div>
 </section>
@@ -438,7 +445,7 @@
   </div>
   <div class="colorSplit">
     <p class="colorNote">No todas las combinaciones están disponibles: cada producto muestra en la tienda las parejas de color que se pueden comprar. Stock sujeto a fabricación.</p>
-    <div class="photo"><img src="./img/detalle-logo.jpg" alt="Placa ALU CRAFT en la estructura"></div>
+    <div class="photo"><img src="./img/detalle-logo.jpg" alt="Placa ALU CRAFT en la estructura" loading="lazy" decoding="async"></div>
   </div>
   <div class="pageFoot"><span>Alucraft Outdoor</span><span class="ig">@alucraft.outdoor</span><span>07</span></div>
 </section>
@@ -469,7 +476,7 @@
 
 <!-- 9. CONTRAPORTADA -->
 <section class="page back">
-  <div class="coverImg"><img src="./img/back.jpg" alt="Sillones Alucraft en negro microtexturado"></div>
+  <div class="coverImg"><img src="./img/back.jpg" alt="Sillones Alucraft en negro microtexturado" loading="lazy" decoding="async"></div>
   <div class="backContent">
     <img class="logo" src="../Logos/alucraftLogo.png" alt="Alucraft">
     <h2>Living de exterior<br>en aluminio</h2>

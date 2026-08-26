@@ -342,6 +342,68 @@ h1, h2, h3 {
 	color: #fff;
 }
 
+/* ── Acceso ─────────────────────────────────── */
+.acceso {
+	padding: 8px 0 8px;
+}
+
+.accesoCompare {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0;
+	max-width: 920px;
+	margin: 0 auto;
+	padding: 0 24px 32px;
+	box-sizing: border-box;
+}
+
+.accesoCompareCol {
+	padding: 8px 32px 0;
+}
+
+.accesoCompareCol + .accesoCompareCol {
+	border-left: 1px solid #e6e3dc;
+}
+
+.accesoKicker {
+	margin: 0 0 10px;
+	font-size: 11px;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: #6b6b6b;
+}
+
+.accesoCompareCol p:last-of-type {
+	margin: 0;
+	font-size: 16px;
+	line-height: 1.55;
+	color: #333;
+}
+
+.accesoFotos {
+	display: none;
+	grid-template-columns: 1fr 1fr;
+	gap: 8px;
+	max-width: 920px;
+	margin: 0 auto 24px;
+	padding: 0 24px 16px;
+	box-sizing: border-box;
+}
+
+.accesoFotos:has(img) {
+	display: grid;
+}
+
+.accesoFotos figure {
+	margin: 0;
+}
+
+.accesoFotos img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
 /* ── Main layout ────────────────────────────── */
 main {
 	padding-top: 60px;
@@ -822,6 +884,25 @@ main {
 
 	.heroSub {
 		font-size: 15px;
+	}
+
+	.accesoCompare {
+		grid-template-columns: 1fr;
+		padding-bottom: 24px;
+	}
+
+	.accesoCompareCol {
+		padding: 0 8px 28px;
+	}
+
+	.accesoCompareCol + .accesoCompareCol {
+		border-left: 0;
+		border-top: 1px solid #e6e3dc;
+		padding-top: 28px;
+	}
+
+	.accesoFotos {
+		grid-template-columns: 1fr;
 	}
 
 	.categoriaHeader h2 {
