@@ -41,6 +41,7 @@ function createApp() {
       webhooks: {
         ordersPaid: "POST /webhooks/orders-paid",
         refundsCreate: "POST /webhooks/refunds-create",
+        ordersCancelled: "POST /webhooks/orders-cancelled",
       },
       admin: "/admin",
     });
@@ -59,6 +60,12 @@ function createApp() {
 
   app.post(
     "/webhooks/refunds-create",
+    express.raw({ type: "application/json" }),
+    shopifyWebhookHandler
+  );
+
+  app.post(
+    "/webhooks/orders-cancelled",
     express.raw({ type: "application/json" }),
     shopifyWebhookHandler
   );

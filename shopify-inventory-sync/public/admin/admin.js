@@ -108,4 +108,80 @@
       }
     });
   }
+
+  const paintForm = document.getElementById("paint-form");
+  const paintStatus = document.getElementById("paint-status");
+
+  if (paintForm) {
+      const buttons = paintForm.querySelectorAll("button[type=submit]");
+      buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          paintForm.dataset.action = btn.dataset.action || "";
+        });
+      });
+
+      paintForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const submitter = event.submitter;
+      const action = submitter?.dataset?.action || paintForm.dataset.action;
+      if (!action) return;
+
+      const formData = new FormData(paintForm);
+      const payload = {
+        pieceKey: String(formData.get("pieceKey") || ""),
+        color: String(formData.get("color") || ""),
+        qty: Number(formData.get("qty") || 0),
+        action,
+      };
+
+      const buttons = paintForm.querySelectorAll("button[type=submit]");
+      buttons.forEach((btn) => {
+        btn.disabled = true;
+      });
+
+      if (paintStatus) {
+        paintStatus.hidden = false;
+        paintStatus.className = "paint-status";
+        paintStatus.textContent =
+          action === "send" ? "Moviendo a pintura…" : "Registrando pintado…";
+      }
+
+      try {
+        const response = await fetch("/admin/api/paint", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          credentials: "same-origin",
+          body: JSON.stringify(payload),
+        });
+
+        const data = await response.json();
+        if (!response.ok || !data.ok) {
+          throw new Error(data.error || "Error al mover pintura");
+        }
+
+        const verb = action === "send" ? "Mandaste a pintar" : "Volvió pintado";
+        const message = data.syncError
+          ? `${verb} ${payload.qty}. Recalcular falló: ${data.syncError}`
+          : `${verb} ${payload.qty}.`;
+
+        if (paintStatus) {
+          paintStatus.className = data.syncError ? "paint-status is-warn" : "paint-status is-ok";
+          paintStatus.textContent = message;
+        }
+
+        setTimeout(() => window.location.reload(), 900);
+      } catch (error) {
+        if (paintStatus) {
+          paintStatus.className = "paint-status is-err";
+          paintStatus.textContent = error.message || "Error";
+        }
+        buttons.forEach((btn) => {
+          btn.disabled = false;
+        });
+      }
+    });
+  }
 })();

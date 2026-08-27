@@ -14,10 +14,22 @@ const { PRODUCT_LABELS } = require("./dashboardData");
 
 const COMPONENT_GROUPS = [
   {
-    id: "structures",
-    title: "Estructuras metálicas",
-    hint: "Stock real en depósito. Limita cuántos muebles podés armar por color.",
-    keys: ["est_s1", "est_s3", "est_rep", "mesa_comp"],
+    id: "pieces_mesa",
+    title: "Piezas — Mesa",
+    hint: "2 laterales + 1 tabla por mesa. Solo las pintadas entran en lo vendible.",
+    keys: ["lat_mes", "tab_mes"],
+  },
+  {
+    id: "pieces_sillon",
+    title: "Piezas — Sillones",
+    hint: "Los laterales son la misma pieza para 1 y 3 cuerpos (2 por sillón).",
+    keys: ["lat_sil", "bas_s1", "res_s1", "bas_s3", "res_s3"],
+  },
+  {
+    id: "pieces_rep",
+    title: "Piezas — Reposera",
+    hint: "1 base + 2 laterales + 1 accesorio por reposera.",
+    keys: ["bas_rep", "lat_rep", "acc_rep"],
   },
   {
     id: "cushions_s1",
@@ -54,22 +66,22 @@ const COMPONENT_GROUPS = [
 const FINISHED_META = {
   sillon1: {
     title: PRODUCT_LABELS.sillon1,
-    hint: "1 sillón = 1 estructura + 1 base + 1 respaldo + 1 caja. La estructura se reparte entre telas del mismo color.",
+    hint: "1 sillón = base + respaldo + 2 laterales (compartidos con S3) + almohadones + caja. Solo piezas ya pintadas.",
     sharedStructure: true,
   },
   sillon3: {
     title: PRODUCT_LABELS.sillon3,
-    hint: "1 sillón = 1 estructura + 1 base + 2 respaldos + 1 caja. La estructura se reparte entre telas del mismo color.",
+    hint: "1 sillón = base + 2 respaldos + 2 laterales (compartidos con S1) + caja. Solo piezas ya pintadas.",
     sharedStructure: true,
   },
   mesa: {
     title: PRODUCT_LABELS.mesa,
-    hint: "1 mesa = 1 componente mesa + 1 caja (mismo color de estructura).",
+    hint: "1 mesa = 2 laterales + 1 tabla pintados + 1 caja.",
     sharedStructure: false,
   },
   reposera: {
     title: PRODUCT_LABELS.reposera,
-    hint: "1 reposera = 1 estructura + 1 almohadón + 1 caja. Estructura compartida entre telas.",
+    hint: "1 reposera = base + 2 laterales + accesorio pintados + almohadón + caja.",
     sharedStructure: true,
   },
   juego: {

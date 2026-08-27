@@ -89,18 +89,11 @@ function skuForAllen() {
   return ALLEN_SKU;
 }
 
-/** Todos los SKUs esperados de componentes (2 estructuras × 4 + 4 telas × 5 + 4 cajas + 1 llave = 33). */
+/** Todos los SKUs esperados: 10 piezas × 5 estados + 5 almohadones × 4 telas + 4 cajas + 1 llave. */
 function allExpectedComponentSkus() {
-  const structureColors = ["Negro Microtexturado", "Arena"];
+  const { allPieceSkus } = require("./pieces");
   const fabricColors = ["Beige", "Gris Claro", "Gris Oscuro", "Tostado"];
-  const skus = [];
-
-  for (const color of structureColors) {
-    skus.push(skuForStructure("sillon1", color));
-    skus.push(skuForStructure("sillon3", color));
-    skus.push(skuForStructure("reposera", color));
-    skus.push(skuForStructure("mesa", color));
-  }
+  const skus = [...allPieceSkus()];
 
   for (const color of fabricColors) {
     skus.push(skuForFabric("baseSillon1", color));

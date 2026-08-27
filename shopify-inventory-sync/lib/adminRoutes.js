@@ -1,7 +1,7 @@
 const path = require("path");
 const express = require("express");
 const { getAdminConfig, validateCredentials, requireAdmin, isAdminConfigured } = require("./auth");
-const { getAlertThresholds, getWhatsAppConfig, getShopifyPendingOrdersUrl } = require("./config");
+const { getAlertThresholds, getWhatsAppConfig, getShopifyPendingOrdersUrl, getSyncConfig } = require("./config");
 const { getDashboardStockSummary } = require("./dashboardData");
 const { getDashboardBomView } = require("./dashboardBomView");
 const { getLastSync, recordSync } = require("./syncState");
@@ -9,6 +9,8 @@ const { runInventorySync } = require("./inventorySync");
 const { checkAndSendStockAlerts } = require("./alerts/stockAlerts");
 const { sendWhatsAppMessage } = require("./alerts/whatsapp");
 const { renderLoginPage, renderDashboardPage } = require("./views/adminPages");
+const { buildPaintDeltas } = require("./bom/paint");
+const { applyInventoryDeltas } = require("./bom/applyInventoryDeltas");
 
 function whatsappStatusLabel() {
   const cfg = getWhatsAppConfig();
@@ -127,6 +129,46 @@ function createAdminRouter() {
     } catch (error) {
       console.error("Manual sync error", error);
       return res.status(500).json({
+        ok: false,
+        error: error.message,
+      });
+    }
+  });
+
+  router.post("/api/paint", requireAdmin, express.json(), async (req, res) => {
+    try {
+      const deltas = buildPaintDeltas({
+        pieceKey: req.body?.pieceKey,
+        color: req.body?.color,
+        qty: req.body?.qty,
+        action: req.body?.action,
+      });
+
+      const applied = await applyInventoryDeltas(deltas, getSyncConfig());
+
+      let synced = null;
+      let syncError = null;
+      try {
+        const result = await runSyncWithAlerts("paint");
+        synced = result.syncResult;
+      } catch (error) {
+        console.error("Paint sync error", error);
+        syncError = error.message;
+      }
+
+      return res.status(200).json({
+        ok: true,
+        applied,
+        synced,
+        syncError,
+        lastSync: getLastSync(),
+      });
+    } catch (error) {
+      console.error("Paint error", error);
+      const status = /insuficiente|desconocid|inválid|invalida|cantidad/i.test(error.message)
+        ? 400
+        : 500;
+      return res.status(status).json({
         ok: false,
         error: error.message,
       });

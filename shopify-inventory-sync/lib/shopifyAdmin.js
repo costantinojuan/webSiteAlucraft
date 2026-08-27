@@ -196,17 +196,21 @@ async function resolveLocationId(preferredLocationId, sampleInventoryItemGid) {
 }
 
 async function getAvailableQuantities(inventoryItemGids, locationId) {
-  const data = await shopifyGraphQL(INVENTORY_LEVELS_QUERY, {
-    ids: inventoryItemGids,
-    locationId: locationGid(locationId),
-  });
-
   const levels = new Map();
+  const chunkSize = 50;
 
-  for (const node of data.nodes || []) {
-    if (!node?.id) continue;
-    const availableEntry = node.inventoryLevel?.quantities?.find((q) => q.name === "available");
-    levels.set(node.id, Number(availableEntry?.quantity) || 0);
+  for (let i = 0; i < inventoryItemGids.length; i += chunkSize) {
+    const chunk = inventoryItemGids.slice(i, i + chunkSize);
+    const data = await shopifyGraphQL(INVENTORY_LEVELS_QUERY, {
+      ids: chunk,
+      locationId: locationGid(locationId),
+    });
+
+    for (const node of data.nodes || []) {
+      if (!node?.id) continue;
+      const availableEntry = node.inventoryLevel?.quantities?.find((q) => q.name === "available");
+      levels.set(node.id, Number(availableEntry?.quantity) || 0);
+    }
   }
 
   for (const gid of inventoryItemGids) {

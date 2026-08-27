@@ -1,4 +1,5 @@
-const { skuForStructure, skuForFabric, skuForBox, skuForAllen } = require("./colors");
+const { skuForFabric, skuForBox, skuForAllen } = require("./colors");
+const { pieceLinesForProduct } = require("./pieces");
 
 function packagingLines(productKey, productLabel) {
   return [
@@ -21,11 +22,7 @@ function packagingLines(productKey, productLabel) {
 function recipeSillon1(parsed) {
   const { structureColor, fabricColor } = parsed;
   return [
-    {
-      sku: skuForStructure("sillon1", structureColor),
-      qty: 1,
-      label: `Estructura Sillón 1 (${structureColor})`,
-    },
+    ...pieceLinesForProduct("sillon1", structureColor),
     {
       sku: skuForFabric("baseSillon1", fabricColor),
       qty: 1,
@@ -43,11 +40,7 @@ function recipeSillon1(parsed) {
 function recipeSillon3(parsed) {
   const { structureColor, fabricColor } = parsed;
   return [
-    {
-      sku: skuForStructure("sillon3", structureColor),
-      qty: 1,
-      label: `Estructura Sillón 3 (${structureColor})`,
-    },
+    ...pieceLinesForProduct("sillon3", structureColor),
     {
       sku: skuForFabric("baseSillon3", fabricColor),
       qty: 1,
@@ -65,11 +58,7 @@ function recipeSillon3(parsed) {
 function recipeReposera(parsed) {
   const { structureColor, fabricColor } = parsed;
   return [
-    {
-      sku: skuForStructure("reposera", structureColor),
-      qty: 1,
-      label: `Estructura Reposera (${structureColor})`,
-    },
+    ...pieceLinesForProduct("reposera", structureColor),
     {
       sku: skuForFabric("reposera", fabricColor),
       qty: 1,
@@ -82,11 +71,7 @@ function recipeReposera(parsed) {
 function recipeMesa(parsed) {
   const { structureColor } = parsed;
   return [
-    {
-      sku: skuForStructure("mesa", structureColor),
-      qty: 1,
-      label: `Mesa Ratona componente (${structureColor})`,
-    },
+    ...pieceLinesForProduct("mesa", structureColor),
     ...packagingLines("mesa", "Mesa ratona"),
   ];
 }

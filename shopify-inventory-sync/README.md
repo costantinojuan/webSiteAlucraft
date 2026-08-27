@@ -12,22 +12,34 @@ Usa **Shopify Admin GraphQL API**.
 
 Por defecto (`INVENTORY_SYNC_MODE=components`):
 
-1. Lee stock de **9 productos componente** (estructuras + almohadones + mesa draft)
-2. Calcula cuántos sillones, reposeras y mesas se pueden fabricar (`min` de piezas)
+1. Lee stock de **componentes** (10 piezas de estructura × 5 estados, almohadones, cajas, llave Allen)
+2. Calcula cuántos sillones, reposeras y mesas se pueden fabricar (`min` de **piezas ya pintadas** + almohadones + packaging)
 3. Actualiza stock de productos **terminados** en Shopify
 4. Calcula el Juego Living: `min(floor(sillon1/2), sillon3, mesa)`
 
 Modo legacy (`INVENTORY_SYNC_MODE=legacy`): solo recalcula Juego Living leyendo stock de sillones/mesa terminados (comportamiento anterior).
 
-### Componentes esperados
+### Piezas de estructura (pintura)
 
-Creá 9 productos en **borrador** con variantes por color. SKUs sugeridos (ver `npm run list-ids`):
+La estructura ya no es un kit `EST-S1-NM`. Se pintan **piezas**. Los laterales de sillón 1 y 3 son la misma pieza (`LAT-SIL`).
 
-- Estructuras: `EST-S1-NM`, `EST-S3-AR`, etc.
-- Almohadones: `ALM-B1-658010-BE`, `ALM-R3-924412-GO`, etc.
-- Mesa componente (draft): `MES-RAT-NM`, `MES-RAT-AR`
+Estados por pieza (5 variantes, mismo producto borrador):
 
-Variantes terminadas: título `"Arena / Beige"` (estructura / tela).
+| Variante | SKU (ejemplo laterales) | Entra en lo vendible |
+|---|---|---|
+| Natural | `LAT-SIL` | No |
+| Pintura NM / Pintura AR | `LAT-SIL-PINT-NM` / `-AR` | No (está en el taller) |
+| Negro Microtexturado / Arena | `LAT-SIL-NM` / `-AR` | Sí |
+
+Flujo: **Natural → En pintura → Pintado**. Eso se carga en el panel (Depósito → Mandé a pintar / Volvió pintado). No es una venta.
+
+Creá los 10 productos en **borrador, no publicados**. Títulos y SKUs: `npm run piece-setup`.
+
+Los borradores viejos de Estructura / Mesa componente pueden quedar en Shopify: la app ya no los usa.
+
+Almohadones y cajas siguen igual (`ALM-…`, `CAJA-…`, `LLAVE-ALLEN`).
+
+Variantes terminadas en la tienda: título `"Arena / Beige"` (estructura / tela). **No cambies IDs ni precios de productos públicos.**
 
 ## Fórmula del Juego
 
@@ -54,7 +66,7 @@ stockJuego = Math.min(
 | `PRODUCT_ID_MESA` | Product ID — Mesa Ratona |
 | `PRODUCT_ID_JUEGO` | Product ID — Juego Living Exterior |
 
-Opcional: `PRODUCT_ID_REPOSERA`, `PRODUCT_ID_MESA_COMPONENT`, `INVENTORY_SYNC_MODE` (`components`|`legacy`), `LOCATION_ID`, `SHOPIFY_API_VERSION` (default `2025-04`).
+Opcional: `PRODUCT_ID_REPOSERA`, `INVENTORY_SYNC_MODE` (`components`|`legacy`), `LOCATION_ID`, `SHOPIFY_API_VERSION` (default `2025-04`).
 
 ### Panel admin (obligatorio para `/admin`)
 
@@ -101,8 +113,8 @@ Las alertas tienen cooldown de 6 horas por variante para no spamear.
 
 ## Permisos de la app en Shopify
 
-- `read_inventory`
 - `write_inventory`
+- `write_products`
 - `read_products`
 - `read_orders`
 - `write_orders`
@@ -116,8 +128,10 @@ Las alertas tienen cooldown de 6 horas por variante para no spamear.
 | `GET /admin/login` | Login privado |
 | `GET /admin` | Dashboard (requiere sesión) |
 | `POST /admin/api/sync` | Recalcular stock de juegos |
+| `POST /admin/api/paint` | Mandé a pintar / volvió pintado (solo componentes) |
 | `POST /webhooks/orders-paid` | Webhook Shopify — venta pagada (HMAC) |
 | `POST /webhooks/refunds-create` | Webhook Shopify — cancelación/reembolso con restock (HMAC) |
+| `POST /webhooks/orders-cancelled` | Webhook Shopify — pedido cancelado con restock (HMAC) |
 | `GET /health` | Health check |
 
 ## Webhook `orders/paid`
@@ -151,6 +165,8 @@ La app necesita scopes **`write_orders`** (tag `alucraft-inventory-synced`) y **
 ```bash
 node scripts/test-order-deduct.js
 node scripts/test-refund-restock.js
+node scripts/test-pieces.js
+node scripts/print-piece-setup.js
 ```
 
 ## Desarrollo local
@@ -205,9 +221,10 @@ URLs de producción:
 Tras configurar `ADMIN_USERNAME`, `ADMIN_PASSWORD` y `SESSION_SECRET`:
 
 1. Entrá a `/admin`
-2. Verás tarjetas de stock por producto y variantes
-3. Botón **Recalcular stock de juegos**
-4. Link **Pedidos en Shopify** (abre pedidos pendientes en Shopify Admin)
+2. **Tienda**: stock que ve el cliente (calculado desde piezas pintadas)
+3. **Depósito**: stock físico + formulario de pintura
+4. Botón **Recalcular todo**
+5. Link **Shopify** (abre pedidos en Shopify Admin)
 
 El token de Shopify **nunca** se expone al frontend; todas las llamadas van por el backend.
 

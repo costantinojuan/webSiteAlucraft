@@ -15,9 +15,7 @@ const {
  */
 async function loadComponentStock(config) {
   const catalog = await fetchAllProductsCatalog();
-  const mesaComponentProductId = process.env.PRODUCT_ID_MESA_COMPONENT?.trim() || null;
-
-  const matched = findComponentProducts(catalog, { mesaComponentProductId });
+  const matched = findComponentProducts(catalog);
   const missingProducts = COMPONENT_PRODUCT_RULES.filter((rule) => !matched.has(rule.key)).map(
     (rule) => rule.label
   );
@@ -25,7 +23,7 @@ async function loadComponentStock(config) {
   if (missingProducts.length > 0) {
     throw new Error(
       `Faltan productos componente en Shopify: ${missingProducts.join(", ")}. ` +
-        "Creá los borradores o ejecutá npm run list-ids para verificar."
+        "Creá los 10 borradores Pieza … (npm run piece-setup) y verificá con npm run list-ids."
     );
   }
 
@@ -88,7 +86,7 @@ async function loadComponentStock(config) {
   if (missingSkus.length > 0) {
     throw new Error(
       `Faltan SKUs de componentes (${missingSkus.length}): ${missingSkus.join(", ")}. ` +
-        "Asigná los SKUs en Shopify o verificá los títulos de variantes."
+        "Asigná los SKUs en Shopify o verificá los títulos de variantes (Natural, Pintura NM, Pintura AR, Negro Microtexturado, Arena)."
     );
   }
 

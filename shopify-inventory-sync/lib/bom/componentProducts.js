@@ -1,32 +1,21 @@
 const { normalizeColor } = require("./colors");
-const { skuForStructure, skuForFabric, skuForBox, skuForAllen } = require("./colors");
+const { skuForFabric, skuForBox, skuForAllen } = require("./colors");
+const { PIECES, skuForPieceVariant, matchPieceProduct } = require("./pieces");
 
 /**
  * Detecta productos componente en el catálogo por título.
- * Mesa Ratona componente = draft; la mesa terminada suele estar ACTIVE.
+ * Piezas de estructura: título exacto "Pieza …" (borrador, no publicado).
  */
+const PIECE_PRODUCT_RULES = PIECES.map((piece) => ({
+  key: piece.key,
+  label: piece.label,
+  match: (title) => matchPieceProduct(title)?.key === piece.key,
+  variantSku: (variantTitle) => skuForPieceVariant(piece.key, variantTitle),
+  variantKind: "structure",
+}));
+
 const COMPONENT_PRODUCT_RULES = [
-  {
-    key: "est_s1",
-    label: "Estructura Sillón 1 Cuerpo",
-    match: (title) => /estructura/i.test(title) && /sill[oó]n/i.test(title) && /\b1\b/.test(title),
-    variantSku: (variantTitle) => skuForStructure("sillon1", variantTitle),
-    variantKind: "structure",
-  },
-  {
-    key: "est_s3",
-    label: "Estructura Sillón 3 Cuerpos",
-    match: (title) => /estructura/i.test(title) && /sill[oó]n/i.test(title) && /\b3\b/.test(title),
-    variantSku: (variantTitle) => skuForStructure("sillon3", variantTitle),
-    variantKind: "structure",
-  },
-  {
-    key: "est_rep",
-    label: "Estructura Reposera",
-    match: (title) => /estructura/i.test(title) && /reposera/i.test(title),
-    variantSku: (variantTitle) => skuForStructure("reposera", variantTitle),
-    variantKind: "structure",
-  },
+  ...PIECE_PRODUCT_RULES,
   {
     key: "alm_b1",
     label: "Almohadón Base Sillón 1",
@@ -61,13 +50,6 @@ const COMPONENT_PRODUCT_RULES = [
     match: (title) => /almohad[oó]n/i.test(title) && /reposera/i.test(title),
     variantSku: (variantTitle) => skuForFabric("reposera", variantTitle),
     variantKind: "fabric",
-  },
-  {
-    key: "mesa_comp",
-    label: "Mesa Ratona (componente)",
-    match: (title, status) => /mesa/i.test(title) && /ratona/i.test(title) && status === "DRAFT" && !/caja|manual/i.test(title),
-    variantSku: (variantTitle) => skuForStructure("mesa", variantTitle),
-    variantKind: "structure",
   },
   {
     key: "caja_s1",
@@ -106,36 +88,15 @@ const COMPONENT_PRODUCT_RULES = [
   },
 ];
 
-function findComponentProducts(catalog, options = {}) {
-  const mesaComponentProductId = options.mesaComponentProductId?.trim() || null;
+function findComponentProducts(catalog) {
   const found = new Map();
 
   for (const product of catalog) {
-    const numericId = product.productId;
-    if (mesaComponentProductId && String(numericId) === String(mesaComponentProductId)) {
-      const rule = COMPONENT_PRODUCT_RULES.find((r) => r.key === "mesa_comp");
-      found.set("mesa_comp", { rule, product });
-      continue;
-    }
-
     for (const rule of COMPONENT_PRODUCT_RULES) {
-      if (rule.key === "mesa_comp") {
-        continue;
-      }
       if (rule.match(product.title, product.status)) {
         if (!found.has(rule.key)) {
           found.set(rule.key, { rule, product });
         }
-      }
-    }
-  }
-
-  if (!found.has("mesa_comp")) {
-    for (const product of catalog) {
-      const rule = COMPONENT_PRODUCT_RULES.find((r) => r.key === "mesa_comp");
-      if (rule.match(product.title, product.status)) {
-        found.set("mesa_comp", { rule, product });
-        break;
       }
     }
   }

@@ -1,20 +1,29 @@
 const { calculateFabricable } = require("./calculate");
+const { isPaintedPieceSku } = require("./pieces");
 
 function isStructureSku(sku) {
-  return String(sku).startsWith("EST-");
+  return isPaintedPieceSku(sku);
 }
 
-/** Máximo fabricable de una variante si la estructura fuera exclusiva (solo almohadones). */
+function structureLinesFromRecipe(recipe) {
+  return recipe.filter((line) => isPaintedPieceSku(line.sku));
+}
+
+/** Máximo fabricable de una variante si las piezas de estructura fueran ilimitadas. */
 function cushionCapFromRecipe(recipe, stockBySku) {
-  const cushionLines = recipe.filter((line) => !isStructureSku(line.sku));
+  const cushionLines = recipe.filter((line) => !isPaintedPieceSku(line.sku));
   if (cushionLines.length === 0) {
     return Infinity;
   }
   return calculateFabricable(stockBySku, cushionLines).fabricable;
 }
 
-function structureLineFromRecipe(recipe) {
-  return recipe.find((line) => isStructureSku(line.sku)) || null;
+function structureCapFromRecipe(recipe, stockBySku) {
+  const structureLines = structureLinesFromRecipe(recipe);
+  if (structureLines.length === 0) {
+    throw new Error("Receta sin piezas de estructura pintadas");
+  }
+  return calculateFabricable(stockBySku, structureLines).fabricable;
 }
 
 /**
@@ -56,13 +65,12 @@ function allocateSharedStructurePool(structureStock, variants) {
 }
 
 /**
- * Calcula stock por variante cuando la estructura se comparte entre telas.
+ * Calcula stock por variante cuando las piezas de estructura se comparten entre telas.
  *
  * Cada variante muestra su MÁXIMO potencial individual: min(almohadones de su
- * tela, estructuras totales del color), sin repartir la estructura entre telas.
- * Esto puede sobre-contar (dos telas pueden mostrar stock contra la misma
- * estructura), pero refleja "qué puedo armar" por color, que es lo deseado para
- * un negocio a pedido. La sobreventa eventual se maneja manualmente.
+ * tela, piezas pintadas del color), sin repartir entre telas.
+ * Esto puede sobre-contar (dos telas pueden mostrar stock contra las mismas
+ * piezas; S1 y S3 comparten laterales), pero refleja "qué puedo armar" por color.
  */
 function calculateWithSharedStructure(variants, stockBySku, getRecipe) {
   const fabricableByTitle = new Map();
@@ -70,13 +78,13 @@ function calculateWithSharedStructure(variants, stockBySku, getRecipe) {
 
   for (const variant of variants) {
     const recipe = getRecipe(variant.parsed);
-    const structureLine = structureLineFromRecipe(recipe);
-    if (!structureLine) {
-      throw new Error(`Receta sin estructura para variante "${variant.title}"`);
+    const structureLines = structureLinesFromRecipe(recipe);
+    if (structureLines.length === 0) {
+      throw new Error(`Receta sin piezas de estructura para variante "${variant.title}"`);
     }
 
     const structureColor = variant.parsed.structureColor;
-    const structureStock = stockBySku.get(structureLine.sku) ?? 0;
+    const structureStock = structureCapFromRecipe(recipe, stockBySku);
     const cushionCap = cushionCapFromRecipe(recipe, stockBySku);
 
     const { fabricable, bottleneck } = calculateFabricable(stockBySku, recipe);
@@ -98,4 +106,6 @@ module.exports = {
   allocateSharedStructurePool,
   calculateWithSharedStructure,
   cushionCapFromRecipe,
+  isStructureSku,
+  structureCapFromRecipe,
 };

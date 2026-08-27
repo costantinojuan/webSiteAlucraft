@@ -1,3 +1,5 @@
+const { PIECES } = require("../bom/pieces");
+
 function brandLogo() {
   return `<img src="/admin/static/alucraft-logo.png" alt="Alucraft" class="brand-logo" width="40" height="40">`;
 }
@@ -81,6 +83,12 @@ const PRODUCT_SHORT = {
 
 function colorClass(name) {
   const n = String(name || "").toLowerCase();
+  if (n.includes("natural")) return "c-natural";
+  if (n.startsWith("pintura") || n.includes("en pintura")) {
+    if (n.includes("nm") || n.includes("negro")) return "c-black";
+    if (n.includes("arena") || /\bar\b/.test(n)) return "c-arena";
+    return "c-wip";
+  }
   if (n.includes("marr")) return "c-brown";
   if (n.includes("negro")) return "c-black";
   if (n.includes("beige")) return "c-beige";
@@ -89,6 +97,13 @@ function colorClass(name) {
   if (n.includes("arena")) return "c-arena";
   if (n.includes("tostado")) return "c-tostado";
   return "c-default";
+}
+
+function variantStage(title) {
+  const n = String(title || "").toLowerCase();
+  if (n.includes("natural")) return "natural";
+  if (n.startsWith("pintura") || n.includes("en pintura")) return "wip";
+  return "ready";
 }
 
 function renderVariantPills(variants, { showZero = false } = {}) {
@@ -171,14 +186,15 @@ function renderDepositoItem(product, isPackaging, icon) {
   }
 
   const colors = product.variants
-    .map(
-      (v) => `
-    <div class="depo-color">
+    .map((v) => {
+      const stage = variantStage(v.title);
+      return `
+    <div class="depo-color depo-color-${stage}">
       <i class="${colorClass(v.title)}"></i>
       <span>${escapeHtml(v.title)}</span>
       <strong>${v.stock}</strong>
-    </div>`
-    )
+    </div>`;
+    })
     .join("");
 
   return `
@@ -189,6 +205,41 @@ function renderDepositoItem(product, isPackaging, icon) {
     </header>
     <div class="depo-colors">${colors}</div>
   </div>`;
+}
+
+function renderPaintForm() {
+  const options = PIECES.map(
+    (piece) =>
+      `<option value="${escapeHtml(piece.key)}">${escapeHtml(piece.label)}</option>`
+  ).join("");
+
+  return `
+  <section class="paint-card" id="paint-card">
+    <h3>Pintura</h3>
+    <p>Pasá piezas de Natural a En pintura, o de En pintura a Pintado. No es una venta: es 1 a 1.</p>
+    <form id="paint-form" class="paint-form">
+      <label>
+        <span>Pieza</span>
+        <select name="pieceKey" required>${options}</select>
+      </label>
+      <label>
+        <span>Color</span>
+        <select name="color" required>
+          <option value="NM">Negro Microtexturado</option>
+          <option value="AR">Arena</option>
+        </select>
+      </label>
+      <label>
+        <span>Cantidad</span>
+        <input type="number" name="qty" min="1" step="1" value="1" required>
+      </label>
+      <div class="paint-actions">
+        <button type="submit" class="btn btn-ghost" data-action="send">Mandé a pintar</button>
+        <button type="submit" class="btn btn-accent" data-action="receive">Volvió pintado</button>
+      </div>
+    </form>
+    <p id="paint-status" class="paint-status" hidden></p>
+  </section>`;
 }
 
 function renderDepositoView(groups) {
@@ -310,7 +361,8 @@ function renderDashboardPage({
       </div>
 
       <div id="view-deposito" class="dash-panel">
-        <p class="panel-lead">Piezas físicas en depósito — acá cargás stock en Shopify (productos borrador).</p>
+        <p class="panel-lead">Piezas físicas en depósito. Natural no se vende; En pintura está en el taller; Pintado es lo que entra al BOM.</p>
+        ${useBomView ? renderPaintForm() : ""}
         <div class="deposito-wrap">${depositoHtml}</div>
       </div>
 

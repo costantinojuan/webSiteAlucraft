@@ -68,8 +68,8 @@ async function main() {
     }
   }
 
-  const mesaComponentProductId = process.env.PRODUCT_ID_MESA_COMPONENT?.trim() || null;
-  const componentMatches = findComponentProducts(catalog, { mesaComponentProductId });
+  const catalog = await fetchAllProductsCatalog();
+  const componentMatches = findComponentProducts(catalog);
 
   console.log("\n=== Componentes BOM (borradores) ===");
   for (const rule of COMPONENT_PRODUCT_RULES) {
@@ -81,14 +81,12 @@ async function main() {
     }
   }
 
-  if (componentMatches.get("mesa_comp")) {
-    const mesaComp = componentMatches.get("mesa_comp").product;
-    console.log(`\n# Opcional si hay más de una Mesa Ratona:`);
-    console.log(`PRODUCT_ID_MESA_COMPONENT=${mesaComp.productId}  # ${mesaComp.title}`);
+  if (componentMatches.get("lat_mes")) {
+    console.log("\n# Mesa: ya no hace falta PRODUCT_ID_MESA_COMPONENT (se usa Pieza Lateral/Tabla mesa).");
   }
 
-  console.log("\n=== SKUs de componentes (33 esperados) ===");
   const expectedSkus = allExpectedComponentSkus();
+  console.log(`\n=== SKUs de componentes (${expectedSkus.length} esperados) ===`);
   const foundSkus = new Map();
 
   for (const [, { rule, product }] of componentMatches.entries()) {
@@ -117,7 +115,7 @@ async function main() {
   if (missingSkuCount > 0) {
     console.log(`\n⚠ Faltan ${missingSkuCount} SKUs/variantes. Asigná SKUs o revisá títulos de color.`);
   } else {
-    console.log("\n✓ Los 23 SKUs de componentes están resueltos.");
+    console.log(`\n✓ Los ${expectedSkus.length} SKUs de componentes están resueltos.`);
   }
 
   console.log("\n=== LOCATION_ID ===");

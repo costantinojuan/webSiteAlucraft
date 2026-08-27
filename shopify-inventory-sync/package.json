@@ -8,6 +8,9 @@
     "dev": "node --watch server.js",
     "start": "node server.js",
     "list-ids": "node scripts/list-config-ids.js",
+    "piece-setup": "node scripts/print-piece-setup.js",
+    "create-pieces": "node scripts/create-piece-products.js",
+    "test-pieces": "node scripts/test-pieces.js",
     "test-deduct": "node scripts/test-order-deduct.js",
     "test-restock": "node scripts/test-refund-restock.js"
   },
