@@ -1,23 +1,55 @@
 const { normalizeColor } = require("./colors");
 
+function parseSofaStyle(label) {
+  const title = normalizeColor(label);
+  if (title.includes("inclin")) {
+    return "inclinado";
+  }
+  if (title.includes("recto") || title.includes("recta")) {
+    return "recto";
+  }
+  throw new Error(`Estilo de sillón desconocido: "${label}" (esperado Recto o Inclinado)`);
+}
+
 /**
- * Variante terminada: "Arena / Beige" → { structureColor, fabricColor, title }
+ * Variante terminada:
+ * - "Arena / Beige" → reposera (sin estilo de patas)
+ * - "Arena / Beige / Recto" → sillón o juego
  */
 function parseVariantTitle(title) {
   const raw = String(title || "").trim();
-  if (!raw.includes(" / ")) {
-    throw new Error(`Formato de variante inválido (esperado "Estructura / Tela"): "${raw}"`);
+  const parts = raw.split(" / ").map((part) => part.trim()).filter(Boolean);
+
+  if (parts.length === 2) {
+    const [structureColor, fabricColor] = parts;
+    return { structureColor, fabricColor, sofaStyle: null, title: raw };
   }
 
-  const [structureColor, fabricColor] = raw.split(" / ").map((part) => part.trim());
-  if (!structureColor || !fabricColor) {
-    throw new Error(`Formato de variante inválido: "${raw}"`);
+  if (parts.length === 3) {
+    const [structureColor, fabricColor, styleLabel] = parts;
+    return {
+      structureColor,
+      fabricColor,
+      sofaStyle: parseSofaStyle(styleLabel),
+      title: raw,
+    };
   }
 
-  return { structureColor, fabricColor, title: raw };
+  throw new Error(
+    `Formato de variante inválido (esperado "Estructura / Tela" o "Estructura / Tela / Recto|Inclinado"): "${raw}"`
+  );
 }
 
-/** "Arena / Gris oscuro" → "Arena" (para matchear mesa ratona terminada) */
+function requireSofaStyle(parsed, productLabel) {
+  if (parsed.sofaStyle === "recto" || parsed.sofaStyle === "inclinado") {
+    return parsed.sofaStyle;
+  }
+  throw new Error(
+    `${productLabel} necesita la opción Recto/Inclinado en la variante "${parsed.title}"`
+  );
+}
+
+/** "Arena / Gris oscuro" o "Arena / Beige / Recto" → "Arena" */
 function mesaColorFromJuegoTitle(juegoVariantTitle) {
   const title = String(juegoVariantTitle || "").trim();
   if (title.includes(" / ")) {
@@ -41,6 +73,8 @@ function colorsMatch(a, b) {
 
 module.exports = {
   parseVariantTitle,
+  parseSofaStyle,
+  requireSofaStyle,
   mesaColorFromJuegoTitle,
   parseMesaVariantTitle,
   colorsMatch,

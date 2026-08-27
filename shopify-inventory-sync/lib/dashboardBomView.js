@@ -22,8 +22,8 @@ const COMPONENT_GROUPS = [
   {
     id: "pieces_sillon",
     title: "Piezas — Sillones",
-    hint: "Los laterales son la misma pieza para 1 y 3 cuerpos (2 por sillón).",
-    keys: ["lat_sil", "bas_s1", "res_s1", "bas_s3", "res_s3"],
+    hint: "Laterales rectos e inclinados: la misma pieza para 1 y 3 cuerpos (2 por sillón). El respaldo de estructura es uno solo.",
+    keys: ["lat_sil_rec", "lat_sil_inc", "bas_s1", "res_s1", "bas_s3", "res_s3"],
   },
   {
     id: "pieces_rep",
@@ -66,12 +66,12 @@ const COMPONENT_GROUPS = [
 const FINISHED_META = {
   sillon1: {
     title: PRODUCT_LABELS.sillon1,
-    hint: "1 sillón = base + respaldo + 2 laterales (compartidos con S3) + almohadones + caja. Solo piezas ya pintadas.",
+    hint: "1 sillón = base + respaldo + 2 laterales rectos o inclinados (compartidos con S3) + almohadones + caja.",
     sharedStructure: true,
   },
   sillon3: {
     title: PRODUCT_LABELS.sillon3,
-    hint: "1 sillón = base + 2 respaldos + 2 laterales (compartidos con S1) + caja. Solo piezas ya pintadas.",
+    hint: "1 sillón = base + 2 respaldos + 2 laterales rectos o inclinados (compartidos con S1) + caja.",
     sharedStructure: true,
   },
   mesa: {

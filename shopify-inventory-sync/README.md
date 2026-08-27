@@ -21,7 +21,7 @@ Modo legacy (`INVENTORY_SYNC_MODE=legacy`): solo recalcula Juego Living leyendo 
 
 ### Piezas de estructura (pintura)
 
-La estructura ya no es un kit `EST-S1-NM`. Se pintan **piezas**. Los laterales de sillón 1 y 3 son la misma pieza (`LAT-SIL`).
+La estructura ya no es un kit `EST-S1-NM`. Se pintan **piezas**. Los laterales de sillón 1 y 3 son la misma pieza, en **recto** o **inclinado** (`LAT-SIL-REC` / `LAT-SIL-INC`). El respaldo de estructura es único.
 
 Estados por pieza (5 variantes, mismo producto borrador):
 

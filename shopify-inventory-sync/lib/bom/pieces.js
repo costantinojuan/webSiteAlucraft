@@ -34,11 +34,20 @@ const PIECES = [
     qtyByProduct: { sillon1: 1 },
   },
   {
-    key: "lat_sil",
-    sku: "LAT-SIL",
-    label: "Lateral sillón",
-    shopifyTitle: "Pieza Lateral sillón",
+    key: "lat_sil_rec",
+    sku: "LAT-SIL-REC",
+    label: "Lateral sillón recto",
+    shopifyTitle: "Pieza Lateral sillón recto",
     qtyByProduct: { sillon1: 2, sillon3: 2 },
+    sofaStyle: "recto",
+  },
+  {
+    key: "lat_sil_inc",
+    sku: "LAT-SIL-INC",
+    label: "Lateral sillón inclinado",
+    shopifyTitle: "Pieza Lateral sillón inclinado",
+    qtyByProduct: { sillon1: 2, sillon3: 2 },
+    sofaStyle: "inclinado",
   },
   {
     key: "bas_s3",
@@ -127,11 +136,12 @@ function skuForPieceVariant(pieceKey, variantTitle) {
   return paintedSku(piece.sku, variantTitle);
 }
 
-function pieceLinesForProduct(productKey, structureColor) {
+function pieceLinesForProduct(productKey, structureColor, sofaStyle = null) {
   const lines = [];
   for (const piece of PIECES) {
     const qty = piece.qtyByProduct[productKey];
     if (!qty) continue;
+    if (piece.sofaStyle && piece.sofaStyle !== sofaStyle) continue;
     lines.push({
       sku: paintedSku(piece.sku, structureColor),
       qty,

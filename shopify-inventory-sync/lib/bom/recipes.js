@@ -1,5 +1,6 @@
 const { skuForFabric, skuForBox, skuForAllen } = require("./colors");
 const { pieceLinesForProduct } = require("./pieces");
+const { requireSofaStyle } = require("./parseVariant");
 
 function packagingLines(productKey, productLabel) {
   return [
@@ -21,8 +22,9 @@ function packagingLines(productKey, productLabel) {
  */
 function recipeSillon1(parsed) {
   const { structureColor, fabricColor } = parsed;
+  const sofaStyle = requireSofaStyle(parsed, "Sillón 1");
   return [
-    ...pieceLinesForProduct("sillon1", structureColor),
+    ...pieceLinesForProduct("sillon1", structureColor, sofaStyle),
     {
       sku: skuForFabric("baseSillon1", fabricColor),
       qty: 1,
@@ -39,8 +41,9 @@ function recipeSillon1(parsed) {
 
 function recipeSillon3(parsed) {
   const { structureColor, fabricColor } = parsed;
+  const sofaStyle = requireSofaStyle(parsed, "Sillón 3");
   return [
-    ...pieceLinesForProduct("sillon3", structureColor),
+    ...pieceLinesForProduct("sillon3", structureColor, sofaStyle),
     {
       sku: skuForFabric("baseSillon3", fabricColor),
       qty: 1,
