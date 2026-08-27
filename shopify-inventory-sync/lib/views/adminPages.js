@@ -207,6 +207,82 @@ function renderDepositoItem(product, isPackaging, icon) {
   </div>`;
 }
 
+function renderStockLoadForm(groups) {
+  const bodies = (groups || [])
+    .map((group) => {
+      const rows = (group.products || [])
+        .flatMap((product) =>
+          (product.variants || [])
+            .filter((variant) => variant.sku)
+            .map((variant) => {
+              const label = `${product.label} / ${variant.title}`;
+              return `
+      <tr>
+        <th>
+          <strong>${escapeHtml(product.label)}</strong>
+          <span class="paint-use">${escapeHtml(variant.title)}</span>
+        </th>
+        <td><code>${escapeHtml(variant.sku)}</code></td>
+        <td class="num">${variant.stock}</td>
+        <td class="qty">
+          <input
+            type="number"
+            min="0"
+            step="1"
+            inputmode="numeric"
+            class="stock-qty"
+            data-sku="${escapeHtml(variant.sku)}"
+            data-label="${escapeHtml(label)}"
+            placeholder="—"
+            aria-label="${escapeHtml(label)}"
+          >
+        </td>
+      </tr>`;
+            })
+        )
+        .join("");
+
+      if (!rows) return "";
+      return `
+      <tbody>
+        <tr class="paint-group"><th colspan="4">${escapeHtml(group.title)}</th></tr>
+        ${rows}
+      </tbody>`;
+    })
+    .join("");
+
+  return `
+  <section class="paint-board" id="stock-load">
+    <h3>Cargar depósito</h3>
+    <p>Sumá lo que llegó, restá un ajuste, o dejá el número del conteo. Graba en Shopify; no recalcula la tienda.</p>
+    <form id="stock-load-form" class="paint-table-form">
+      <fieldset class="stock-mode">
+        <legend>Qué hacer</legend>
+        <label><input type="radio" name="mode" value="add" checked> Sumar (llegó)</label>
+        <label><input type="radio" name="mode" value="subtract"> Restar (ajuste)</label>
+        <label><input type="radio" name="mode" value="set"> Dejar en (conteo)</label>
+      </fieldset>
+      <div class="table-scroll">
+        <table class="paint-table">
+          <thead>
+            <tr>
+              <th>Componente</th>
+              <th>Código</th>
+              <th>Hay</th>
+              <th>Cantidad</th>
+            </tr>
+          </thead>
+          ${bodies}
+        </table>
+      </div>
+      <div class="paint-actions">
+        <button type="submit" class="btn btn-outline">Guardar en depósito</button>
+      </div>
+    </form>
+    <p id="stock-load-status" class="paint-status" hidden></p>
+  </section>`;
+}
+
 function renderPaintForm() {
   return `
   <section class="paint-card" id="paint-card">
@@ -340,6 +416,7 @@ function renderDashboardPage({
 
       <div id="view-deposito" class="dash-panel">
         <p class="panel-lead">Piezas físicas en depósito. Natural no se vende; En pintura está en el taller; Pintado es lo que entra al BOM.</p>
+        ${useBomView ? renderStockLoadForm(bomView.components.groups) : ""}
         ${useBomView ? renderPaintForm() : ""}
         <div class="deposito-wrap">${depositoHtml}</div>
       </div>

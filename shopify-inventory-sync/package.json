@@ -11,7 +11,7 @@
     "piece-setup": "node scripts/print-piece-setup.js",
     "create-pieces": "node scripts/create-piece-products.js",
     "add-sofa-style": "node scripts/add-sofa-style-option.js",
-    "test-pieces": "node scripts/test-pieces.js",
+    "test-pieces": "node scripts/test-pieces.js && node scripts/test-stock-adjust.js",
     "test-deduct": "node scripts/test-order-deduct.js",
     "test-restock": "node scripts/test-refund-restock.js"
   },

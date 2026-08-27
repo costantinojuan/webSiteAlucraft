@@ -319,4 +319,78 @@
       window.location.reload();
     });
   }
+
+  const stockForm = document.getElementById("stock-load-form");
+  const stockStatus = document.getElementById("stock-load-status");
+  const MODE_LABEL = {
+    add: "Sumar",
+    subtract: "Restar",
+    set: "Dejar en",
+  };
+
+  if (stockForm) {
+    stockForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const submitBtn = stockForm.querySelector("button[type=submit]");
+      const mode = stockForm.querySelector('input[name="mode"]:checked')?.value || "add";
+
+      const showStockStatus = (type, message) => {
+        if (!stockStatus) return;
+        stockStatus.hidden = false;
+        stockStatus.className = `paint-status ${type}`;
+        stockStatus.textContent = message;
+      };
+
+      try {
+        const lines = [];
+        stockForm.querySelectorAll(".stock-qty").forEach((input) => {
+          const raw = String(input.value || "").trim();
+          if (raw === "") return;
+          const qty = Math.floor(Number(raw));
+          if (!Number.isFinite(qty) || qty < 0) {
+            throw new Error("Las cantidades tienen que ser enteros de 0 o más");
+          }
+          lines.push({
+            sku: input.dataset.sku,
+            qty,
+            label: input.dataset.label || input.dataset.sku,
+          });
+        });
+
+        if (!lines.length) {
+          throw new Error("Marcá al menos una cantidad");
+        }
+
+        const total = lines.reduce((sum, line) => sum + line.qty, 0);
+        const ok = window.confirm(
+          `${MODE_LABEL[mode] || mode}: ${lines.length} códigos (${total} u.). ¿Guardar en depósito?`
+        );
+        if (!ok) return;
+
+        if (submitBtn) submitBtn.disabled = true;
+        showStockStatus("", "Guardando…");
+
+        const response = await fetch("/admin/api/stock", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          credentials: "same-origin",
+          body: JSON.stringify({ mode, lines }),
+        });
+        const data = await response.json();
+        if (!response.ok || !data.ok) {
+          throw new Error(data.error || "Error al guardar stock");
+        }
+
+        showStockStatus("is-ok", `Guardado: ${data.applied.length} códigos. Actualizando…`);
+        window.location.hash = "deposito";
+        window.setTimeout(() => window.location.reload(), 700);
+      } catch (error) {
+        showStockStatus("is-err", error.message || "Error");
+        if (submitBtn) submitBtn.disabled = false;
+      }
+    });
+  }
 })();

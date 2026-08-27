@@ -13,6 +13,7 @@ const { renderPrintCodesPage } = require("./views/adminPaintPages");
 const { buildPaintDeltas, buildPaintBatchDeltas } = require("./bom/paint");
 const { applyInventoryDeltas } = require("./bom/applyInventoryDeltas");
 const { codesCatalog } = require("./paintWorkshop");
+const { applyStockAdjust } = require("./bom/stockAdjust");
 
 function whatsappStatusLabel() {
   const cfg = getWhatsAppConfig();
@@ -168,6 +169,34 @@ function createAdminRouter() {
     } catch (error) {
       console.error("Paint error", error);
       const status = /insuficiente|desconocid|inválid|invalida|cantidad|Marcá/i.test(error.message)
+        ? 400
+        : 500;
+      return res.status(status).json({
+        ok: false,
+        error: error.message,
+      });
+    }
+  });
+
+  router.post("/api/stock", requireAdmin, express.json(), async (req, res) => {
+    try {
+      const applied = await applyStockAdjust(
+        {
+          mode: req.body?.mode,
+          lines: req.body?.lines,
+        },
+        getSyncConfig()
+      );
+
+      return res.status(200).json({
+        ok: true,
+        applied,
+      });
+    } catch (error) {
+      console.error("Stock adjust error", error);
+      const status = /insuficiente|desconocid|inválid|invalida|cantidad|Marcá|Falta|negativa|modo/i.test(
+        error.message
+      )
         ? 400
         : 500;
       return res.status(status).json({
