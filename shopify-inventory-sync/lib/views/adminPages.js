@@ -234,7 +234,7 @@ function renderPaintForm() {
         <input type="number" name="qty" min="1" step="1" value="1" required>
       </label>
       <div class="paint-actions">
-        <button type="submit" class="btn btn-ghost" data-action="send">Mandé a pintar</button>
+        <button type="submit" class="btn btn-outline" data-action="send">Mandé a pintar</button>
         <button type="submit" class="btn btn-accent" data-action="receive">Volvió pintado</button>
       </div>
     </form>

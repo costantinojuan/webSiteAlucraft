@@ -96,10 +96,25 @@ a { color: var(--accent); }
 .btn-primary { background: var(--side); color: white; }
 .btn-primary:hover { background: #44403c; }
 .btn-accent { background: var(--accent); color: white; }
-.btn-accent:hover { background: var(--accent-hover); }
-.btn-accent:disabled { opacity: 0.6; cursor: wait; }
+.btn-accent:hover { background: var(--accent-hover); color: white; }
+.btn-accent:disabled { opacity: 0.6; cursor: wait; color: white; }
 .btn-ghost { background: transparent; color: var(--side-muted); border: 1px solid #57534e; }
 .btn-ghost:hover { background: rgba(255,255,255,0.06); color: var(--side-text); }
+.btn-outline {
+  background: #fff;
+  color: var(--text);
+  border: 1px solid #d6d3d1;
+}
+.btn-outline:hover {
+  background: #f5f3ef;
+  border-color: #a8a29e;
+  color: var(--text);
+}
+.btn-outline:disabled {
+  opacity: 0.55;
+  cursor: wait;
+  color: var(--text);
+}
 .btn-block { width: 100%; }
 
 .link-btn {
@@ -500,6 +515,16 @@ a { color: var(--accent); }
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+}
+
+.paint-actions .btn {
+  min-height: 2.5rem;
+}
+
+.paint-actions .btn-accent:hover,
+.paint-actions .btn-accent:focus-visible {
+  background: var(--accent-hover);
+  color: #fff;
 }
 
 .paint-status {
