@@ -63,4 +63,58 @@ function buildPaintDeltas({ pieceKey, color, qty, action }) {
   ];
 }
 
-module.exports = { buildPaintDeltas };
+function mergeDeltas(deltas) {
+  const bySku = new Map();
+  for (const line of deltas) {
+    const prev = bySku.get(line.sku);
+    if (prev) {
+      prev.delta += line.delta;
+    } else {
+      bySku.set(line.sku, { ...line });
+    }
+  }
+  return [...bySku.values()].filter((line) => line.delta !== 0);
+}
+
+function normalizePaintLines(lines) {
+  if (!Array.isArray(lines)) {
+    throw new Error("Las líneas de pintura tienen que ser una lista");
+  }
+
+  const normalized = [];
+  for (const line of lines) {
+    const qty = Math.floor(Number(line?.qty));
+    if (!Number.isFinite(qty) || qty < 1) {
+      continue;
+    }
+    normalized.push({
+      pieceKey: String(line.pieceKey || ""),
+      color: String(line.color || ""),
+      qty,
+    });
+  }
+  return normalized;
+}
+
+/**
+ * Varias piezas / colores en un solo movimiento. Fusiona SKUs repetidos
+ * (p. ej. dos envíos que descuentan el mismo Natural).
+ */
+function buildPaintBatchDeltas({ action, lines }) {
+  if (action !== "send" && action !== "receive") {
+    throw new Error(`Acción de pintura inválida: ${action}`);
+  }
+
+  const normalized = normalizePaintLines(lines);
+  if (!normalized.length) {
+    throw new Error("Marcá al menos una cantidad");
+  }
+
+  const all = [];
+  for (const line of normalized) {
+    all.push(...buildPaintDeltas({ ...line, action }));
+  }
+  return mergeDeltas(all);
+}
+
+module.exports = { buildPaintDeltas, buildPaintBatchDeltas, mergeDeltas };

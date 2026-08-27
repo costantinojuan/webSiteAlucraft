@@ -11,6 +11,7 @@ const {
   mesaColorFromJuegoTitle,
 } = require("./bom/parseVariant");
 const { PRODUCT_LABELS } = require("./dashboardData");
+const { snapshotFromStock } = require("./paintWorkshop");
 
 const COMPONENT_GROUPS = [
   {
@@ -266,6 +267,7 @@ async function getDashboardBomView() {
       groups: buildComponentGroups(resolvedProducts, stockBySku),
       totalPhysicalUnits: [...stockBySku.values()].reduce((sum, n) => sum + n, 0),
     },
+    paintPieces: snapshotFromStock(stockBySku),
     finished: [juego, sillon1, sillon3, mesa, reposera].filter(Boolean),
   };
 }

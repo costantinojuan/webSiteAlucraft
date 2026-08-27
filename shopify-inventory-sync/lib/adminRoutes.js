@@ -8,9 +8,11 @@ const { getLastSync, recordSync } = require("./syncState");
 const { runInventorySync } = require("./inventorySync");
 const { checkAndSendStockAlerts } = require("./alerts/stockAlerts");
 const { sendWhatsAppMessage } = require("./alerts/whatsapp");
-const { renderLoginPage, renderDashboardPage } = require("./views/adminPages");
-const { buildPaintDeltas } = require("./bom/paint");
+const { renderLoginPage, renderDashboardPage, formatDateTime } = require("./views/adminPages");
+const { renderPrintCodesPage } = require("./views/adminPaintPages");
+const { buildPaintDeltas, buildPaintBatchDeltas } = require("./bom/paint");
 const { applyInventoryDeltas } = require("./bom/applyInventoryDeltas");
+const { codesCatalog } = require("./paintWorkshop");
 
 function whatsappStatusLabel() {
   const cfg = getWhatsAppConfig();
@@ -135,37 +137,37 @@ function createAdminRouter() {
     }
   });
 
+  router.get("/pintura/codigos", requireAdmin, (req, res) => {
+    return res.status(200).send(
+      renderPrintCodesPage({
+        pieces: codesCatalog(),
+        printedAt: formatDateTime(new Date().toISOString()),
+      })
+    );
+  });
+
   router.post("/api/paint", requireAdmin, express.json(), async (req, res) => {
     try {
-      const deltas = buildPaintDeltas({
-        pieceKey: req.body?.pieceKey,
-        color: req.body?.color,
-        qty: req.body?.qty,
-        action: req.body?.action,
-      });
+      const action = req.body?.action;
+      const deltas = Array.isArray(req.body?.lines)
+        ? buildPaintBatchDeltas({ action, lines: req.body.lines })
+        : buildPaintDeltas({
+            pieceKey: req.body?.pieceKey,
+            color: req.body?.color,
+            qty: req.body?.qty,
+            action,
+          });
 
       const applied = await applyInventoryDeltas(deltas, getSyncConfig());
-
-      let synced = null;
-      let syncError = null;
-      try {
-        const result = await runSyncWithAlerts("paint");
-        synced = result.syncResult;
-      } catch (error) {
-        console.error("Paint sync error", error);
-        syncError = error.message;
-      }
 
       return res.status(200).json({
         ok: true,
         applied,
-        synced,
-        syncError,
         lastSync: getLastSync(),
       });
     } catch (error) {
       console.error("Paint error", error);
-      const status = /insuficiente|desconocid|inválid|invalida|cantidad/i.test(error.message)
+      const status = /insuficiente|desconocid|inválid|invalida|cantidad|Marcá/i.test(error.message)
         ? 400
         : 500;
       return res.status(status).json({

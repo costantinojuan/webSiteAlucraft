@@ -710,3 +710,268 @@ a { color: var(--accent); }
 
   .tienda-row-qty strong { font-size: 1.5rem; }
 }
+
+/* ── Pintura workshop ── */
+.paint-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.paint-toolbar .btn.is-active {
+  background: var(--side);
+  color: #fff;
+  border-color: var(--side);
+}
+
+.paint-board {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem 1.1rem 1.15rem;
+  margin-bottom: 1rem;
+}
+
+.paint-board h3 {
+  margin: 0 0 0.25rem;
+  font-size: 0.95rem;
+}
+
+.paint-board > p {
+  margin: 0 0 0.85rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  margin: 0 -0.25rem 0.85rem;
+}
+
+.paint-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.paint-table th,
+.paint-table td {
+  padding: 0.45rem 0.55rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.paint-table thead th {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.paint-table .paint-group th {
+  padding-top: 0.85rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  background: transparent;
+  border-bottom-color: #e7e5e4;
+}
+
+.paint-table .paint-use,
+.print-use {
+  display: block;
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.paint-table code,
+.print-table code {
+  font-size: 0.8rem;
+  background: #f5f3ef;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+}
+
+.paint-table .num {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  width: 3.5rem;
+}
+
+.paint-table .qty {
+  width: 5.5rem;
+}
+
+.paint-table input[type="number"] {
+  width: 4.5rem;
+  padding: 0.4rem 0.45rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: inherit;
+}
+
+.paint-table input[type="number"]:disabled {
+  background: #f5f3ef;
+  color: var(--muted);
+}
+
+.paint-order {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+  box-shadow: var(--shadow);
+}
+
+.paint-order-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.paint-order-bar h3 { margin: 0; font-size: 0.95rem; }
+
+.print-order-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.print-order-head h2 { margin: 0; font-size: 1.1rem; }
+.print-order-head p { margin: 0.15rem 0 0; color: var(--muted); font-size: 0.85rem; }
+
+.print-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+  background: #fff;
+}
+
+.print-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--text);
+}
+
+.print-head > div:first-child {
+  display: flex;
+  gap: 0.85rem;
+  align-items: center;
+}
+
+.print-head h1 { margin: 0; font-size: 1.35rem; }
+.print-head p { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.9rem; }
+
+.print-meta {
+  display: grid;
+  justify-items: end;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.print-block { margin-bottom: 1.5rem; }
+.print-block h2 {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+
+.print-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.print-table th,
+.print-table td {
+  padding: 0.55rem 0.45rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.print-table thead th {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.print-table code {
+  font-size: 0.95rem;
+  font-weight: 700;
+  background: #f5f3ef;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+}
+
+.print-note {
+  margin-top: 1.5rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+@media print {
+  .no-print { display: none !important; }
+
+  body.printing-order {
+    background: #fff;
+  }
+
+  body.printing-order .dash-side,
+  body.printing-order .dash-top,
+  body.printing-order .dash-foot,
+  body.printing-order .sync-toast,
+  body.printing-order .panel-lead,
+  body.printing-order .paint-toolbar,
+  body.printing-order .paint-board,
+  body.printing-order .paint-status,
+  body.printing-order .paint-order-bar {
+    display: none !important;
+  }
+
+  body.printing-order .dash {
+    display: block;
+    min-height: 0;
+  }
+
+  body.printing-order .dash-panel {
+    display: none !important;
+    padding: 0;
+  }
+
+  body.printing-order #view-pintura {
+    display: block !important;
+  }
+
+  body.printing-order #paint-order {
+    display: block !important;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .print-page {
+    max-width: none;
+    padding: 0;
+  }
+
+  .print-table code,
+  .paint-table code {
+    background: transparent;
+  }
+}

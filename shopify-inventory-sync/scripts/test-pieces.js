@@ -14,7 +14,7 @@ const {
   matchPieceProduct,
 } = require("../lib/bom/pieces");
 const { allExpectedComponentSkus } = require("../lib/bom/colors");
-const { buildPaintDeltas } = require("../lib/bom/paint");
+const { buildPaintDeltas, buildPaintBatchDeltas } = require("../lib/bom/paint");
 const { parseVariantTitle } = require("../lib/bom/parseVariant");
 const { calculateWithSharedStructure } = require("../lib/bom/sharedStructureAllocation");
 
@@ -78,6 +78,33 @@ const send = buildPaintDeltas({
 assert.deepStrictEqual(
   send.map((d) => `${d.sku}:${d.delta}`),
   ["LAT-SIL-INC:-4", "LAT-SIL-INC-PINT-NM:4"]
+);
+
+const batch = buildPaintBatchDeltas({
+  action: "send",
+  lines: [
+    { pieceKey: "lat_mes", color: "NM", qty: 3 },
+    { pieceKey: "lat_mes", color: "AR", qty: 2 },
+    { pieceKey: "tab_mes", color: "NM", qty: 1 },
+  ],
+});
+assert.deepStrictEqual(
+  batch.map((d) => `${d.sku}:${d.delta}`).sort(),
+  ["LAT-MES-PINT-AR:2", "LAT-MES-PINT-NM:3", "LAT-MES:-5", "TAB-MES-PINT-NM:1", "TAB-MES:-1"].sort()
+);
+
+assert.throws(
+  () => buildPaintBatchDeltas({ action: "send", lines: [{ pieceKey: "lat_mes", color: "NM", qty: 0 }] }),
+  /Marcá al menos una cantidad/
+);
+
+const received = buildPaintBatchDeltas({
+  action: "receive",
+  lines: [{ pieceKey: "bas_s1", color: "AR", qty: 2 }],
+});
+assert.deepStrictEqual(
+  received.map((d) => `${d.sku}:${d.delta}`),
+  ["BAS-S1-PINT-AR:-2", "BAS-S1-AR:2"]
 );
 
 const expected = allExpectedComponentSkus();

@@ -1,4 +1,4 @@
-const { PIECES } = require("../bom/pieces");
+const { renderPaintWorkshopPanel } = require("./adminPaintPages");
 
 function brandLogo() {
   return `<img src="/admin/static/alucraft-logo.png" alt="Alucraft" class="brand-logo" width="40" height="40">`;
@@ -208,37 +208,11 @@ function renderDepositoItem(product, isPackaging, icon) {
 }
 
 function renderPaintForm() {
-  const options = PIECES.map(
-    (piece) =>
-      `<option value="${escapeHtml(piece.key)}">${escapeHtml(piece.label)}</option>`
-  ).join("");
-
   return `
   <section class="paint-card" id="paint-card">
     <h3>Pintura</h3>
-    <p>Pasá piezas de Natural a En pintura, o de En pintura a Pintado. No es una venta: es 1 a 1.</p>
-    <form id="paint-form" class="paint-form">
-      <label>
-        <span>Pieza</span>
-        <select name="pieceKey" required>${options}</select>
-      </label>
-      <label>
-        <span>Color</span>
-        <select name="color" required>
-          <option value="NM">Negro Microtexturado</option>
-          <option value="AR">Arena</option>
-        </select>
-      </label>
-      <label>
-        <span>Cantidad</span>
-        <input type="number" name="qty" min="1" step="1" value="1" required>
-      </label>
-      <div class="paint-actions">
-        <button type="submit" class="btn btn-outline" data-action="send">Mandé a pintar</button>
-        <button type="submit" class="btn btn-accent" data-action="receive">Volvió pintado</button>
-      </div>
-    </form>
-    <p id="paint-status" class="paint-status" hidden></p>
+    <p>Los chicos cargan cantidades en la pantalla Pintura. Acá no se vende nada: es un canje 1 a 1.</p>
+    <button type="button" class="btn btn-outline" data-view="pintura">Ir a Pintura</button>
   </section>`;
 }
 
@@ -318,6 +292,10 @@ function renderDashboardPage({
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
           Depósito
         </button>
+        <button type="button" class="dash-nav-btn" data-view="pintura">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+          Pintura
+        </button>
       </nav>
 
       <div class="dash-side-foot">
@@ -364,6 +342,15 @@ function renderDashboardPage({
         <p class="panel-lead">Piezas físicas en depósito. Natural no se vende; En pintura está en el taller; Pintado es lo que entra al BOM.</p>
         ${useBomView ? renderPaintForm() : ""}
         <div class="deposito-wrap">${depositoHtml}</div>
+      </div>
+
+      <div id="view-pintura" class="dash-panel">
+        <p class="panel-lead">Imprimí los códigos para el taller, mandá un lote a pintar o registrá lo que volvió. No recalcula la tienda.</p>
+        ${
+          useBomView && bomView.paintPieces
+            ? renderPaintWorkshopPanel(bomView.paintPieces)
+            : `<p class="empty-state">Cargá las piezas en Shopify para usar pintura.</p>`
+        }
       </div>
 
       <footer class="dash-foot">

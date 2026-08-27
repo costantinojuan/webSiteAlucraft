@@ -1,5 +1,4 @@
 (function () {
-  const nav = document.getElementById("dash-nav");
   const viewTitle = document.getElementById("view-title");
   const syncBtn = document.getElementById("sync-btn");
   const syncToast = document.getElementById("sync-toast");
@@ -7,22 +6,33 @@
   const VIEW_TITLES = {
     tienda: "Tienda",
     deposito: "Depósito",
+    pintura: "Pintura",
   };
 
-  if (nav) {
-    nav.addEventListener("click", (e) => {
-      const btn = e.target.closest(".dash-nav-btn");
-      if (!btn) return;
+  function showView(view) {
+    if (!VIEW_TITLES[view]) return;
 
-      const view = btn.dataset.view;
-      nav.querySelectorAll(".dash-nav-btn").forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-
-      document.querySelectorAll(".dash-panel").forEach((p) => p.classList.remove("active"));
-      const panel = document.getElementById(`view-${view}`);
-      if (panel) panel.classList.add("active");
-      if (viewTitle) viewTitle.textContent = VIEW_TITLES[view] || view;
+    document.querySelectorAll(".dash-nav-btn").forEach((btn) => {
+      btn.classList.toggle("active", btn.dataset.view === view);
     });
+    document.querySelectorAll(".dash-panel").forEach((panel) => panel.classList.remove("active"));
+    const panel = document.getElementById(`view-${view}`);
+    if (panel) panel.classList.add("active");
+    if (viewTitle) viewTitle.textContent = VIEW_TITLES[view];
+    if (location.hash !== `#${view}`) {
+      history.replaceState(null, "", `#${view}`);
+    }
+  }
+
+  document.addEventListener("click", (event) => {
+    const trigger = event.target.closest("[data-view]");
+    if (!trigger || trigger.tagName === "A") return;
+    showView(trigger.dataset.view);
+  });
+
+  const hashView = String(location.hash || "").replace("#", "");
+  if (VIEW_TITLES[hashView]) {
+    showView(hashView);
   }
 
   function showToast(message, type) {
@@ -109,79 +119,204 @@
     });
   }
 
-  const paintForm = document.getElementById("paint-form");
-  const paintStatus = document.getElementById("paint-status");
+  const COLOR_LABEL = {
+    NM: "Negro Microtexturado",
+    AR: "Arena",
+  };
 
-  if (paintForm) {
-      const buttons = paintForm.querySelectorAll("button[type=submit]");
-      buttons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          paintForm.dataset.action = btn.dataset.action || "";
+  function linesFromForm(form) {
+    const lines = [];
+    form.querySelectorAll("tr[data-piece]").forEach((row) => {
+      const pieceKey = row.dataset.piece;
+      const label = row.querySelector("strong")?.textContent?.trim() || pieceKey;
+      const natural = Number(row.dataset.natural);
+      let rowTotal = 0;
+
+      for (const color of ["NM", "AR"]) {
+        const input = form.querySelector(`[name="${pieceKey}-${color}"]`);
+        const qty = Math.floor(Number(input?.value || 0));
+        if (!input || !Number.isFinite(qty) || qty < 1) continue;
+        rowTotal += qty;
+        lines.push({
+          pieceKey,
+          color,
+          qty,
+          label,
+          sku: row.dataset.sku || "",
+          skuPainted: color === "NM" ? row.dataset.skuNm : row.dataset.skuAr,
         });
-      });
-
-      paintForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      const submitter = event.submitter;
-      const action = submitter?.dataset?.action || paintForm.dataset.action;
-      if (!action) return;
-
-      const formData = new FormData(paintForm);
-      const payload = {
-        pieceKey: String(formData.get("pieceKey") || ""),
-        color: String(formData.get("color") || ""),
-        qty: Number(formData.get("qty") || 0),
-        action,
-      };
-
-      const buttons = paintForm.querySelectorAll("button[type=submit]");
-      buttons.forEach((btn) => {
-        btn.disabled = true;
-      });
-
-      if (paintStatus) {
-        paintStatus.hidden = false;
-        paintStatus.className = "paint-status";
-        paintStatus.textContent =
-          action === "send" ? "Moviendo a pintura…" : "Registrando pintado…";
       }
 
+      if (Number.isFinite(natural) && rowTotal > natural) {
+        throw new Error(
+          `${label}: Natural hay ${natural}, anotaste ${rowTotal} (negro + arena)`
+        );
+      }
+    });
+    return lines;
+  }
+
+  function renderOrder(action, lines) {
+    const title = action === "send" ? "Orden de pintura" : "Recepción de pintura";
+    const date = new Intl.DateTimeFormat("es-AR", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    }).format(new Date());
+    const rows = lines
+      .map((line) => {
+        const paintedSku = line.skuPainted || `${line.sku}-${line.color}`;
+        return `<tr>
+          <td>${line.label}</td>
+          <td class="num">${line.qty}</td>
+          <td>${COLOR_LABEL[line.color] || line.color}</td>
+          <td><code>${paintedSku}</code></td>
+        </tr>`;
+      })
+      .join("");
+    const total = lines.reduce((sum, line) => sum + line.qty, 0);
+
+    return {
+      title,
+      html: `
+      <header class="print-order-head">
+        <img src="/admin/static/alucraft-logo.png" alt="Alucraft" width="36" height="36">
+        <div>
+          <h2>${title}</h2>
+          <p>${date} · ${total} piezas</p>
+        </div>
+      </header>
+      <table class="paint-table print-table">
+        <thead>
+          <tr>
+            <th>Pieza</th>
+            <th>Cant.</th>
+            <th>Color</th>
+            <th>Código</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <p class="print-note">${
+        action === "send"
+          ? "Al volver, el código es el de la última columna (NM negro, AR arena)."
+          : "Ya está cargado en depósito como Pintado."
+      }</p>`,
+    };
+  }
+
+  async function submitPaint(form, action) {
+    const status = document.getElementById("paint-status");
+    const order = document.getElementById("paint-order");
+    const orderTitle = document.getElementById("paint-order-title");
+    const orderBody = document.getElementById("paint-order-body");
+    const submitBtn = form.querySelector("button[type=submit]");
+    const lines = linesFromForm(form);
+
+    if (!lines.length) {
+      throw new Error("Marcá al menos una cantidad");
+    }
+
+    if (submitBtn) submitBtn.disabled = true;
+    if (status) {
+      status.hidden = false;
+      status.className = "paint-status";
+      status.textContent = action === "send" ? "Mandando a pintar…" : "Registrando recepción…";
+    }
+
+    const response = await fetch("/admin/api/paint", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      credentials: "same-origin",
+      body: JSON.stringify({
+        action,
+        lines: lines.map(({ pieceKey, color, qty }) => ({ pieceKey, color, qty })),
+      }),
+    });
+
+    const data = await response.json();
+    if (!response.ok || !data.ok) {
+      throw new Error(data.error || "Error al mover pintura");
+    }
+
+    const printed = renderOrder(action, lines);
+    if (order && orderBody) {
+      order.hidden = false;
+      if (orderTitle) orderTitle.textContent = printed.title;
+      orderBody.innerHTML = printed.html;
+      order.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    if (status) {
+      status.className = "paint-status is-ok";
+      status.textContent =
+        action === "send"
+          ? `Mandaste ${lines.reduce((s, l) => s + l.qty, 0)} piezas. Imprimí la orden para el taller.`
+          : `Recibiste ${lines.reduce((s, l) => s + l.qty, 0)} piezas pintadas.`;
+    }
+
+    form.querySelectorAll('input[type="number"]').forEach((input) => {
+      if (!input.disabled) input.value = "0";
+    });
+    if (submitBtn) submitBtn.disabled = false;
+  }
+
+  function bindPaintForm(id, action) {
+    const form = document.getElementById(id);
+    if (!form) return;
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
       try {
-        const response = await fetch("/admin/api/paint", {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          credentials: "same-origin",
-          body: JSON.stringify(payload),
-        });
-
-        const data = await response.json();
-        if (!response.ok || !data.ok) {
-          throw new Error(data.error || "Error al mover pintura");
-        }
-
-        const verb = action === "send" ? "Mandaste a pintar" : "Volvió pintado";
-        const message = data.syncError
-          ? `${verb} ${payload.qty}. Recalcular falló: ${data.syncError}`
-          : `${verb} ${payload.qty}.`;
-
-        if (paintStatus) {
-          paintStatus.className = data.syncError ? "paint-status is-warn" : "paint-status is-ok";
-          paintStatus.textContent = message;
-        }
-
-        setTimeout(() => window.location.reload(), 900);
+        await submitPaint(form, action);
       } catch (error) {
-        if (paintStatus) {
-          paintStatus.className = "paint-status is-err";
-          paintStatus.textContent = error.message || "Error";
+        const status = document.getElementById("paint-status");
+        if (status) {
+          status.hidden = false;
+          status.className = "paint-status is-err";
+          status.textContent = error.message || "Error";
         }
-        buttons.forEach((btn) => {
+        form.querySelectorAll("button[type=submit]").forEach((btn) => {
           btn.disabled = false;
         });
       }
+    });
+  }
+
+  bindPaintForm("paint-send-form", "send");
+  bindPaintForm("paint-receive-form", "receive");
+
+  document.querySelectorAll("[data-paint-tab]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const tab = btn.dataset.paintTab;
+      document.querySelectorAll("[data-paint-panel]").forEach((panel) => {
+        panel.hidden = panel.dataset.paintPanel !== tab;
+      });
+      document.querySelectorAll("[data-paint-tab]").forEach((other) => {
+        other.classList.toggle("is-active", other === btn);
+      });
+    });
+  });
+
+  const sendTabBtn = document.querySelector('[data-paint-tab="send"]');
+  if (sendTabBtn) sendTabBtn.classList.add("is-active");
+
+  const printOrderBtn = document.getElementById("paint-order-print");
+  if (printOrderBtn) {
+    printOrderBtn.addEventListener("click", () => {
+      document.body.classList.add("printing-order");
+      window.print();
+      window.setTimeout(() => document.body.classList.remove("printing-order"), 300);
+    });
+  }
+
+  const reloadBtn = document.getElementById("paint-order-reload");
+  if (reloadBtn) {
+    reloadBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      window.location.href = "/admin#pintura";
+      window.location.reload();
     });
   }
 })();
