@@ -207,54 +207,188 @@ function renderDepositoItem(product, isPackaging, icon) {
   </div>`;
 }
 
-function renderStockLoadForm(groups) {
-  const bodies = (groups || [])
-    .map((group) => {
-      const rows = (group.products || [])
-        .flatMap((product) =>
-          (product.variants || [])
-            .filter((variant) => variant.sku)
-            .map((variant) => {
-              const label = `${product.label} / ${variant.title}`;
-              return `
+function stockQtyInput(variant, productLabel) {
+  const label = `${productLabel} / ${variant.title}`;
+  return `<input
+    type="number"
+    min="0"
+    step="1"
+    inputmode="numeric"
+    class="stock-qty"
+    data-sku="${escapeHtml(variant.sku)}"
+    data-label="${escapeHtml(label)}"
+    placeholder="—"
+    aria-label="${escapeHtml(label)}"
+  >`;
+}
+
+function loadTabForVariant(group, variant) {
+  const groupId = String(group.id || "");
+  if (groupId.startsWith("packaging")) return "cajas";
+  if (groupId.startsWith("cushions")) return "telas";
+  const stage = variantStage(variant.title);
+  if (stage === "wip") return null;
+  if (stage === "natural") return "natural";
+  const n = String(variant.title || "").toLowerCase();
+  if (n.includes("negro")) return "negro";
+  if (n.includes("arena")) return "arena";
+  return null;
+}
+
+function renderStockSimpleRows(items) {
+  const byGroup = [];
+  for (const item of items) {
+    const title = item.group.title;
+    const last = byGroup[byGroup.length - 1];
+    if (!last || last.title !== title) {
+      byGroup.push({ title, items: [item] });
+    } else {
+      last.items.push(item);
+    }
+  }
+
+  return byGroup
+    .map((block) => {
+      const rows = block.items
+        .map(
+          ({ product, variant }) => `
       <tr>
         <th>
           <strong>${escapeHtml(product.label)}</strong>
-          <span class="paint-use">${escapeHtml(variant.title)}</span>
+          <span class="paint-use">${escapeHtml(variant.sku)}</span>
         </th>
-        <td><code>${escapeHtml(variant.sku)}</code></td>
         <td class="num">${variant.stock}</td>
-        <td class="qty">
-          <input
-            type="number"
-            min="0"
-            step="1"
-            inputmode="numeric"
-            class="stock-qty"
-            data-sku="${escapeHtml(variant.sku)}"
-            data-label="${escapeHtml(label)}"
-            placeholder="—"
-            aria-label="${escapeHtml(label)}"
-          >
-        </td>
-      </tr>`;
-            })
+        <td class="qty">${stockQtyInput(variant, product.label)}</td>
+      </tr>`
         )
         .join("");
-
-      if (!rows) return "";
       return `
       <tbody>
-        <tr class="paint-group"><th colspan="4">${escapeHtml(group.title)}</th></tr>
+        <tr class="paint-group"><th colspan="3">${escapeHtml(block.title)}</th></tr>
         ${rows}
       </tbody>`;
+    })
+    .join("");
+}
+
+function renderStockFabricTable(items) {
+  const colors = [];
+  for (const item of items) {
+    const color = item.variant.title;
+    if (color && !colors.includes(color)) colors.push(color);
+  }
+  const preferred = ["Beige", "Tostado", "Gris oscuro", "Gris claro"];
+  colors.sort((a, b) => {
+    const ia = preferred.indexOf(a);
+    const ib = preferred.indexOf(b);
+    return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+  });
+
+  const products = [];
+  for (const item of items) {
+    const key = item.product.label;
+    let row = products.find((p) => p.label === key);
+    if (!row) {
+      row = { label: key, byColor: new Map() };
+      products.push(row);
+    }
+    row.byColor.set(item.variant.title, item.variant);
+  }
+
+  const head = colors
+    .map(
+      (color) =>
+        `<th><span class="pill-dots"><i class="${colorClass(color)}"></i></span>${escapeHtml(color)}</th>`
+    )
+    .join("");
+
+  const body = products
+    .map((product) => {
+      const cells = colors
+        .map((color) => {
+          const variant = product.byColor.get(color);
+          if (!variant) return `<td class="qty muted">—</td>`;
+          return `<td class="qty stock-cell">
+            <span class="num">${variant.stock}</span>
+            ${stockQtyInput(variant, product.label)}
+          </td>`;
+        })
+        .join("");
+      return `<tr><th>${escapeHtml(product.label)}</th>${cells}</tr>`;
+    })
+    .join("");
+
+  return `
+    <table class="paint-table">
+      <thead>
+        <tr>
+          <th>Almohadón</th>
+          ${head}
+        </tr>
+      </thead>
+      <tbody>${body}</tbody>
+    </table>`;
+}
+
+function renderStockLoadForm(groups) {
+  const buckets = { natural: [], negro: [], arena: [], telas: [], cajas: [] };
+  for (const group of groups || []) {
+    for (const product of group.products || []) {
+      for (const variant of product.variants || []) {
+        if (!variant.sku) continue;
+        const tab = loadTabForVariant(group, variant);
+        if (!tab || !buckets[tab]) continue;
+        buckets[tab].push({ group, product, variant });
+      }
+    }
+  }
+
+  const tabs = [
+    { id: "natural", title: "Natural", swatch: "c-natural", hint: "Sin pintar — lo que llega crudo." },
+    { id: "negro", title: "Negro", swatch: "c-black", hint: "Pintado negro microtexturado." },
+    { id: "arena", title: "Arena", swatch: "c-arena", hint: "Pintado arena." },
+    { id: "telas", title: "Almohadones", swatch: "c-beige", hint: "Por color de tela." },
+    { id: "cajas", title: "Cajas", swatch: "c-default", hint: "Cajas y llaves Allen." },
+  ];
+
+  const tabButtons = tabs
+    .map(
+      (tab, index) => `
+      <button type="button" class="btn btn-outline${index === 0 ? " is-active" : ""}" data-stock-tab="${tab.id}">
+        <span class="pill-dots"><i class="${tab.swatch}"></i></span>
+        ${escapeHtml(tab.title)}
+      </button>`
+    )
+    .join("");
+
+  const panels = tabs
+    .map((tab) => {
+      const items = buckets[tab.id] || [];
+      const table =
+        tab.id === "telas"
+          ? renderStockFabricTable(items)
+          : `<table class="paint-table">
+              <thead>
+                <tr>
+                  <th>Pieza</th>
+                  <th>Hay</th>
+                  <th>Cantidad</th>
+                </tr>
+              </thead>
+              ${renderStockSimpleRows(items)}
+            </table>`;
+      return `
+      <div class="stock-panel" data-stock-panel="${tab.id}" ${tab.id === "natural" ? "" : "hidden"}>
+        <p class="stock-hint">${escapeHtml(tab.hint)}</p>
+        <div class="table-scroll">${table}</div>
+      </div>`;
     })
     .join("");
 
   return `
   <section class="paint-board" id="stock-load">
     <h3>Cargar depósito</h3>
-    <p>Sumá lo que llegó, restá un ajuste, o dejá el número del conteo. Graba en Shopify; no recalcula la tienda.</p>
+    <p>Elegí el color o el tipo, anotá cantidades y guardá. Vacío = no cambia. No recalcula la tienda.</p>
     <form id="stock-load-form" class="paint-table-form">
       <fieldset class="stock-mode">
         <legend>Qué hacer</legend>
@@ -262,33 +396,13 @@ function renderStockLoadForm(groups) {
         <label><input type="radio" name="mode" value="subtract"> Restar (ajuste)</label>
         <label><input type="radio" name="mode" value="set"> Dejar en (conteo)</label>
       </fieldset>
-      <div class="table-scroll">
-        <table class="paint-table">
-          <thead>
-            <tr>
-              <th>Componente</th>
-              <th>Código</th>
-              <th>Hay</th>
-              <th>Cantidad</th>
-            </tr>
-          </thead>
-          ${bodies}
-        </table>
-      </div>
+      <div class="paint-toolbar stock-tabs">${tabButtons}</div>
+      ${panels}
       <div class="paint-actions">
         <button type="submit" class="btn btn-outline">Guardar en depósito</button>
       </div>
     </form>
     <p id="stock-load-status" class="paint-status" hidden></p>
-  </section>`;
-}
-
-function renderPaintForm() {
-  return `
-  <section class="paint-card" id="paint-card">
-    <h3>Pintura</h3>
-    <p>Los chicos cargan cantidades en la pantalla Pintura. Acá no se vende nada: es un canje 1 a 1.</p>
-    <button type="button" class="btn btn-outline" data-view="pintura">Ir a Pintura</button>
   </section>`;
 }
 
@@ -417,7 +531,6 @@ function renderDashboardPage({
       <div id="view-deposito" class="dash-panel">
         <p class="panel-lead">Piezas físicas en depósito. Natural no se vende; En pintura está en el taller; Pintado es lo que entra al BOM.</p>
         ${useBomView ? renderStockLoadForm(bomView.components.groups) : ""}
-        ${useBomView ? renderPaintForm() : ""}
         <div class="deposito-wrap">${depositoHtml}</div>
       </div>
 

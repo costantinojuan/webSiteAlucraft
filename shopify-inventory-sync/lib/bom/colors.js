@@ -89,7 +89,7 @@ function skuForAllen() {
   return ALLEN_SKU;
 }
 
-/** Todos los SKUs esperados: 10 piezas × 5 estados + 5 almohadones × 4 telas + 4 cajas + 1 llave. */
+/** Todos los SKUs esperados: piezas × 5 estados + 5 almohadones × 4 telas + 4 cajas + 1 llave. */
 function allExpectedComponentSkus() {
   const { allPieceSkus } = require("./pieces");
   const fabricColors = ["Beige", "Gris Claro", "Gris Oscuro", "Tostado"];

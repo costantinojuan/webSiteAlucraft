@@ -302,6 +302,18 @@
   const sendTabBtn = document.querySelector('[data-paint-tab="send"]');
   if (sendTabBtn) sendTabBtn.classList.add("is-active");
 
+  document.querySelectorAll("[data-stock-tab]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const tab = btn.dataset.stockTab;
+      document.querySelectorAll("[data-stock-panel]").forEach((panel) => {
+        panel.hidden = panel.dataset.stockPanel !== tab;
+      });
+      document.querySelectorAll("[data-stock-tab]").forEach((other) => {
+        other.classList.toggle("is-active", other === btn);
+      });
+    });
+  });
+
   const printOrderBtn = document.getElementById("paint-order-print");
   if (printOrderBtn) {
     printOrderBtn.addEventListener("click", () => {

@@ -60,7 +60,7 @@ const reposera = getRecipe("reposera", {
 });
 assert.deepStrictEqual(
   reposera.filter((line) => isPaintedPieceSku(line.sku)).map((line) => `${line.sku}×${line.qty}`),
-  ["BAS-REP-AR×1", "LAT-REP-AR×2", "ACC-REP-AR×1"]
+  ["BAS-REP-AR×1", "RES-REP-AR×1", "LAT-REP-AR×2", "ACC-REP-AR×1"]
 );
 
 assert.strictEqual(skuForPieceVariant("lat_sil_rec", "Natural"), "LAT-SIL-REC");
@@ -109,9 +109,9 @@ assert.deepStrictEqual(
 
 const expected = allExpectedComponentSkus();
 const pieces = allPieceSkus();
-assert.strictEqual(pieces.length, 55);
+assert.strictEqual(pieces.length, 60);
 assert.ok(pieces.every((sku) => expected.includes(sku)));
-assert.strictEqual(expected.length, 80);
+assert.strictEqual(expected.length, 85);
 
 const stock = new Map([
   ["BAS-S1-AR", 3],

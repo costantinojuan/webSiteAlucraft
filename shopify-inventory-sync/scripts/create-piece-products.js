@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Crea (o completa) los 10 productos borrador de piezas en Shopify.
+ * Crea (o completa) los productos borrador de piezas en Shopify.
  * No los publica. Stock inicial 0.
  *
  * Uso: node scripts/create-piece-products.js

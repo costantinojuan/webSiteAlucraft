@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Checklist para crear los 10 productos borrador de piezas en Shopify.
+ * Checklist para crear los productos borrador de piezas en Shopify.
  * Uso: node scripts/print-piece-setup.js
  */
 
@@ -41,7 +41,7 @@ for (const piece of PIECES) {
 }
 
 console.log(`Cuando estén creados:
-  1. npm run list-ids   (tiene que decir OK en las 10 piezas y 0 SKUs faltantes)
+  1. npm run list-ids   (tiene que decir OK en las piezas y 0 SKUs faltantes)
   2. Recién ahí deploy a Vercel de shopify-inventory-sync
 
 Los borradores viejos de Estructura / Mesa componente pueden quedar:

@@ -29,8 +29,8 @@ const COMPONENT_GROUPS = [
   {
     id: "pieces_rep",
     title: "Piezas — Reposera",
-    hint: "1 base + 2 laterales + 1 accesorio por reposera.",
-    keys: ["bas_rep", "lat_rep", "acc_rep"],
+    hint: "1 base + 1 respaldo + 2 laterales + 1 accesorio por reposera.",
+    keys: ["bas_rep", "res_rep", "lat_rep", "acc_rep"],
   },
   {
     id: "cushions_s1",
@@ -82,7 +82,7 @@ const FINISHED_META = {
   },
   reposera: {
     title: PRODUCT_LABELS.reposera,
-    hint: "1 reposera = base + 2 laterales + accesorio pintados + almohadón + caja.",
+    hint: "1 reposera = base + respaldo + 2 laterales + accesorio pintados + almohadón + caja.",
     sharedStructure: true,
   },
   juego: {

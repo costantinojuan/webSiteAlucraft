@@ -23,7 +23,7 @@ async function loadComponentStock(config) {
   if (missingProducts.length > 0) {
     throw new Error(
       `Faltan productos componente en Shopify: ${missingProducts.join(", ")}. ` +
-        "Creá los 10 borradores Pieza … (npm run piece-setup) y verificá con npm run list-ids."
+        "Creá los borradores Pieza … (npm run piece-setup) y verificá con npm run list-ids."
     );
   }
 

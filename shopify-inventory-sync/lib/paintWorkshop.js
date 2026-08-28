@@ -15,7 +15,7 @@ const PIECE_GROUPS = [
     title: "Sillones",
     keys: ["lat_sil_rec", "lat_sil_inc", "bas_s1", "res_s1", "bas_s3", "res_s3"],
   },
-  { id: "reposera", title: "Reposera", keys: ["bas_rep", "lat_rep", "acc_rep"] },
+  { id: "reposera", title: "Reposera", keys: ["bas_rep", "res_rep", "lat_rep", "acc_rep"] },
 ];
 
 function pieceUseLabel(piece) {

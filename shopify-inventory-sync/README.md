@@ -12,7 +12,7 @@ Usa **Shopify Admin GraphQL API**.
 
 Por defecto (`INVENTORY_SYNC_MODE=components`):
 
-1. Lee stock de **componentes** (10 piezas de estructura × 5 estados, almohadones, cajas, llave Allen)
+1. Lee stock de **componentes** (piezas de estructura × 5 estados, almohadones, cajas, llave Allen)
 2. Calcula cuántos sillones, reposeras y mesas se pueden fabricar (`min` de **piezas ya pintadas** + almohadones + packaging)
 3. Actualiza stock de productos **terminados** en Shopify
 4. Calcula el Juego Living: `min(floor(sillon1/2), sillon3, mesa)`
@@ -33,7 +33,7 @@ Estados por pieza (5 variantes, mismo producto borrador):
 
 Flujo: **Natural → En pintura → Pintado**. Eso se carga en el panel (Depósito → Mandé a pintar / Volvió pintado). No es una venta.
 
-Creá los 10 productos en **borrador, no publicados**. Títulos y SKUs: `npm run piece-setup`.
+Creá los productos de pieza en **borrador, no publicados**. Títulos y SKUs: `npm run piece-setup`.
 
 Los borradores viejos de Estructura / Mesa componente pueden quedar en Shopify: la app ya no los usa.
 

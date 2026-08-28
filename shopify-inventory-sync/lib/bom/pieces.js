@@ -71,6 +71,13 @@ const PIECES = [
     qtyByProduct: { reposera: 1 },
   },
   {
+    key: "res_rep",
+    sku: "RES-REP",
+    label: "Respaldo reposera",
+    shopifyTitle: "Pieza Respaldo reposera",
+    qtyByProduct: { reposera: 1 },
+  },
+  {
     key: "lat_rep",
     sku: "LAT-REP",
     label: "Lateral reposera",

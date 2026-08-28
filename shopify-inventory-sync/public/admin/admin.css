@@ -954,6 +954,28 @@ a { color: var(--accent); }
   cursor: pointer;
 }
 
+.stock-tabs {
+  margin-bottom: 0.85rem;
+}
+
+.stock-hint {
+  margin: 0 0 0.65rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.stock-cell {
+  white-space: nowrap;
+}
+
+.stock-cell .num {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
 @media print {
   .no-print { display: none !important; }
 
