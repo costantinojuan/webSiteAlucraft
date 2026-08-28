@@ -204,17 +204,32 @@ En el proyecto de Vercel:
 URLs de producción:
 
 - Panel: `https://TU-PROYECTO.vercel.app/admin`
+- Health: `https://TU-PROYECTO.vercel.app/health` → `{"ok":true}`
 - Webhook ventas: `https://TU-PROYECTO.vercel.app/webhooks/orders-paid`
 - Webhook reembolsos: `https://TU-PROYECTO.vercel.app/webhooks/refunds-create`
+- Webhook cancelaciones: `https://TU-PROYECTO.vercel.app/webhooks/orders-cancelled`
+
+Comprobar C1 (deploy + webhooks de esta app):
+
+```bash
+npm run check-deploy -- https://TU-PROYECTO.vercel.app
+npm run list-webhooks
+npm run register-webhooks -- --url https://TU-PROYECTO.vercel.app
+npm run register-webhooks -- --url https://TU-PROYECTO.vercel.app --apply
+```
 
 ## Configurar webhooks en Shopify
+
+Preferible: `npm run register-webhooks` (crea los 3 topics en la app). Alternativa manual:
 
 1. **Settings → Notifications → Webhooks**
 2. Agregar **Order payment** (`orders/paid`):
    - URL: `https://TU-PROYECTO.vercel.app/webhooks/orders-paid`
 3. Agregar **Refund create** (`refunds/create`):
    - URL: `https://TU-PROYECTO.vercel.app/webhooks/refunds-create`
-4. Mismo **Secret** en ambos → `SHOPIFY_WEBHOOK_SECRET`
+4. Agregar **Order cancellation** (`orders/cancelled`):
+   - URL: `https://TU-PROYECTO.vercel.app/webhooks/orders-cancelled`
+5. Mismo **Secret** en todos → `SHOPIFY_WEBHOOK_SECRET` en Vercel
 
 ## Panel admin
 

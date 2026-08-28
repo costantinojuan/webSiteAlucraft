@@ -121,7 +121,16 @@ function getShopifyPendingOrdersUrl() {
 }
 
 function getWebhookSecret() {
-  return requireEnv("SHOPIFY_WEBHOOK_SECRET");
+  const clientSecret = process.env.SHOPIFY_CLIENT_SECRET?.trim();
+  const dedicated = process.env.SHOPIFY_WEBHOOK_SECRET?.trim();
+  // Las suscripciones creadas por Admin API se firman con el client secret de la app.
+  if (clientSecret) {
+    return clientSecret;
+  }
+  if (dedicated) {
+    return dedicated;
+  }
+  throw new Error("Missing SHOPIFY_CLIENT_SECRET or SHOPIFY_WEBHOOK_SECRET");
 }
 
 module.exports = {

@@ -13,7 +13,10 @@
     "add-sofa-style": "node scripts/add-sofa-style-option.js",
     "test-pieces": "node scripts/test-pieces.js && node scripts/test-stock-adjust.js",
     "test-deduct": "node scripts/test-order-deduct.js",
-    "test-restock": "node scripts/test-refund-restock.js"
+    "test-restock": "node scripts/test-refund-restock.js",
+    "list-webhooks": "node scripts/list-webhooks.js",
+    "check-deploy": "node scripts/check-deploy.js",
+    "register-webhooks": "node scripts/register-webhooks.js"
   },
   "engines": {
     "node": ">=18"
