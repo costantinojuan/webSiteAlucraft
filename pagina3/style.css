@@ -446,20 +446,26 @@ main {
 /* ── Armado / catálogo ──────────────────────── */
 .armadoBand {
 	display: grid;
-	grid-template-columns: 1.15fr 1fr;
+	grid-template-columns: 1fr 1fr;
 	align-items: stretch;
+	column-gap: 5px;
+	padding: 5px 0;
+	box-sizing: border-box;
 	background: #fff;
 }
 
 .armadoBandPhoto {
 	display: flex;
-	align-items: center;
 	justify-content: center;
+	align-items: center;
+	line-height: 0;
+	padding: 5px;
 	background: #fff;
+	min-width: 0;
 }
 
 .armadoBandPhoto img {
-	width: 100%;
+	width: min(400px, 100%);
 	height: auto;
 	display: block;
 }
@@ -468,7 +474,11 @@ main {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	padding: 72px 56px;
+	align-items: center;
+	text-align: center;
+	min-width: 0;
+	padding: 24px clamp(16px, 4vw, 40px);
+	box-sizing: border-box;
 	color: #fff;
 	background: #111;
 }
@@ -477,12 +487,12 @@ main {
 	background: transparent;
 	color: rgba(255,255,255,.7);
 	border: 1px solid rgba(255,255,255,.28);
-	align-self: flex-start;
+	align-self: center;
 }
 
 .armadoBandCopy h2 {
 	font-family: "Roboto", sans-serif;
-	font-size: 34px;
+	font-size: clamp(22px, 2.4vw, 34px);
 	font-weight: 700;
 	line-height: 1.12;
 	margin: 0 0 16px;
@@ -493,12 +503,13 @@ main {
 	font-size: 16px;
 	line-height: 1.55;
 	color: rgba(255,255,255,.78);
-	margin: 0 0 28px;
+	margin: 0 auto 28px;
 	max-width: 420px;
 }
 
 .armadoBandCopy .plusActions {
-	justify-content: flex-start;
+	justify-content: center;
+	width: 100%;
 }
 
 .armadoBandCopy .heroBtnGhost {
@@ -819,6 +830,24 @@ main {
 		grid-template-columns: 1fr 1fr;
 		gap: 40px;
 	}
+
+	.armadoBand {
+		grid-template-columns: 1fr;
+		row-gap: 5px;
+		padding: 5px;
+	}
+
+	.armadoBandPhoto img {
+		width: min(400px, 100%);
+	}
+
+	.armadoBandCopy {
+		padding: 32px 24px 40px;
+	}
+
+	.armadoBandCopy h2 {
+		font-size: 26px;
+	}
 }
 
 @media (max-width: 768px) {
@@ -913,30 +942,6 @@ main {
 	}
 
 	.categoriaHeader h2 {
-		font-size: 26px;
-	}
-
-	.armadoBand {
-		grid-template-columns: 1fr;
-		min-height: 0;
-	}
-
-	.armadoBandPhoto {
-		min-height: 0;
-	}
-
-	.armadoBandPhoto img {
-		width: 100%;
-		height: auto;
-		max-height: 420px;
-		object-fit: contain;
-	}
-
-	.armadoBandCopy {
-		padding: 40px 24px 48px;
-	}
-
-	.armadoBandCopy h2 {
 		font-size: 26px;
 	}
 
