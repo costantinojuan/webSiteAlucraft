@@ -1,5 +1,7 @@
 const { renderPaintWorkshopPanel } = require("./adminPaintPages");
 
+const ADMIN_ASSET_V = "20260828c";
+
 function brandLogo() {
   return `<img src="/admin/static/alucraft-logo.png" alt="Alucraft" class="brand-logo" width="40" height="40">`;
 }
@@ -33,12 +35,12 @@ function layout({ title, body, extraHead = "" }) {
   <title>${escapeHtml(title)} — Alucraft</title>
   <link rel="icon" href="/admin/static/alucraft-logo.png" type="image/png">
   <link rel="apple-touch-icon" href="/admin/static/alucraft-logo.png">
-  <link rel="stylesheet" href="/admin/static/admin.css">
+  <link rel="stylesheet" href="/admin/static/admin.css?v=${ADMIN_ASSET_V}">
   ${extraHead}
 </head>
 <body>
   ${body}
-  <script src="/admin/static/admin.js" defer></script>
+  <script src="/admin/static/admin.js?v=${ADMIN_ASSET_V}" defer></script>
 </body>
 </html>`;
 }

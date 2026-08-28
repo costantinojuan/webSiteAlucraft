@@ -720,9 +720,14 @@ a { color: var(--accent); }
 }
 
 .paint-toolbar .btn.is-active {
-  background: var(--side);
-  color: #fff;
-  border-color: var(--side);
+  background: var(--accent-soft);
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+[data-stock-panel][hidden],
+[data-paint-panel][hidden] {
+  display: none !important;
 }
 
 .paint-board {

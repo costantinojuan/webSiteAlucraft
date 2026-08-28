@@ -25,6 +25,32 @@
   }
 
   document.addEventListener("click", (event) => {
+    const stockBtn = event.target.closest("[data-stock-tab]");
+    if (stockBtn) {
+      event.preventDefault();
+      const tab = stockBtn.dataset.stockTab;
+      document.querySelectorAll("[data-stock-panel]").forEach((panel) => {
+        panel.hidden = panel.dataset.stockPanel !== tab;
+      });
+      document.querySelectorAll("[data-stock-tab]").forEach((other) => {
+        other.classList.toggle("is-active", other === stockBtn);
+      });
+      return;
+    }
+
+    const paintBtn = event.target.closest("[data-paint-tab]");
+    if (paintBtn) {
+      event.preventDefault();
+      const tab = paintBtn.dataset.paintTab;
+      document.querySelectorAll("[data-paint-panel]").forEach((panel) => {
+        panel.hidden = panel.dataset.paintPanel !== tab;
+      });
+      document.querySelectorAll("[data-paint-tab]").forEach((other) => {
+        other.classList.toggle("is-active", other === paintBtn);
+      });
+      return;
+    }
+
     const trigger = event.target.closest("[data-view]");
     if (!trigger || trigger.tagName === "A") return;
     showView(trigger.dataset.view);
@@ -287,32 +313,8 @@
   bindPaintForm("paint-send-form", "send");
   bindPaintForm("paint-receive-form", "receive");
 
-  document.querySelectorAll("[data-paint-tab]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const tab = btn.dataset.paintTab;
-      document.querySelectorAll("[data-paint-panel]").forEach((panel) => {
-        panel.hidden = panel.dataset.paintPanel !== tab;
-      });
-      document.querySelectorAll("[data-paint-tab]").forEach((other) => {
-        other.classList.toggle("is-active", other === btn);
-      });
-    });
-  });
-
   const sendTabBtn = document.querySelector('[data-paint-tab="send"]');
   if (sendTabBtn) sendTabBtn.classList.add("is-active");
-
-  document.querySelectorAll("[data-stock-tab]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const tab = btn.dataset.stockTab;
-      document.querySelectorAll("[data-stock-panel]").forEach((panel) => {
-        panel.hidden = panel.dataset.stockPanel !== tab;
-      });
-      document.querySelectorAll("[data-stock-tab]").forEach((other) => {
-        other.classList.toggle("is-active", other === btn);
-      });
-    });
-  });
 
   const printOrderBtn = document.getElementById("paint-order-print");
   if (printOrderBtn) {
