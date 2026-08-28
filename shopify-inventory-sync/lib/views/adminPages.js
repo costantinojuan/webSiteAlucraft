@@ -1,6 +1,6 @@
 const { renderPaintWorkshopPanel } = require("./adminPaintPages");
 
-const ADMIN_ASSET_V = "20260828c";
+const ADMIN_ASSET_V = "20260828d";
 
 function brandLogo() {
   return `<img src="/admin/static/alucraft-logo.png" alt="Alucraft" class="brand-logo" width="40" height="40">`;
@@ -226,6 +226,7 @@ function stockQtyInput(variant, productLabel) {
 
 function loadTabForVariant(group, variant) {
   const groupId = String(group.id || "");
+  if (groupId.includes("allen")) return "herramientas";
   if (groupId.startsWith("packaging")) return "cajas";
   if (groupId.startsWith("cushions")) return "telas";
   const stage = variantStage(variant.title);
@@ -333,7 +334,7 @@ function renderStockFabricTable(items) {
 }
 
 function renderStockLoadForm(groups) {
-  const buckets = { natural: [], negro: [], arena: [], telas: [], cajas: [] };
+  const buckets = { natural: [], negro: [], arena: [], telas: [], cajas: [], herramientas: [] };
   for (const group of groups || []) {
     for (const product of group.products || []) {
       for (const variant of product.variants || []) {
@@ -350,7 +351,8 @@ function renderStockLoadForm(groups) {
     { id: "negro", title: "Negro", swatch: "c-black", hint: "Pintado negro microtexturado." },
     { id: "arena", title: "Arena", swatch: "c-arena", hint: "Pintado arena." },
     { id: "telas", title: "Almohadones", swatch: "c-beige", hint: "Por color de tela." },
-    { id: "cajas", title: "Cajas", swatch: "c-default", hint: "Cajas y llaves Allen." },
+    { id: "cajas", title: "Cajas", swatch: "c-default", hint: "Cajas de cada producto." },
+    { id: "herramientas", title: "Herramientas", swatch: "c-gray-d", hint: "Llaves Allen." },
   ];
 
   const tabButtons = tabs

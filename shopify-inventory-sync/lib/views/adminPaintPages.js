@@ -204,7 +204,7 @@ function renderPrintCodesPage({ pieces, printedAt }) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Códigos de piezas — Alucraft</title>
   <link rel="icon" href="/admin/static/alucraft-logo.png" type="image/png">
-  <link rel="stylesheet" href="/admin/static/admin.css?v=20260828c">
+  <link rel="stylesheet" href="/admin/static/admin.css?v=20260828d">
 </head>
 <body class="print-page">
   <header class="print-head">
