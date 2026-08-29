@@ -551,6 +551,209 @@ main {
 	box-sizing: border-box;
 }
 
+.juegoBuy {
+	display: grid;
+	grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+	gap: 36px;
+	align-items: start;
+	padding: 48px 0 24px;
+}
+
+.juegoBuyStatus {
+	margin: 48px 0;
+	text-align: center;
+	color: #666;
+}
+
+.juegoBuyMedia {
+	margin: 0;
+	background: #f4f4f4;
+	border-radius: 16px;
+	overflow: hidden;
+}
+
+.juegoBuyMedia img {
+	display: block;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 4 / 5;
+	object-fit: cover;
+}
+
+.juegoBuyCard {
+	margin: 0;
+	padding: 28px 28px 24px;
+	background: #fff;
+	border: 1px solid #e4e4e4;
+	border-radius: 18px;
+	box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+}
+
+.juegoBuyBadge {
+	display: inline-block;
+	font-size: 11px;
+	letter-spacing: 1.6px;
+	text-transform: uppercase;
+	background: #f0f0f0;
+	color: #222;
+	padding: 5px 12px;
+	border-radius: 20px;
+	margin-bottom: 16px;
+}
+
+.juegoBuyCard h2 {
+	margin: 0 0 8px;
+	font-size: 28px;
+	font-weight: 700;
+	line-height: 1.15;
+	color: #111;
+}
+
+.juegoBuyLead {
+	margin: 0 0 22px;
+	font-size: 15px;
+	line-height: 1.45;
+	color: #555;
+}
+
+.juegoBuyOption {
+	margin-bottom: 18px;
+}
+
+.juegoBuyLabel {
+	margin: 0 0 10px;
+	font-size: 14px;
+	color: #222;
+}
+
+.juegoBuyLabel strong {
+	font-weight: 600;
+}
+
+.juegoBuyChoices {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	align-items: center;
+}
+
+.juegoSwatch {
+	width: 42px;
+	height: 42px;
+	padding: 0;
+	border-radius: 50%;
+	border: 2px solid #ddd;
+	box-shadow: inset 0 0 0 3px #fff;
+	background: #ccc;
+	cursor: pointer;
+}
+
+.juegoSwatch.is-selected {
+	border-color: #111;
+}
+
+.juegoChip {
+	min-height: 38px;
+	padding: 0 14px;
+	border-radius: 999px;
+	border: 1px solid #ddd;
+	background: #fff;
+	font: 500 14px/1 "Roboto", sans-serif;
+	color: #111;
+	cursor: pointer;
+}
+
+.juegoChip.is-selected {
+	border-color: #111;
+	background: #111;
+	color: #fff;
+}
+
+.juegoSwatch.is-disabled,
+.juegoChip.is-disabled {
+	opacity: 0.35;
+	cursor: not-allowed;
+}
+
+.juegoBuyPriceRow {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	gap: 16px;
+	margin-top: 8px;
+	padding-top: 18px;
+	border-top: 1px solid #ececec;
+	color: #777;
+	font-size: 14px;
+}
+
+.juegoBuyPriceRow strong {
+	font-size: 28px;
+	font-weight: 700;
+	color: #111;
+}
+
+.juegoBuySave {
+	margin: 8px 0 0;
+	font-size: 14px;
+	font-weight: 700;
+	color: #111;
+}
+
+.juegoBuyQty {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	margin: 22px 0 16px;
+	font-size: 14px;
+}
+
+.juegoQty {
+	display: inline-flex;
+	align-items: center;
+	border: 1px solid #ddd;
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+.juegoQtyBtn {
+	width: 40px;
+	height: 40px;
+	border: 0;
+	background: #fff;
+	font-size: 20px;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.juegoQtyValue {
+	min-width: 28px;
+	text-align: center;
+	font-size: 15px;
+	font-weight: 500;
+}
+
+.juegoBuySubmit {
+	width: 100%;
+	height: 52px;
+	border: 0;
+	border-radius: 10px;
+	background: #111;
+	color: #fff;
+	font: 700 16px/1 "Roboto", sans-serif;
+	cursor: pointer;
+}
+
+.juegoBuySubmit:hover:not(:disabled) {
+	background: #2a2a2a;
+}
+
+.juegoBuySubmit:disabled {
+	opacity: 0.55;
+	cursor: not-allowed;
+}
+
 .productoGrid {
 	display: flex;
 	flex-wrap: wrap;
@@ -914,6 +1117,28 @@ main {
 
 	.categoriaHeader h2 {
 		font-size: 26px;
+	}
+
+	.juegoBuy {
+		grid-template-columns: 1fr;
+		gap: 20px;
+		padding-top: 28px;
+	}
+
+	.juegoBuyMedia img {
+		aspect-ratio: 1 / 1;
+	}
+
+	.juegoBuyCard {
+		padding: 22px 20px 20px;
+	}
+
+	.juegoBuyCard h2 {
+		font-size: 24px;
+	}
+
+	.juegoBuyPriceRow strong {
+		font-size: 24px;
 	}
 }
 

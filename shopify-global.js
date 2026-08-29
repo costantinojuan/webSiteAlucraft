@@ -41,6 +41,7 @@
       domain: 'v4apub-im.myshopify.com',
       storefrontAccessToken: 'e7abe6f448d4477a4827e9884e0cf515',
     });
+    window.AlucraftShopifyClient = client;
 
     ShopifyBuy.UI.onReady(client).then(function (ui) {
 

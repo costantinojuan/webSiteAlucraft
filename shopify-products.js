@@ -2,7 +2,6 @@
   var MONEY_FORMAT = "%24%7B%7Bamount_with_comma_separator%7D%7D";
 
   var PRODUCTS = [
-    { id: "7842687025230", nodeId: "product-component-1772633830148", layout: "full" },
     { id: "7840729497678", nodeId: "product-component-1772634623360", layout: "card" },
     { id: "7842184069198", nodeId: "product-component-1772634660161", layout: "card" },
     { id: "7842184888398", nodeId: "product-component-1772634578714", layout: "card" },
