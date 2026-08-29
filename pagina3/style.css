@@ -596,35 +596,6 @@ main {
 	width: 100%;
 }
 
-/* ── Terminaciones (reemplaza el parallax) ───── */
-.terminaciones {
-	margin: 0;
-}
-
-.terminaciones .categoriaHeader {
-	padding: 48px 20px;
-}
-
-.terminacionesFotos {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 8px;
-	width: 100%;
-}
-
-.terminacionesFotos figure {
-	margin: 0;
-}
-
-.terminacionesFotos img {
-	display: block;
-	width: 100%;
-	height: 56vh;
-	min-height: 320px;
-	max-height: 620px;
-	object-fit: cover;
-}
-
 .footer {
 	background: #000;
 	color: #fff;
@@ -943,15 +914,6 @@ main {
 
 	.categoriaHeader h2 {
 		font-size: 26px;
-	}
-
-	.terminacionesFotos {
-		grid-template-columns: 1fr;
-	}
-
-	.terminacionesFotos img {
-		height: 42vh;
-		min-height: 240px;
 	}
 }
 
