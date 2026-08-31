@@ -51,6 +51,18 @@ function createApp() {
     res.status(200).json({ ok: true });
   });
 
+  app.get("/public/vitrina-stock", async (_req, res) => {
+    res.set("Access-Control-Allow-Origin", "*");
+    res.set("Cache-Control", "public, max-age=20");
+    try {
+      const { getPublicVitrinaStock } = require("./publicVitrinaStock");
+      const payload = await getPublicVitrinaStock();
+      res.status(200).json({ ok: true, quantities: payload.quantities || {} });
+    } catch (err) {
+      res.status(500).json({ ok: false, quantities: {} });
+    }
+  });
+
   // Raw body required for Shopify HMAC verification
   app.post(
     "/webhooks/orders-paid",
