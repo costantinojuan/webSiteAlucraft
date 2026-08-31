@@ -455,19 +455,49 @@ main {
 }
 
 .armadoBandPhoto {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	line-height: 0;
-	padding: 5px;
-	background: #fff;
+	position: relative;
 	min-width: 0;
+	min-height: 520px;
+	overflow: hidden;
+	background: #f3f3f1;
 }
 
-.armadoBandPhoto img {
-	width: min(400px, 100%);
-	height: auto;
+.armadoBandVideo {
+	position: absolute;
+	inset: 0;
+}
+
+.armadoBandVideo video {
 	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center 62%;
+	opacity: 0;
+	transition: opacity 0.7s ease;
+}
+
+.armadoBandVideo.is-visible video {
+	opacity: 1;
+}
+
+.armadoBandVideoBtn {
+	position: absolute;
+	right: 14px;
+	bottom: 14px;
+	z-index: 1;
+	margin: 0;
+	border: 0;
+	border-radius: 999px;
+	padding: 8px 14px;
+	background: rgba(17, 17, 17, 0.72);
+	color: #fff;
+	font: 500 13px/1 "Roboto", sans-serif;
+	cursor: pointer;
+}
+
+.armadoBandVideoBtn:hover {
+	background: rgba(17, 17, 17, 0.88);
 }
 
 .armadoBandCopy {
@@ -1123,8 +1153,8 @@ main {
 		padding: 5px;
 	}
 
-	.armadoBandPhoto img {
-		width: min(400px, 100%);
+	.armadoBandPhoto {
+		min-height: 420px;
 	}
 
 	.armadoBandCopy {

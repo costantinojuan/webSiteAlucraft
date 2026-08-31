@@ -6,7 +6,7 @@
       <title>Alucraft Outdoor — Mobiliario de exterior</title>
       <link rel="shortcut icon" href="/Logos/alucraft-logo.png" type="image/png">
       <meta name="description" content="Muebles de exterior de aluminio: juegos de living, sillones, reposeras y mesas. Diseño y durabilidad Alucraft.">
-      <link rel="stylesheet" href="/pagina3/style.css?v=typo33">
+      <link rel="stylesheet" href="/pagina3/style.css?v=typo41">
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,400;0,500;0,700;1,400&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -115,7 +115,12 @@
 
          <section class="armadoBand">
             <div class="armadoBandPhoto">
-               <img src="/catalogo/img/caja-juego.webp?v=6" width="747" height="608" alt="Living Alucraft empacado en caja">
+               <div class="armadoBandVideo">
+                  <video id="armadoBandVideo" muted playsinline preload="auto" aria-label="Living Alucraft empacado en caja">
+                     <source src="/catalogo/img/stop-motion-caja.mp4" type="video/mp4">
+                  </video>
+                  <button type="button" class="armadoBandVideoBtn" id="armadoBandVideoBtn" aria-controls="armadoBandVideo">Pausar</button>
+               </div>
             </div>
             <div class="armadoBandCopy">
                <span class="categoriaTag">Armado simple</span>
@@ -197,6 +202,6 @@
       </div>
       <script src="/shopify-global.js?v=navcart3"></script>
       <script src="/shopify-juego-card.js?v=5"></script>
-      <script src="/nav.js"></script>
+      <script src="/nav.js?v=video5"></script>
    </body>
 </html>
