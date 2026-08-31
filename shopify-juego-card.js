@@ -1,6 +1,29 @@
 (function () {
-  var PRODUCT_ID = "7842687025230";
-  var PIECE_IDS = ["7840729497678", "7842184069198", "7842184167502"];
+  var JUEGO_ID = "7842687025230";
+  var VITRINA_STOCK_URL =
+    "https://temporary-snappy-walnut-fsw66dt.vercel.app/public/vitrina-stock";
+  var PIECE_DEFS = [
+    {
+      id: "7840729497678",
+      title: "Sillón 1 Cuerpo",
+      lead: "Aluminio microtexturado, negro o arena."
+    },
+    {
+      id: "7842184069198",
+      title: "Sillón 3 Cuerpos",
+      lead: "Aluminio microtexturado, negro o arena."
+    },
+    {
+      id: "7842184888398",
+      title: "Reposera",
+      lead: "Reclinable, estructura liviana y resistente."
+    },
+    {
+      id: "7842184167502",
+      title: "Mesa Ratona",
+      lead: "Tapa de aluminio, apta intemperie."
+    }
+  ];
   var SWATCH = {
     "negro microtexturado": "#1a1a1a",
     arena: "#c9b896",
@@ -10,12 +33,14 @@
     "gris claro": "#c8c8c8"
   };
 
-  var root;
-  var product;
-  var pieces = [];
-  var selected = {};
-  var quantity = 1;
-  var adding = false;
+  var juegoRoot;
+  var piezasRoot;
+  var juegoProduct;
+  var pieceModels = [];
+  var savingsPieces = [];
+  var juegoSelected = {};
+  var juegoQty = 1;
+  var juegoAdding = false;
 
   function normalize(value) {
     return String(value || "")
@@ -39,6 +64,9 @@
 
   function isAvailable(variant) {
     if (!variant) return false;
+    if (typeof variant.quantityAvailable === "number" && variant.quantityAvailable <= 0) {
+      return false;
+    }
     if (variant.availableForSale === false) return false;
     if (variant.available === false) return false;
     return true;
@@ -75,6 +103,10 @@
     return (prod && prod.options) || [];
   }
 
+  function optionLabel(value) {
+    return typeof value === "string" ? value : value.value || value.name;
+  }
+
   function findVariant(prod, current) {
     var variants = (prod && prod.variants) || [];
     for (var i = 0; i < variants.length; i++) {
@@ -92,8 +124,8 @@
     return null;
   }
 
-  function valueAvailable(optionName, value, current) {
-    var options = optionsOf(product);
+  function valueAvailable(prod, optionName, value, current) {
+    var options = optionsOf(prod);
     var optionIndex = -1;
     for (var o = 0; o < options.length; o++) {
       if (options[o].name === optionName) {
@@ -101,7 +133,7 @@
         break;
       }
     }
-    var variants = product.variants || [];
+    var variants = (prod && prod.variants) || [];
     for (var i = 0; i < variants.length; i++) {
       var variant = variants[i];
       var map = optionMap(variant);
@@ -119,36 +151,36 @@
     return false;
   }
 
-  function firstAvailableSelection() {
-    var variants = product.variants || [];
+  function firstAvailableSelection(prod) {
+    var variants = (prod && prod.variants) || [];
     for (var i = 0; i < variants.length; i++) {
       if (isAvailable(variants[i])) return optionMap(variants[i]);
     }
     return variants[0] ? optionMap(variants[0]) : {};
   }
 
-  function reconcileSelection(changedName, value) {
+  function reconcileSelection(prod, selected, changedName, value) {
     selected[changedName] = value;
-    var options = optionsOf(product);
+    var options = optionsOf(prod);
     for (var i = 0; i < options.length; i++) {
       var name = options[i].name;
       if (name === changedName) continue;
-      if (valueAvailable(name, selected[name], selected)) continue;
+      if (valueAvailable(prod, name, selected[name], selected)) continue;
       var values = options[i].values || [];
       var next = "";
       for (var v = 0; v < values.length; v++) {
-        var label = typeof values[v] === "string" ? values[v] : values[v].value || values[v].name;
-        if (valueAvailable(name, label, selected)) {
+        var label = optionLabel(values[v]);
+        if (valueAvailable(prod, name, label, selected)) {
           next = label;
           break;
         }
       }
       if (next) selected[name] = next;
     }
+    return selected;
   }
 
   function matchingPiecePrice(piece, current) {
-    var variants = (piece && piece.variants) || [];
     var needed = {};
     var pieceOptions = optionsOf(piece);
     for (var i = 0; i < pieceOptions.length; i++) {
@@ -164,10 +196,10 @@
   }
 
   function savingsFor(current, juegoPrice) {
-    if (!pieces.length || !juegoPrice) return 0;
-    var s1 = matchingPiecePrice(pieces[0], current);
-    var s3 = matchingPiecePrice(pieces[1], current);
-    var mesa = matchingPiecePrice(pieces[2], current);
+    if (savingsPieces.length < 3 || !juegoPrice) return 0;
+    var s1 = matchingPiecePrice(savingsPieces[0], current);
+    var s3 = matchingPiecePrice(savingsPieces[1], current);
+    var mesa = matchingPiecePrice(savingsPieces[2], current);
     if (!s1 || !s3 || !mesa) return 0;
     var separate = s1 * 2 + s3 + mesa;
     var diff = Math.round(separate - juegoPrice);
@@ -190,38 +222,244 @@
     return null;
   }
 
-  function render() {
-    if (!root || !product) return;
-    var variant = findVariant(product, selected);
-    var available = isAvailable(variant);
-    var price = variantPrice(variant);
-    var save = savingsFor(selected, price);
-    var img = variantImage(variant, productImage(product));
-    var options = optionsOf(product);
-    var html = "";
-    html += '<div class="juegoBuyMedia">';
-    html += '<img src="' + img + '" alt="Juego de Living Exterior">';
-    html += "</div>";
-    html += '<form class="juegoBuyCard" id="juegoBuyForm">';
-    html += '<span class="juegoBuyBadge">El set completo</span>';
-    html += "<h2>Juego de Living Exterior</h2>";
-    html += "<p class=\"juegoBuyLead\">2 sillones de 1 cuerpo, 1 sillón de 3 cuerpos y mesa ratona — el conjunto para tu terraza.</p>";
+  function sameVariantId(a, b) {
+    if (!a || !b) return false;
+    a = String(a);
+    b = String(b);
+    if (a === b) return true;
+    return a.split("/").pop() === b.split("/").pop();
+  }
 
+  function cartQtyForVariant(variantId) {
+    var cart = getCart(window.AlucraftShopifyUI);
+    var items = cart && cart.model && cart.model.lineItems;
+    if (!items || !items.length) return 0;
+    var total = 0;
+    for (var i = 0; i < items.length; i++) {
+      var itemVariant = items[i].variant;
+      var id = itemVariant && itemVariant.id;
+      if (sameVariantId(id, variantId)) {
+        total += Number(items[i].quantity) || 0;
+      }
+    }
+    return total;
+  }
+
+  function variantStock(variant) {
+    if (!variant) return 0;
+    if (typeof variant.quantityAvailable === "number") {
+      return Math.max(0, variant.quantityAvailable);
+    }
+    if (!isAvailable(variant)) return 0;
+    return null;
+  }
+
+  function remainingStock(variant) {
+    var stock = variantStock(variant);
+    if (stock == null) return null;
+    return Math.max(0, stock - cartQtyForVariant(variant.id));
+  }
+
+  function clampQty(qty, variant) {
+    var remaining = remainingStock(variant);
+    qty = Math.max(1, qty);
+    if (remaining == null) return qty;
+    if (remaining <= 0) return 1;
+    return Math.min(qty, remaining);
+  }
+
+  function canBuy(variant) {
+    var remaining = remainingStock(variant);
+    if (remaining != null) return remaining > 0;
+    return isAvailable(variant);
+  }
+
+  function qtyControlsHtml(qty, variant) {
+    var remaining = remainingStock(variant);
+    var minusDisabled = qty <= 1 ? " disabled" : "";
+    var plusDisabled = remaining != null && qty >= remaining ? " disabled" : "";
+    return (
+      '<button type="button" class="juegoQtyBtn" data-qty="-1" aria-label="Restar"' +
+      minusDisabled +
+      ">−</button>" +
+      '<span class="juegoQtyValue">' +
+      qty +
+      "</span>" +
+      '<button type="button" class="juegoQtyBtn" data-qty="1" aria-label="Sumar"' +
+      plusDisabled +
+      ">+</button>"
+    );
+  }
+
+  function mapVariant(node) {
+    var price = node.price;
+    var amount =
+      price && price.amount != null
+        ? price.amount
+        : node.priceV2 && node.priceV2.amount != null
+          ? node.priceV2.amount
+          : node.price;
+    var image = node.image || {};
+    var qty =
+      typeof node.quantityAvailable === "number" && !isNaN(node.quantityAvailable)
+        ? Math.max(0, node.quantityAvailable)
+        : null;
+    return {
+      id: node.id,
+      title: node.title,
+      available: node.available !== false && node.availableForSale !== false,
+      availableForSale: node.availableForSale !== false && node.available !== false,
+      quantityAvailable: qty,
+      price: amount,
+      priceV2: { amount: amount },
+      image: { src: image.src || image.url || "", url: image.src || image.url || "" },
+      selectedOptions: node.selectedOptions || node.optionValues || []
+    };
+  }
+
+  function mapProduct(node) {
+    if (!node) return null;
+    var variantNodes = node.variants;
+    if (variantNodes && variantNodes.nodes) variantNodes = variantNodes.nodes;
+    if (!variantNodes) variantNodes = [];
+    var imageNodes = node.images;
+    if (imageNodes && imageNodes.nodes) imageNodes = imageNodes.nodes;
+    if (!imageNodes) imageNodes = [];
+    return {
+      title: node.title,
+      options: (node.options || []).map(function (option) {
+        return {
+          name: option.name,
+          values: (option.values || []).map(optionLabel)
+        };
+      }),
+      images: imageNodes.map(function (image) {
+        return { src: image.src || image.url || "", url: image.src || image.url || "" };
+      }),
+      variants: Array.prototype.map.call(variantNodes, mapVariant)
+    };
+  }
+
+  function storefrontQuery(client, query) {
+    var domain =
+      (client.config && (client.config.domain || client.config.apiHost)) ||
+      "v4apub-im.myshopify.com";
+    var token =
+      (client.config && client.config.storefrontAccessToken) ||
+      "e7abe6f448d4477a4827e9884e0cf515";
+    domain = String(domain).replace(/^https?:\/\//, "");
+    return fetch("https://" + domain + "/api/2024-10/graphql.json", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Storefront-Access-Token": token
+      },
+      body: JSON.stringify({ query: query })
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error("storefront " + res.status);
+        return res.json();
+      })
+      .then(function (payload) {
+        var errors = payload.errors || [];
+        var fatal = errors.filter(function (err) {
+          var code = err.extensions && err.extensions.code;
+          var msg = String(err.message || "");
+          return (
+            code !== "ACCESS_DENIED" &&
+            msg.indexOf("quantityAvailable") === -1 &&
+            msg.indexOf("unauthenticated_read_product_inventory") === -1
+          );
+        });
+        if (fatal.length) {
+          throw new Error(fatal[0].message || "storefront error");
+        }
+        return payload.data;
+      });
+  }
+
+  function productQuery(alias, id) {
+    return (
+      " " +
+      alias +
+      ': product(id: "gid://shopify/Product/' +
+      id +
+      '") { title options { name values } images(first: 8) { nodes { url } } variants(first: 50) { nodes { id title availableForSale quantityAvailable price { amount } image { url } selectedOptions { name value } } } }'
+    );
+  }
+
+  function applyQuantities(product, quantities) {
+    if (!product || !quantities) return product;
+    var variants = product.variants || [];
+    for (var i = 0; i < variants.length; i++) {
+      var variant = variants[i];
+      var qty = quantities[variant.id];
+      if (qty == null && variant.id) {
+        qty = quantities[String(variant.id).split("/").pop()];
+      }
+      if (typeof qty === "number" && !isNaN(qty)) {
+        variant.quantityAvailable = Math.max(0, qty);
+      }
+    }
+    return product;
+  }
+
+  function loadVitrinaStock() {
+    return fetch(VITRINA_STOCK_URL)
+      .then(function (res) {
+        if (!res.ok) throw new Error("stock " + res.status);
+        return res.json();
+      })
+      .then(function (payload) {
+        return (payload && payload.quantities) || {};
+      })
+      .catch(function () {
+        return {};
+      });
+  }
+
+  function loadCatalog(client) {
+    var query =
+      "query {" +
+      productQuery("juego", JUEGO_ID) +
+      productQuery("s1", PIECE_DEFS[0].id) +
+      productQuery("s3", PIECE_DEFS[1].id) +
+      productQuery("reposera", PIECE_DEFS[2].id) +
+      productQuery("mesa", PIECE_DEFS[3].id) +
+      " }";
+
+    return storefrontQuery(client, query).then(function (data) {
+      return {
+        juego: mapProduct(data && data.juego),
+        s1: mapProduct(data && data.s1),
+        s3: mapProduct(data && data.s3),
+        reposera: mapProduct(data && data.reposera),
+        mesa: mapProduct(data && data.mesa)
+      };
+    });
+  }
+
+  function optionsHtml(prod, selected, compact) {
+    var options = optionsOf(prod);
+    var html = "";
+    var swatchClass = compact ? "juegoSwatch juegoSwatch--sm" : "juegoSwatch";
+    var chipClass = compact ? "juegoChip juegoChip--sm" : "juegoChip";
     for (var i = 0; i < options.length; i++) {
       var option = options[i];
       var values = option.values || [];
-      html += '<div class="juegoBuyOption">';
+      html += '<div class="juegoBuyOption' + (compact ? " juegoBuyOption--sm" : "") + '">';
       html += '<p class="juegoBuyLabel">' + option.name + ": <strong>" + (selected[option.name] || "") + "</strong></p>";
       html += '<div class="juegoBuyChoices" role="listbox" aria-label="' + option.name + '">';
       for (var v = 0; v < values.length; v++) {
-        var label = typeof values[v] === "string" ? values[v] : values[v].value || values[v].name;
+        var label = optionLabel(values[v]);
         var on = selected[option.name] === label;
-        var enabled = valueAvailable(option.name, label, selected);
+        var enabled = valueAvailable(prod, option.name, label, selected);
         var cls = on ? " is-selected" : "";
         if (!enabled) cls += " is-disabled";
         if (isSwatchOption(option)) {
           html +=
-            '<button type="button" class="juegoSwatch' +
+            '<button type="button" class="' +
+            swatchClass +
             cls +
             '" data-option="' +
             option.name +
@@ -240,7 +478,8 @@
             "></button>";
         } else {
           html +=
-            '<button type="button" class="juegoChip' +
+            '<button type="button" class="' +
+            chipClass +
             cls +
             '" data-option="' +
             option.name +
@@ -257,9 +496,45 @@
       }
       html += "</div></div>";
     }
+    return html;
+  }
 
+  function addToCart(variant, quantity, done) {
+    var cart = getCart(window.AlucraftShopifyUI);
+    if (!cart || typeof cart.addVariantToCart !== "function") {
+      done(new Error("cart missing"));
+      return;
+    }
+    quantity = clampQty(quantity, variant);
+    Promise.resolve(cart.addVariantToCart(variant, quantity, true))
+      .then(function () {
+        done();
+      })
+      .catch(function (err) {
+        done(err || new Error("add failed"));
+      });
+  }
+
+  function renderJuego() {
+    if (!juegoRoot || !juegoProduct) return;
+    var variant = findVariant(juegoProduct, juegoSelected);
+    juegoQty = clampQty(juegoQty, variant);
+    var available = canBuy(variant);
+    var price = variantPrice(variant);
+    var save = savingsFor(juegoSelected, price);
+    var img = variantImage(variant, productImage(juegoProduct));
+    var html = "";
+    html += '<div class="juegoBuyMedia">';
+    html += '<img src="' + img + '" alt="Juego de Living Exterior">';
+    html += "</div>";
+    html += '<form class="juegoBuyCard" id="juegoBuyForm">';
+    html += '<span class="juegoBuyBadge">El set completo</span>';
+    html += "<h2>Juego de Living Exterior</h2>";
+    html +=
+      '<p class="juegoBuyLead">2 sillones de 1 cuerpo, 1 sillón de 3 cuerpos y mesa ratona — el conjunto para tu terraza.</p>';
+    html += optionsHtml(juegoProduct, juegoSelected, false);
     html += '<div class="juegoBuyPriceRow">';
-    html += '<span>Precio del juego completo</span>';
+    html += "<span>Precio del juego completo</span>";
     html += "<strong>" + formatARS(price) + "</strong>";
     html += "</div>";
     if (save) {
@@ -268,99 +543,190 @@
     html += '<div class="juegoBuyQty">';
     html += "<span>Cantidad</span>";
     html += '<div class="juegoQty">';
-    html += '<button type="button" class="juegoQtyBtn" data-qty="-1" aria-label="Restar">−</button>';
-    html += '<span class="juegoQtyValue">' + quantity + "</span>";
-    html += '<button type="button" class="juegoQtyBtn" data-qty="1" aria-label="Sumar">+</button>';
+    html += qtyControlsHtml(juegoQty, variant);
     html += "</div></div>";
     html +=
       '<button type="submit" class="juegoBuySubmit"' +
-      (available && !adding ? "" : " disabled") +
+      (available && !juegoAdding ? "" : " disabled") +
       ">" +
-      (adding ? "Agregando…" : available ? "Comprar" : "Sin stock") +
+      (juegoAdding ? "Agregando…" : available ? "Comprar" : "Sin stock") +
       "</button>";
     html += "</form>";
-    root.innerHTML = html;
+    juegoRoot.innerHTML = html;
   }
 
-  function onClick(event) {
+  function renderPiezas() {
+    if (!piezasRoot) return;
+    if (!pieceModels.length) {
+      piezasRoot.innerHTML = '<p class="juegoBuyStatus">No se pudieron cargar las piezas.</p>';
+      return;
+    }
+    var html = "";
+    for (var i = 0; i < pieceModels.length; i++) {
+      var card = pieceModels[i];
+      var variant = findVariant(card.product, card.selected);
+      card.quantity = clampQty(card.quantity, variant);
+      var available = canBuy(variant);
+      var price = variantPrice(variant);
+      var img = variantImage(variant, productImage(card.product));
+      html += '<form class="piezaCard" data-piece="' + i + '">';
+      html += '<div class="piezaCardMedia"><img src="' + img + '" alt="' + card.title + '"></div>';
+      html += '<div class="piezaCardBody">';
+      html += "<h3>" + card.title + "</h3>";
+      html += '<p class="piezaCardLead">' + card.lead + "</p>";
+      html += optionsHtml(card.product, card.selected, true);
+      html += '<div class="piezaCardPrice"><span>Precio unitario</span><strong>' + formatARS(price) + "</strong></div>";
+      html += '<div class="piezaCardQty"><span>Cantidad</span>';
+      html += '<div class="piezaQty">';
+      html += qtyControlsHtml(card.quantity, variant);
+      html += "</div></div>";
+      html +=
+        '<button type="submit" class="juegoBuySubmit"' +
+        (available && !card.adding ? "" : " disabled") +
+        ">" +
+        (card.adding ? "Agregando…" : available ? "Comprar" : "Sin stock") +
+        "</button>";
+      html += "</div></form>";
+    }
+    piezasRoot.innerHTML = html;
+  }
+
+  function onJuegoClick(event) {
     var swatch = event.target.closest("[data-option]");
     if (swatch && !swatch.disabled) {
       event.preventDefault();
-      reconcileSelection(swatch.getAttribute("data-option"), swatch.getAttribute("data-value"));
-      render();
+      reconcileSelection(
+        juegoProduct,
+        juegoSelected,
+        swatch.getAttribute("data-option"),
+        swatch.getAttribute("data-value")
+      );
+      renderJuego();
       return;
     }
     var qtyBtn = event.target.closest("[data-qty]");
     if (qtyBtn) {
       event.preventDefault();
-      quantity = Math.max(1, quantity + Number(qtyBtn.getAttribute("data-qty")));
-      render();
+      var variant = findVariant(juegoProduct, juegoSelected);
+      var next = juegoQty + Number(qtyBtn.getAttribute("data-qty"));
+      juegoQty = clampQty(next, variant);
+      renderJuego();
     }
   }
 
-  function onSubmit(event) {
+  function onJuegoSubmit(event) {
     event.preventDefault();
-    if (adding) return;
-    var variant = findVariant(product, selected);
-    if (!isAvailable(variant)) return;
-    var cart = getCart(window.AlucraftShopifyUI);
-    if (!cart || typeof cart.addVariantToCart !== "function") {
-      root.querySelector(".juegoBuySubmit").textContent = "No se pudo agregar";
+    if (juegoAdding) return;
+    var variant = findVariant(juegoProduct, juegoSelected);
+    if (!canBuy(variant)) return;
+    juegoQty = clampQty(juegoQty, variant);
+    juegoAdding = true;
+    renderJuego();
+    addToCart(variant, juegoQty, function () {
+      juegoAdding = false;
+      renderJuego();
+    });
+  }
+
+  function onPiezaClick(event) {
+    var form = event.target.closest("[data-piece]");
+    if (!form) return;
+    var card = pieceModels[Number(form.getAttribute("data-piece"))];
+    if (!card) return;
+    var swatch = event.target.closest("[data-option]");
+    if (swatch && !swatch.disabled) {
+      event.preventDefault();
+      reconcileSelection(
+        card.product,
+        card.selected,
+        swatch.getAttribute("data-option"),
+        swatch.getAttribute("data-value")
+      );
+      renderPiezas();
       return;
     }
-    adding = true;
-    render();
-    Promise.resolve(cart.addVariantToCart(variant, quantity, true))
-      .catch(function () {
-        adding = false;
-        render();
-      })
-      .then(function () {
-        adding = false;
-        render();
-      });
+    var qtyBtn = event.target.closest("[data-qty]");
+    if (qtyBtn) {
+      event.preventDefault();
+      var variant = findVariant(card.product, card.selected);
+      card.quantity = clampQty(card.quantity + Number(qtyBtn.getAttribute("data-qty")), variant);
+      renderPiezas();
+    }
   }
 
-  function bind() {
-    root.addEventListener("click", onClick);
-    root.addEventListener("submit", onSubmit);
-  }
-
-  function showError(message) {
-    root.innerHTML = '<p class="juegoBuyStatus">' + message + "</p>";
+  function onPiezaSubmit(event) {
+    var form = event.target.closest("[data-piece]");
+    if (!form) return;
+    event.preventDefault();
+    var card = pieceModels[Number(form.getAttribute("data-piece"))];
+    if (!card || card.adding) return;
+    var variant = findVariant(card.product, card.selected);
+    if (!canBuy(variant)) return;
+    card.quantity = clampQty(card.quantity, variant);
+    card.adding = true;
+    renderPiezas();
+    addToCart(variant, card.quantity, function () {
+      card.adding = false;
+      renderPiezas();
+    });
   }
 
   var started = false;
 
   function start() {
     if (started) return;
-    root = document.getElementById("juegoBuy");
+    juegoRoot = document.getElementById("juegoBuy");
+    piezasRoot = document.getElementById("piezasBuy");
     var client = window.AlucraftShopifyClient;
-    if (!root || !client || !client.product) return;
+    if (!client || (!juegoRoot && !piezasRoot)) return;
     started = true;
 
-    var juegoFetch = client.product.fetch(PRODUCT_ID);
-    var piecesFetch =
-      typeof client.product.fetchMultiple === "function"
-        ? client.product.fetchMultiple(PIECE_IDS).catch(function () {
-            return [];
-          })
-        : Promise.resolve([]);
-
-    Promise.all([juegoFetch, piecesFetch])
+    Promise.all([loadCatalog(client), loadVitrinaStock()])
       .then(function (results) {
-        product = results[0];
-        pieces = results[1] || [];
-        if (!product) {
-          showError("No se pudo cargar el juego.");
-          return;
+        var catalog = results[0];
+        var quantities = results[1] || {};
+        applyQuantities(catalog.juego, quantities);
+        applyQuantities(catalog.s1, quantities);
+        applyQuantities(catalog.s3, quantities);
+        applyQuantities(catalog.reposera, quantities);
+        applyQuantities(catalog.mesa, quantities);
+        juegoProduct = catalog.juego;
+        savingsPieces = [catalog.s1, catalog.s3, catalog.mesa].filter(Boolean);
+        var fetched = [catalog.s1, catalog.s3, catalog.reposera, catalog.mesa];
+        pieceModels = [];
+        for (var i = 0; i < PIECE_DEFS.length; i++) {
+          if (!fetched[i] || !fetched[i].variants.length) continue;
+          pieceModels.push({
+            title: PIECE_DEFS[i].title,
+            lead: PIECE_DEFS[i].lead,
+            product: fetched[i],
+            selected: firstAvailableSelection(fetched[i]),
+            quantity: 1,
+            adding: false
+          });
         }
-        selected = firstAvailableSelection();
-        bind();
-        render();
+        if (juegoRoot) {
+          if (!juegoProduct || !juegoProduct.variants.length) {
+            juegoRoot.innerHTML = '<p class="juegoBuyStatus">No se pudo cargar el juego.</p>';
+          } else {
+            juegoSelected = firstAvailableSelection(juegoProduct);
+            juegoRoot.addEventListener("click", onJuegoClick);
+            juegoRoot.addEventListener("submit", onJuegoSubmit);
+            renderJuego();
+          }
+        }
+        if (piezasRoot) {
+          piezasRoot.addEventListener("click", onPiezaClick);
+          piezasRoot.addEventListener("submit", onPiezaSubmit);
+          renderPiezas();
+        }
       })
-      .catch(function () {
-        showError("No se pudo cargar el juego.");
+      .catch(function (err) {
+        if (typeof console !== "undefined" && console.error) {
+          console.error("Alucraft juego card", err);
+        }
+        if (juegoRoot) juegoRoot.innerHTML = '<p class="juegoBuyStatus">No se pudo cargar el juego.</p>';
+        if (piezasRoot) piezasRoot.innerHTML = '<p class="juegoBuyStatus">No se pudieron cargar las piezas.</p>';
       });
   }
 

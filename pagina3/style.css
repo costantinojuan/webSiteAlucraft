@@ -727,6 +727,11 @@ main {
 	cursor: pointer;
 }
 
+.juegoQtyBtn:disabled {
+	opacity: 0.35;
+	cursor: not-allowed;
+}
+
 .juegoQtyValue {
 	min-width: 28px;
 	text-align: center;
@@ -772,31 +777,138 @@ main {
 .productosColeccion {
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
-	gap: 28px;
-	align-items: start;
+	gap: 20px;
+	align-items: stretch;
 	max-width: 1200px;
 	margin: 8px auto 80px;
 	padding: 0 24px;
 	box-sizing: border-box;
 }
 
-.productosColeccion > div {
-	width: 100%;
+.piezasHead {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	gap: 16px;
+	max-width: 1200px;
+	margin: 28px auto 8px;
+	padding: 32px 24px 0;
+	box-sizing: border-box;
+}
+
+.piezasHead h2 {
+	margin: 0;
+	font-size: 28px;
+	font-weight: 700;
+	color: #111;
+}
+
+.piezasHead p {
+	margin: 0;
+	font-size: 14px;
+	color: #9a9a9a;
+}
+
+.piezaCard {
+	display: flex;
+	flex-direction: column;
 	min-width: 0;
+	margin: 0;
+	background: #fff;
+	border: 1px solid #e4e4e4;
+	border-radius: 18px;
+	overflow: hidden;
 }
 
-.productosColeccion .shopify-buy__product {
-	margin: 0 !important;
-	max-width: 100% !important;
-	width: 100% !important;
-}
-
-.productosColeccion .shopify-buy__product-img-wrapper {
-	min-height: 220px;
-}
-
-.productosColeccion .shopify-buy__btn {
+.piezaCardMedia img {
+	display: block;
 	width: 100%;
+	height: auto;
+	aspect-ratio: 4 / 3;
+	object-fit: cover;
+	background: #f4f4f4;
+}
+
+.piezaCardBody {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	padding: 16px 16px 18px;
+}
+
+.piezaCard h3 {
+	margin: 0 0 6px;
+	font-size: 20px;
+	font-weight: 700;
+	color: #111;
+}
+
+.piezaCardLead {
+	margin: 0 0 12px;
+	font-size: 13px;
+	line-height: 1.4;
+	color: #777;
+}
+
+.piezaCard .juegoBuyOption--sm {
+	margin-bottom: 10px;
+}
+
+.piezaCard .juegoBuyLabel {
+	font-size: 12px;
+	margin-bottom: 8px;
+}
+
+.piezaCardPrice,
+.piezaCardQty {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 12px;
+	font-size: 13px;
+	color: #777;
+}
+
+.piezaCardPrice {
+	margin-top: auto;
+	padding-top: 12px;
+	border-top: 1px solid #ececec;
+}
+
+.piezaCardPrice strong {
+	font-size: 18px;
+	font-weight: 700;
+	color: #111;
+}
+
+.piezaCardQty {
+	margin: 12px 0 14px;
+}
+
+.piezaQty {
+	display: inline-flex;
+	align-items: center;
+	background: #f2f2f2;
+	border-radius: 999px;
+	overflow: hidden;
+}
+
+.piezaQty .juegoQtyBtn,
+.piezaQty .juegoQtyValue {
+	background: transparent;
+	border: 0;
+}
+
+.juegoSwatch--sm {
+	width: 28px;
+	height: 28px;
+	box-shadow: inset 0 0 0 2px #fff;
+}
+
+.juegoChip--sm {
+	min-height: 28px;
+	padding: 0 10px;
+	font-size: 12px;
 }
 
 .footer {
@@ -1262,8 +1374,19 @@ main {
 
 	.productosColeccion {
 		grid-template-columns: 1fr;
-		gap: 28px;
-		margin: 32px auto 48px;
+		gap: 20px;
+		margin: 24px auto 48px;
+	}
+
+	.piezasHead {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 4px;
+		padding-top: 16px;
+	}
+
+	.piezasHead h2 {
+		font-size: 22px;
 	}
 
 	.pergolasCompare .compareContainer {
