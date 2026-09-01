@@ -72,16 +72,31 @@
     return true;
   }
 
-  function variantImage(variant, fallback) {
+  function sizedImage(url, width) {
+    if (!url) return "";
+    width = width || 800;
+    if (url.indexOf("shopify") === -1) return url;
+    try {
+      var parsed = new URL(url, window.location.href);
+      parsed.searchParams.set("width", String(width));
+      parsed.searchParams.set("format", "webp");
+      return parsed.toString();
+    } catch (err) {
+      var sep = url.indexOf("?") >= 0 ? "&" : "?";
+      return url + sep + "width=" + width + "&format=webp";
+    }
+  }
+
+  function variantImage(variant, fallback, width) {
     var img = variant && (variant.image || (variant.images && variant.images[0]));
-    if (img && (img.src || img.url)) return img.src || img.url;
+    if (img && (img.src || img.url)) return sizedImage(img.src || img.url, width);
     return fallback;
   }
 
-  function productImage(prod) {
+  function productImage(prod, width) {
     if (!prod) return "";
     if (prod.images && prod.images.length) {
-      return prod.images[0].src || prod.images[0].url || "";
+      return sizedImage(prod.images[0].src || prod.images[0].url || "", width);
     }
     return "";
   }
@@ -384,7 +399,7 @@
       alias +
       ': product(id: "gid://shopify/Product/' +
       id +
-      '") { title options { name values } images(first: 8) { nodes { url } } variants(first: 50) { nodes { id title availableForSale quantityAvailable price { amount } image { url } selectedOptions { name value } } } }'
+      '") { title options { name values } images(first: 2) { nodes { url } } variants(first: 50) { nodes { id title availableForSale quantityAvailable price { amount } image { url } selectedOptions { name value } } } }'
     );
   }
 
@@ -522,10 +537,10 @@
     var available = canBuy(variant);
     var price = variantPrice(variant);
     var save = savingsFor(juegoSelected, price);
-    var img = variantImage(variant, productImage(juegoProduct));
+    var img = variantImage(variant, productImage(juegoProduct, 1100), 1100);
     var html = "";
     html += '<div class="juegoBuyMedia">';
-    html += '<img src="' + img + '" alt="Juego de Living Exterior">';
+    html += '<img src="' + img + '" alt="Juego de Living Exterior" width="1100" height="1100" decoding="async" fetchpriority="high">';
     html += "</div>";
     html += '<form class="juegoBuyCard" id="juegoBuyForm">';
     html += '<span class="juegoBuyBadge">El set completo</span>';
@@ -568,9 +583,14 @@
       card.quantity = clampQty(card.quantity, variant);
       var available = canBuy(variant);
       var price = variantPrice(variant);
-      var img = variantImage(variant, productImage(card.product));
+      var img = variantImage(variant, productImage(card.product, 700), 700);
       html += '<form class="piezaCard" data-piece="' + i + '">';
-      html += '<div class="piezaCardMedia"><img src="' + img + '" alt="' + card.title + '"></div>';
+      html +=
+        '<div class="piezaCardMedia"><img src="' +
+        img +
+        '" alt="' +
+        card.title +
+        '" width="700" height="525" loading="lazy" decoding="async"></div>';
       html += '<div class="piezaCardBody">';
       html += "<h3>" + card.title + "</h3>";
       html += '<p class="piezaCardLead">' + card.lead + "</p>";
