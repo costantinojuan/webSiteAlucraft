@@ -590,7 +590,7 @@
         img +
         '" alt="' +
         card.title +
-        '" width="700" height="525" loading="lazy" decoding="async"></div>';
+        '" width="700" height="525" decoding="async"></div>';
       html += '<div class="piezaCardBody">';
       html += "<h3>" + card.title + "</h3>";
       html += '<p class="piezaCardLead">' + card.lead + "</p>";
@@ -692,69 +692,126 @@
   }
 
   var started = false;
+  var listenersBound = false;
+  var stockQuantities = {};
+  var CACHE_KEY = "alucraft-vitrina-catalog-v1";
+  var CACHE_MS = 15 * 60 * 1000;
+
+  function readCatalogCache() {
+    try {
+      var parsed = JSON.parse(sessionStorage.getItem(CACHE_KEY) || "");
+      if (!parsed || !parsed.catalog || Date.now() - parsed.at > CACHE_MS) return null;
+      return parsed.catalog;
+    } catch (err) {
+      return null;
+    }
+  }
+
+  function writeCatalogCache(catalog) {
+    try {
+      sessionStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), catalog: catalog }));
+    } catch (err) {}
+  }
+
+  function bindListeners() {
+    if (listenersBound) return;
+    listenersBound = true;
+    if (juegoRoot) {
+      juegoRoot.addEventListener("click", onJuegoClick);
+      juegoRoot.addEventListener("submit", onJuegoSubmit);
+    }
+    if (piezasRoot) {
+      piezasRoot.addEventListener("click", onPiezaClick);
+      piezasRoot.addEventListener("submit", onPiezaSubmit);
+    }
+  }
+
+  function buildPieces(catalog) {
+    var fetched = [catalog.s1, catalog.s3, catalog.reposera, catalog.mesa];
+    var prev = {};
+    for (var i = 0; i < pieceModels.length; i++) {
+      prev[pieceModels[i].title] = pieceModels[i];
+    }
+    var next = [];
+    for (var j = 0; j < PIECE_DEFS.length; j++) {
+      if (!fetched[j] || !fetched[j].variants.length) continue;
+      var old = prev[PIECE_DEFS[j].title];
+      next.push({
+        title: PIECE_DEFS[j].title,
+        lead: PIECE_DEFS[j].lead,
+        product: fetched[j],
+        selected: old ? old.selected : firstAvailableSelection(fetched[j]),
+        quantity: old ? old.quantity : 1,
+        adding: old ? old.adding : false
+      });
+    }
+    pieceModels = next;
+  }
+
+  function mountCatalog(catalog) {
+    if (!catalog) return;
+    applyQuantities(catalog.juego, stockQuantities);
+    applyQuantities(catalog.s1, stockQuantities);
+    applyQuantities(catalog.s3, stockQuantities);
+    applyQuantities(catalog.reposera, stockQuantities);
+    applyQuantities(catalog.mesa, stockQuantities);
+    juegoProduct = catalog.juego;
+    savingsPieces = [catalog.s1, catalog.s3, catalog.mesa].filter(Boolean);
+    buildPieces(catalog);
+    bindListeners();
+    if (juegoRoot) {
+      if (!juegoProduct || !juegoProduct.variants.length) {
+        juegoRoot.innerHTML = '<p class="juegoBuyStatus">No se pudo cargar el juego.</p>';
+      } else {
+        if (!juegoSelected || !Object.keys(juegoSelected).length) {
+          juegoSelected = firstAvailableSelection(juegoProduct);
+        }
+        renderJuego();
+      }
+    }
+    if (piezasRoot) renderPiezas();
+  }
 
   function start() {
     if (started) return;
     juegoRoot = document.getElementById("juegoBuy");
     piezasRoot = document.getElementById("piezasBuy");
-    var client = window.AlucraftShopifyClient;
-    if (!client || (!juegoRoot && !piezasRoot)) return;
+    if (!juegoRoot && !piezasRoot) return;
     started = true;
 
-    Promise.all([loadCatalog(client), loadVitrinaStock()])
-      .then(function (results) {
-        var catalog = results[0];
-        var quantities = results[1] || {};
-        applyQuantities(catalog.juego, quantities);
-        applyQuantities(catalog.s1, quantities);
-        applyQuantities(catalog.s3, quantities);
-        applyQuantities(catalog.reposera, quantities);
-        applyQuantities(catalog.mesa, quantities);
-        juegoProduct = catalog.juego;
-        savingsPieces = [catalog.s1, catalog.s3, catalog.mesa].filter(Boolean);
-        var fetched = [catalog.s1, catalog.s3, catalog.reposera, catalog.mesa];
-        pieceModels = [];
-        for (var i = 0; i < PIECE_DEFS.length; i++) {
-          if (!fetched[i] || !fetched[i].variants.length) continue;
-          pieceModels.push({
-            title: PIECE_DEFS[i].title,
-            lead: PIECE_DEFS[i].lead,
-            product: fetched[i],
-            selected: firstAvailableSelection(fetched[i]),
-            quantity: 1,
-            adding: false
-          });
-        }
-        if (juegoRoot) {
-          if (!juegoProduct || !juegoProduct.variants.length) {
-            juegoRoot.innerHTML = '<p class="juegoBuyStatus">No se pudo cargar el juego.</p>';
-          } else {
-            juegoSelected = firstAvailableSelection(juegoProduct);
-            juegoRoot.addEventListener("click", onJuegoClick);
-            juegoRoot.addEventListener("submit", onJuegoSubmit);
-            renderJuego();
-          }
-        }
-        if (piezasRoot) {
-          piezasRoot.addEventListener("click", onPiezaClick);
-          piezasRoot.addEventListener("submit", onPiezaSubmit);
-          renderPiezas();
-        }
+    var cached = readCatalogCache();
+    if (cached) mountCatalog(cached);
+
+    loadCatalog()
+      .then(function (catalog) {
+        writeCatalogCache(catalog);
+        mountCatalog(catalog);
       })
       .catch(function (err) {
+        if (cached) return;
         if (typeof console !== "undefined" && console.error) {
           console.error("Alucraft juego card", err);
         }
         if (juegoRoot) juegoRoot.innerHTML = '<p class="juegoBuyStatus">No se pudo cargar el juego.</p>';
         if (piezasRoot) piezasRoot.innerHTML = '<p class="juegoBuyStatus">No se pudieron cargar las piezas.</p>';
       });
+
+    loadVitrinaStock().then(function (qty) {
+      stockQuantities = qty || {};
+      if (juegoProduct) {
+        applyQuantities(juegoProduct, stockQuantities);
+        for (var i = 0; i < pieceModels.length; i++) {
+          applyQuantities(pieceModels[i].product, stockQuantities);
+        }
+        if (juegoRoot && juegoProduct.variants.length) renderJuego();
+        if (piezasRoot) renderPiezas();
+      }
+    });
   }
 
-  function onReady() {
-    document.removeEventListener("alucraft:shopify-ready", onReady);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", start);
+  } else {
     start();
   }
-
-  document.addEventListener("alucraft:shopify-ready", onReady);
-  if (window.AlucraftShopifyUI && window.AlucraftShopifyClient) start();
 })();
