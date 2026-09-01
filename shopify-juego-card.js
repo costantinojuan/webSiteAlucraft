@@ -356,12 +356,11 @@
   }
 
   function storefrontQuery(client, query) {
+    var config = client && client.config;
     var domain =
-      (client.config && (client.config.domain || client.config.apiHost)) ||
-      "v4apub-im.myshopify.com";
+      (config && (config.domain || config.apiHost)) || "v4apub-im.myshopify.com";
     var token =
-      (client.config && client.config.storefrontAccessToken) ||
-      "e7abe6f448d4477a4827e9884e0cf515";
+      (config && config.storefrontAccessToken) || "e7abe6f448d4477a4827e9884e0cf515";
     domain = String(domain).replace(/^https?:\/\//, "");
     return fetch("https://" + domain + "/api/2024-10/graphql.json", {
       method: "POST",
@@ -694,7 +693,7 @@
   var started = false;
   var listenersBound = false;
   var stockQuantities = {};
-  var CACHE_KEY = "alucraft-vitrina-catalog-v1";
+  var CACHE_KEY = "alucraft-vitrina-catalog-v2";
   var CACHE_MS = 15 * 60 * 1000;
 
   function readCatalogCache() {
