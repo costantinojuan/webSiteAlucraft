@@ -279,6 +279,7 @@ h1, h2, h3 {
 	background-repeat: no-repeat;
 	display: flex;
 	align-items: flex-end;
+	justify-content: center;
 	padding-bottom: 80px;
 	position: relative;
 }
@@ -293,9 +294,11 @@ h1, h2, h3 {
 .heroContent {
 	position: relative;
 	z-index: 1;
-	max-width: 700px;
+	max-width: 720px;
+	width: 100%;
 	padding: 0 60px;
 	color: #fff;
+	text-align: center;
 }
 
 .heroLabel {
@@ -320,9 +323,64 @@ h1, h2, h3 {
 .heroSub {
 	font-size: 18px;
 	color: rgba(255,255,255,0.85);
-	margin: 0 0 28px;
+	margin: 0 auto 22px;
 	line-height: 1.5;
 	max-width: 480px;
+}
+
+.heroCta {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 14px;
+	flex-wrap: wrap;
+	margin-bottom: 0;
+}
+
+.heroPrice {
+	display: inline-flex;
+	align-items: center;
+	gap: 18px;
+	margin: 0;
+	padding: 12px 18px;
+	background: rgba(17, 17, 17, 0.55);
+	border: 1px solid rgba(255, 255, 255, 0.28);
+	border-radius: 12px;
+	text-align: left;
+	backdrop-filter: blur(8px);
+}
+
+.heroPriceMain {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.heroPriceLabel {
+	font-size: 12px;
+	letter-spacing: 0.04em;
+	color: rgba(255, 255, 255, 0.75);
+}
+
+.heroPriceAmount {
+	font-size: 28px;
+	font-weight: 700;
+	line-height: 1.1;
+	color: #fff;
+}
+
+.heroPriceSplit {
+	width: 1px;
+	align-self: stretch;
+	background: rgba(255, 255, 255, 0.28);
+}
+
+.heroPriceNote {
+	margin: 0;
+	max-width: 110px;
+	font-size: 13px;
+	line-height: 1.35;
+	color: rgba(255, 255, 255, 0.78);
 }
 
 .heroBtn {
@@ -1275,6 +1333,33 @@ main {
 
 	.heroSub {
 		font-size: 15px;
+	}
+
+	.heroCta {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.heroPrice {
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		gap: 10px;
+		padding: 12px 16px;
+	}
+
+	.heroPriceAmount {
+		font-size: 24px;
+	}
+
+	.heroPriceSplit {
+		width: 40px;
+		height: 1px;
+		align-self: center;
+	}
+
+	.heroPriceNote {
+		max-width: none;
 	}
 
 	.accesoCompare {

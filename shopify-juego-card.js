@@ -114,6 +114,34 @@
     return "$ " + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
 
+  function renderHeroPrice() {
+    var box = document.getElementById("heroPrice");
+    var amountEl = document.getElementById("heroPriceAmount");
+    var labelEl = document.getElementById("heroPriceLabel");
+    var prefixEl = document.getElementById("heroPricePrefix");
+    if (!box || !amountEl) return;
+    if (!juegoProduct || !juegoProduct.variants || !juegoProduct.variants.length) {
+      box.hidden = true;
+      return;
+    }
+    var prices = [];
+    var variants = juegoProduct.variants;
+    for (var i = 0; i < variants.length; i++) {
+      var price = variantPrice(variants[i]);
+      if (price > 0) prices.push(price);
+    }
+    if (!prices.length) {
+      box.hidden = true;
+      return;
+    }
+    var min = Math.min.apply(null, prices);
+    var max = Math.max.apply(null, prices);
+    if (labelEl) labelEl.textContent = juegoProduct.title || "";
+    if (prefixEl) prefixEl.hidden = min === max;
+    amountEl.textContent = formatARS(min);
+    box.hidden = false;
+  }
+
   function optionsOf(prod) {
     return (prod && prod.options) || [];
   }
@@ -758,6 +786,7 @@
     savingsPieces = [catalog.s1, catalog.s3, catalog.mesa].filter(Boolean);
     buildPieces(catalog);
     bindListeners();
+    renderHeroPrice();
     if (juegoRoot) {
       if (!juegoProduct || !juegoProduct.variants.length) {
         juegoRoot.innerHTML = '<p class="juegoBuyStatus">No se pudo cargar el juego.</p>';
@@ -775,7 +804,7 @@
     if (started) return;
     juegoRoot = document.getElementById("juegoBuy");
     piezasRoot = document.getElementById("piezasBuy");
-    if (!juegoRoot && !piezasRoot) return;
+    if (!juegoRoot && !piezasRoot && !document.getElementById("heroPrice")) return;
     started = true;
 
     var cached = readCatalogCache();
@@ -793,6 +822,7 @@
         }
         if (juegoRoot) juegoRoot.innerHTML = '<p class="juegoBuyStatus">No se pudo cargar el juego.</p>';
         if (piezasRoot) piezasRoot.innerHTML = '<p class="juegoBuyStatus">No se pudieron cargar las piezas.</p>';
+        renderHeroPrice();
       });
 
     loadVitrinaStock().then(function (qty) {
@@ -803,6 +833,7 @@
           applyQuantities(pieceModels[i].product, stockQuantities);
         }
         if (juegoRoot && juegoProduct.variants.length) renderJuego();
+        renderHeroPrice();
         if (piezasRoot) renderPiezas();
       }
     });

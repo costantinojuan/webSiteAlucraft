@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Alucraft Outdoor · Living de Exterior 2026</title>
-<link rel="shortcut icon" href="../Logos/alucraft-logo.png" type="image/png">
+<link rel="icon" href="../Logos/favicon.png?v=20260903" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" href="../Logos/favicon.png?v=20260903">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500&family=Roboto:wght@300;400;500;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -95,8 +96,8 @@
     height: 100%;
     object-fit: cover;
   }
-  .photo.studio { background: #fff; }
-  .photo.studio img { object-fit: contain; padding: 0; }
+  .photo.studio { background: #f4f4f4; }
+  .photo.studio img { object-fit: cover; object-position: center 72%; padding: 0; }
 
   /* Cover */
   .cover { padding: 0; color: #fff; }
@@ -257,7 +258,7 @@
   @media print {
     html, body { background: #fff; }
     .toolbar { display: none; }
-    .page { margin: 0; box-shadow: none; page-break-after: always; }
+    .page { margin: 0; box-shadow: none; page-break-after: always; content-visibility: visible; }
     .page:last-child { page-break-after: auto; }
   }
   @page { size: A4; margin: 0; }
@@ -273,7 +274,7 @@
 
 <!-- 1. PORTADA -->
 <section class="page cover">
-  <div class="coverImg"><img src="./img/cover.jpg" alt="Juego de living exterior Alucraft" fetchpriority="high"></div>
+  <div class="coverImg"><img src="./img/cover.webp" alt="Juego de living exterior Alucraft" fetchpriority="high"></div>
   <div class="brandRow">
     <img src="../Logos/alucraftLogo.png" alt="Alucraft">
     <span class="sub">Outdoor</span>
@@ -326,7 +327,7 @@
   <span class="kicker">La colección completa</span>
   <h1 class="sectionTitle">El juego de living</h1>
   <p class="sectionSub">El conjunto para transformar la terraza en un living al aire libre.</p>
-  <div class="photo heroPhoto"><img src="./img/juego-hero.jpg" alt="Juego de living exterior en arena junto a la pileta" loading="lazy" decoding="async"></div>
+  <div class="photo heroPhoto"><img src="./img/juego-hero.webp" alt="Juego de living exterior en arena junto a la pileta" loading="lazy" decoding="async"></div>
   <div class="heroCaption">
     <div class="txt">
       <p>Sofá, sillones y mesa con la misma geometría de aluminio. Elegís color de estructura y tapizado, y el conjunto queda coherente. La reposera se suma aparte, con la misma línea.</p>
@@ -350,7 +351,7 @@
   <p class="sectionSub">Llevá el juego completo o cada pieza por separado. Todas combinan entre sí. Estructura soldada, sin tornillos a la vista.</p>
   <div class="pieces">
     <article class="piece">
-      <div class="photo studio"><img src="./img/sillon1.jpg" alt="Sillón 1 cuerpo" loading="lazy" decoding="async"></div>
+      <div class="photo studio"><img src="./img/sillon1.webp" alt="Sillón 1 cuerpo" loading="lazy" decoding="async"></div>
       <div class="pt">
         <h3>Sillón 1 cuerpo</h3>
         <div class="med">80 × 80 × 75 cm · asiento 40 cm</div>
@@ -358,7 +359,7 @@
       </div>
     </article>
     <article class="piece">
-      <div class="photo studio"><img src="./img/sillon3.jpg" alt="Sillón 3 cuerpos" loading="lazy" decoding="async"></div>
+      <div class="photo studio"><img src="./img/sillon3.webp" alt="Sillón 3 cuerpos" loading="lazy" decoding="async"></div>
       <div class="pt">
         <h3>Sillón 3 cuerpos</h3>
         <div class="med">200 × 80 × 75 cm · asiento 40 cm</div>
@@ -366,7 +367,7 @@
       </div>
     </article>
     <article class="piece">
-      <div class="photo studio"><img src="./img/mesa.jpg" alt="Mesa ratona" loading="lazy" decoding="async"></div>
+      <div class="photo studio"><img src="./img/mesa.webp" alt="Mesa ratona" loading="lazy" decoding="async"></div>
       <div class="pt">
         <h3>Mesa ratona</h3>
         <div class="med">120 × 60 × 40 cm</div>
@@ -374,7 +375,7 @@
       </div>
     </article>
     <article class="piece">
-      <div class="photo studio"><img src="./img/reposera.jpg" alt="Reposera" loading="lazy" decoding="async"></div>
+      <div class="photo studio"><img src="./img/reposera.webp" alt="Reposera" loading="lazy" decoding="async"></div>
       <div class="pt">
         <h3>Reposera</h3>
         <div class="med">Respaldo reclinable</div>
@@ -391,8 +392,8 @@
   <h1 class="sectionTitle">Dos terminaciones, una colección</h1>
   <p class="sectionSub">Negro microtexturado o arena. El tapizado cambia el carácter del living.</p>
   <div class="lifeGrid">
-    <div class="photo"><img src="./img/contexto-arena.jpg" alt="Sillón 1 cuerpo en arena junto a la pileta" loading="lazy" decoding="async"></div>
-    <div class="photo"><img src="./img/contexto-negro.jpg" alt="Sillón 1 cuerpo en negro microtexturado" loading="lazy" decoding="async"></div>
+    <div class="photo"><img src="./img/contexto-arena.webp" alt="Sillón 1 cuerpo en arena junto a la pileta" loading="lazy" decoding="async"></div>
+    <div class="photo"><img src="./img/contexto-negro.webp" alt="Sillón 1 cuerpo en negro microtexturado" loading="lazy" decoding="async"></div>
   </div>
   <div class="lifeCap">
     <p><strong style="color:var(--ink)">Arena.</strong> Más cálido: se integra al deck y a la pileta. El tapizado tostado o beige termina el conjunto.</p>
@@ -445,7 +446,7 @@
   </div>
   <div class="colorSplit">
     <p class="colorNote">No todas las combinaciones están disponibles: cada producto muestra en la tienda las parejas de color que se pueden comprar. Stock sujeto a fabricación.</p>
-    <div class="photo"><img src="./img/detalle-logo.jpg" alt="Placa ALU CRAFT en la estructura" loading="lazy" decoding="async"></div>
+    <div class="photo"><img src="./img/detalle-logo.webp" alt="Placa ALU CRAFT en la estructura" loading="lazy" decoding="async"></div>
   </div>
   <div class="pageFoot"><span>Alucraft Outdoor</span><span class="ig">@alucraft.outdoor</span><span>07</span></div>
 </section>
@@ -476,7 +477,7 @@
 
 <!-- 9. CONTRAPORTADA -->
 <section class="page back">
-  <div class="coverImg"><img src="./img/back.jpg" alt="Sillones Alucraft en negro microtexturado" loading="lazy" decoding="async"></div>
+  <div class="coverImg"><img src="./img/back.webp" alt="Sillones Alucraft en negro microtexturado" loading="lazy" decoding="async"></div>
   <div class="backContent">
     <img class="logo" src="../Logos/alucraftLogo.png" alt="Alucraft">
     <h2>Living de exterior<br>en aluminio</h2>
