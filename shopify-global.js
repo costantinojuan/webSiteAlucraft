@@ -110,7 +110,7 @@
               title: "Carrito de compras",
               total: "Subtotal",
               empty: "Tu carrito está vacío",
-              notice: "Hacemos envíos a todo el país",
+              notice: "Envio Gratis a TODO el país",
               button: "Pagar"
             },
             googleFonts: ["Roboto"]
