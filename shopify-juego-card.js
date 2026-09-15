@@ -37,7 +37,6 @@
   var piezasRoot;
   var juegoProduct;
   var pieceModels = [];
-  var savingsPieces = [];
   var juegoSelected = {};
   var juegoQty = 1;
   var juegoAdding = false;
@@ -221,32 +220,6 @@
       if (next) selected[name] = next;
     }
     return selected;
-  }
-
-  function matchingPiecePrice(piece, current) {
-    var needed = {};
-    var pieceOptions = optionsOf(piece);
-    for (var i = 0; i < pieceOptions.length; i++) {
-      var name = pieceOptions[i].name;
-      if (current[name]) needed[name] = current[name];
-    }
-    if (pieceOptions.length === 1 && current.Color) {
-      needed[pieceOptions[0].name] = current.Color;
-    }
-    var variant = findVariant(piece, needed);
-    if (!variant) return 0;
-    return variantPrice(variant);
-  }
-
-  function savingsFor(current, juegoPrice) {
-    if (savingsPieces.length < 3 || !juegoPrice) return 0;
-    var s1 = matchingPiecePrice(savingsPieces[0], current);
-    var s3 = matchingPiecePrice(savingsPieces[1], current);
-    var mesa = matchingPiecePrice(savingsPieces[2], current);
-    if (!s1 || !s3 || !mesa) return 0;
-    var separate = s1 * 2 + s3 + mesa;
-    var diff = Math.round(separate - juegoPrice);
-    return diff > 0 ? diff : 0;
   }
 
   function swatchColor(label) {
@@ -563,7 +536,6 @@
     juegoQty = clampQty(juegoQty, variant);
     var available = canBuy(variant);
     var price = variantPrice(variant);
-    var save = savingsFor(juegoSelected, price);
     var img = variantImage(variant, productImage(juegoProduct, 1100), 1100);
     var html = "";
     html += '<div class="juegoBuyMedia">';
@@ -579,9 +551,6 @@
     html += "<span>Precio del juego completo</span>";
     html += "<strong>" + formatARS(price) + "</strong>";
     html += "</div>";
-    if (save) {
-      html += '<p class="juegoBuySave">Ahorrás ' + formatARS(save) + " comprando el juego completo</p>";
-    }
     html += '<div class="juegoBuyQty">';
     html += "<span>Cantidad</span>";
     html += '<div class="juegoQty">';
@@ -783,7 +752,6 @@
     applyQuantities(catalog.reposera, stockQuantities);
     applyQuantities(catalog.mesa, stockQuantities);
     juegoProduct = catalog.juego;
-    savingsPieces = [catalog.s1, catalog.s3, catalog.mesa].filter(Boolean);
     buildPieces(catalog);
     bindListeners();
     renderHeroPrice();
