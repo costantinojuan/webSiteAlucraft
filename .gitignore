@@ -14,3 +14,4 @@ config-mail-nPower.zip
 **/__pycache__/
 *.pyc
 test-bmad/
+.venv-pdf/
