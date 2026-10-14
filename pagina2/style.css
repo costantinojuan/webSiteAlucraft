@@ -286,68 +286,179 @@ h1, h2, h3 {
 
 .hero {
 	height: 90vh;
+	min-height: 480px;
 	background-image: url("/pagina2/multimedia/f3/1.webp");
 	background-size: cover;
 	background-position: 50% 20%;
+	background-repeat: no-repeat;
 	position: relative;
 	z-index: 3;
 	display: flex;
-	justify-content: center;
-	align-items: center;
+	align-items: flex-end;
+	justify-content: flex-start;
+	padding-bottom: 80px;
 }
 
 .hero::before {
 	content: "";
 	position: absolute;
 	inset: 0;
-	background: rgba(0, 0, 0, 0.5);
+	background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0.1) 100%);
 }
 
-.hero h1 {
-	font-weight: 700;
+.heroContent {
 	position: relative;
-	color: white;
-	font-size: 48px;
-	z-index: 2;
-	max-width: min(720px, 100%);
-	width: auto;
-	box-sizing: border-box;
-	padding: 0 24px;
-	text-align: center;
+	z-index: 1;
+	max-width: 660px;
+	width: 100%;
+	padding: 0 60px;
+	color: #fff;
+	text-align: left;
+}
+
+.heroTitle {
+	font-size: 56px;
+	font-weight: 700;
+	color: #fff;
+	margin: 0 0 16px;
+	line-height: 1.05;
+}
+
+.heroSub {
+	font-size: 18px;
+	color: rgba(255,255,255,0.85);
+	margin: 0 0 14px;
+	line-height: 1.5;
+	max-width: 480px;
+}
+
+.heroPromo {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	margin: 0 0 18px;
+}
+
+.heroPill {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0;
+	padding: 8px 16px;
+	border-radius: 999px;
+	background: rgba(255,255,255,0.14);
+	border: 1px solid rgba(255,255,255,0.45);
+	-webkit-backdrop-filter: blur(6px);
+	backdrop-filter: blur(6px);
+	color: #fff;
+	font-size: 13px;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	line-height: 1.35;
+	text-decoration: none;
+	transition: background 0.25s, color 0.25s, border-color 0.25s;
+}
+
+.heroPill span {
+	transition: transform 0.25s;
+}
+
+.heroPill:hover {
+	background: #fff;
+	color: #111;
+	border-color: #fff;
+}
+
+.heroPill:hover span {
+	transform: translateX(3px);
+}
+
+.heroCta {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 14px;
+	flex-wrap: wrap;
+}
+
+.heroBtn {
+	display: inline-block;
+	background: #25d366;
+	color: #fff;
+	padding: 13px 28px;
+	border-radius: 8px;
+	text-decoration: none;
+	font-weight: 600;
+	font-size: 15px;
+	transition: background 0.25s;
+}
+
+.heroBtn:hover {
+	background: #1da851;
 }
 
 .pergolaTypes {
-	padding: 80px 40px 30px;
+	padding: 88px 40px 96px;
 	background: #fff;
 }
 
 .pergolaTypesHeader {
-	text-align: center;
-	margin-bottom: 80px;
+	max-width: 1100px;
+	margin: 0 auto 56px;
+	text-align: left;
+}
+
+.pergolaTypesLabel {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	font-size: 13px;
+	font-weight: 600;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: #1d2b24;
+	margin-bottom: 14px;
+}
+
+.pergolaTypesLabel::before {
+	content: "";
+	width: 32px;
+	height: 2px;
+	background: #1d2b24;
 }
 
 .pergolaTypesHeader h2 {
-	font-size: 36px;
 	margin: 0;
-	font-weight: 700;
+	font-size: 26px;
+	font-weight: 400;
+	line-height: 1.35;
+	color: #555;
 }
 
-.pergolaTypes .pergolaType {
-	position: relative;
+.pergolaType {
+	display: grid;
+	grid-template-columns: 1.15fr 1fr;
+	gap: 64px;
+	align-items: center;
 	max-width: 1100px;
-	margin: 0 auto 80px;
-	scroll-margin-top: 80px;
+	margin: 0 auto 96px;
+	scroll-margin-top: 96px;
 }
 
-.pergolaTypes .pergolaType:last-child {
+.pergolaType:last-child {
 	margin-bottom: 0;
 }
 
+.pergolaType:nth-of-type(even) .pergolaTypeImage {
+	order: 2;
+}
+
 .pergolaTypeImage {
-	width: 100%;
-	aspect-ratio: 16 / 10;
+	aspect-ratio: 4 / 3;
 	overflow: hidden;
-	border-radius: 10px;
+	border-radius: 14px;
 }
 
 .pergolaTypeImage img {
@@ -357,110 +468,131 @@ h1, h2, h3 {
 	display: block;
 }
 
-.pergolaTypeContent {
-	position: absolute;
-	left: 28px;
-	bottom: 28px;
-	max-width: 420px;
-	padding: 18px 20px;
-	background: rgba(255, 255, 255, 0.78);
-	backdrop-filter: blur(2px);
-	border-radius: 14px;
-	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
-	text-align: left;
-}
-
-.pergolaTypes .pergolaType:nth-of-type(even) .pergolaTypeContent {
-	left: auto;
-	right: 28px;
-	text-align: left;
+.pergolaTypeNum {
+	display: block;
+	font-size: 13px;
+	font-weight: 600;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: #1d2b24;
+	margin-bottom: 12px;
 }
 
 .pergolaTypeContent h2 {
-	font-size: 32px;
-	margin: 0 0 14px;
+	font-size: 36px;
 	font-weight: 700;
+	line-height: 1.1;
+	color: #111;
+	margin: 0 0 16px;
 }
 
 .pergolaTypeText {
 	font-size: 18px;
-	margin: 0 0 20px;
-	color: rgba(0,0,0,0.8);
+	line-height: 1.6;
+	color: #444;
+	margin: 0 0 24px;
 }
 
 .pergolaTypeList {
 	list-style: none;
-	padding-left: 0;
-	color: rgba(0,0,0,0.75);
-	margin: 0;
+	padding: 0;
+	margin: 0 0 28px;
+	border-top: 1px solid rgba(0,0,0,0.1);
 }
 
 .pergolaTypeList li {
-	margin-bottom: 10px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 12px 0;
+	border-bottom: 1px solid rgba(0,0,0,0.1);
+	font-size: 16px;
+	color: #222;
+}
+
+.pergolaTypeList li::before {
+	content: "";
+	flex: 0 0 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: #111;
+}
+
+.pergolaTypeLink {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 15px;
+	font-weight: 600;
+	color: #111;
+	text-decoration: none;
+	border-bottom: 1px solid #111;
+	padding-bottom: 2px;
+}
+
+.pergolaTypeLink span {
+	transition: transform 0.25s;
+}
+
+.pergolaTypeLink:hover span {
+	transform: translateX(3px);
+}
+
+#obrasFijas,
+#obrasMoviles {
+	scroll-margin-top: 96px;
 }
 
 @media (max-width: 900px) {
 	.pergolaTypes {
-		padding: 80px 24px 30px;
+		padding: 80px 24px 32px;
 	}
-	.pergolaTypeContent {
-		left: 16px;
-		right: auto;
-		bottom: 16px;
-		max-width: min(340px, 62%);
-		padding: 14px 16px;
-	}
-	.pergolaTypes .pergolaType:nth-of-type(even) .pergolaTypeContent {
-		left: auto;
-		right: 16px;
-		text-align: left;
+	.pergolaTypesHeader {
+		margin-bottom: 48px;
 	}
 	.pergolaTypesHeader h2 {
-		font-size: 32px;
+		font-size: 22px;
+	}
+	.pergolaType {
+		grid-template-columns: 1fr;
+		gap: 24px;
+		margin-bottom: 72px;
+	}
+	.pergolaType:nth-of-type(even) .pergolaTypeImage {
+		order: 0;
+	}
+	.pergolaTypeContent h2 {
+		font-size: 30px;
 	}
 }
 
 @media (max-width: 600px) {
 	.pergolaTypes {
-		padding: 88px 20px 40px;
+		padding: 64px 20px 32px;
 	}
 	.pergolaTypesHeader {
 		margin-bottom: 36px;
 	}
 	.pergolaTypesHeader h2 {
-		font-size: 28px;
+		font-size: 19px;
+	}
+	.pergolaType {
+		margin-bottom: 56px;
 	}
 	.pergolaTypeImage {
 		aspect-ratio: 16 / 10;
 	}
-	.pergolaTypeContent {
-		position: static;
-		left: auto;
-		right: auto;
-		bottom: auto;
-		max-width: none;
-		margin-top: 14px;
-		padding: 0 2px 8px;
-		background: none;
-		backdrop-filter: none;
-		box-shadow: none;
-		border-radius: 0;
-	}
-	.pergolaTypes .pergolaType:nth-of-type(even) .pergolaTypeContent {
-		left: auto;
-		right: auto;
-		text-align: left;
-	}
 	.pergolaTypeContent h2 {
-		font-size: 22px;
-		margin-bottom: 8px;
+		font-size: 26px;
+		margin-bottom: 10px;
 	}
 	.pergolaTypeText {
-		font-size: 15px;
-		margin-bottom: 12px;
+		font-size: 16px;
+		margin-bottom: 18px;
 	}
 	.pergolaTypeList li {
-		margin-bottom: 6px;
+		font-size: 15px;
+		padding: 10px 0;
 	}
 }
 
@@ -1090,12 +1222,43 @@ h1, h2, h3 {
 	}
 }
 
-@media (max-width: 900px) {
-	.hero h1 {
-		width: auto;
-		max-width: 100%;
-		font-size: 32px;
+@media (max-width: 768px) {
+	.heroTitle {
+		font-size: 36px;
+	}
+
+	.heroContent {
+		padding: 0 28px;
+	}
+
+	.heroSub {
+		font-size: 15px;
+	}
+
+	.heroPill {
+		font-size: 12px;
+	}
+}
+
+@media (max-width: 680px) {
+	.hero {
+		align-items: center;
+		justify-content: center;
+		padding-bottom: 0;
+	}
+
+	.heroContent {
 		text-align: center;
+		padding: 0 20px;
+	}
+
+	.heroSub {
+		max-width: 100%;
+	}
+
+	.heroPromo,
+	.heroCta {
+		justify-content: center;
 	}
 }
 

@@ -7,7 +7,7 @@
       <link rel="icon" href="/Logos/favicon.png?v=20260903" type="image/png" sizes="512x512">
       <link rel="apple-touch-icon" href="/Logos/favicon.png?v=20260903">
       <meta name="description" content="Los mejores productos de aluminio para vos. Contamos con más de 20 años de experiencia. Fabricamos tu perfil">
-      <link rel="stylesheet" href="/pagina2/style.css?v=typo7">
+      <link rel="stylesheet" href="/pagina2/style.css?v=hero12">
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -69,40 +69,55 @@
       </header>
       <main>
          <section class="hero">
-              <h1>Diseño y confort para vivir el exterior</h1>
+            <div class="heroContent">
+               <h1 class="heroTitle">Pérgolas de Aluminio</h1>
+               <p class="heroSub">Diseño y confort para vivir el exterior.</p>
+               <div class="heroPromo">
+                  <a href="#fijas" class="heroPill">Pérgolas fijas <span aria-hidden="true">→</span></a>
+                  <a href="#moviles" class="heroPill">Pérgolas móviles <span aria-hidden="true">→</span></a>
+               </div>
+               <div class="heroCta">
+                  <a href="https://wa.me/5491132122439" target="_blank" onclick="return gtag_report_conversion('https://wa.me/5491132122439')" class="heroBtn">Cotizar por WhatsApp</a>
+               </div>
+            </div>
          </section>
          <section class="pergolaTypes">
             <div class="pergolaTypesHeader">
-               <h2>Tipos de pérgolas</h2>
+               <span class="pergolaTypesLabel">Tipos de pérgolas</span>
+               <h2>Elegí la que mejor se adapta a tu espacio</h2>
             </div>
-            <div class="pergolaType" id="fijas">
+            <article class="pergolaType" id="fijas">
                <div class="pergolaTypeImage">
-                  <img src="/pagina2/multimedia/f2/1.webp" alt="Pérgolas Fijas">
+                  <img src="/pagina2/multimedia/f2/1.webp" alt="Pérgola fija de aluminio con lamas fijas" loading="lazy">
                </div>
                <div class="pergolaTypeContent">
-                  <h2>Pérgolas Fijas</h2>
-                  <p class="pergolaTypeText">Estructuras sólidas, ideales para espacios permanentes</p>
+                  <span class="pergolaTypeNum">01 · Protección permanente</span>
+                  <h2>Pérgola Fija</h2>
+                  <p class="pergolaTypeText">Lamas de aluminio de alta resistencia. Estructuras sólidas, pensadas para durar.</p>
                   <ul class="pergolaTypeList">
                      <li>Alta durabilidad</li>
                      <li>Bajo mantenimiento</li>
                      <li>Diseño personalizado</li>
                   </ul>
+                  <a href="#obrasFijas" class="pergolaTypeLink">Ver obras de pérgolas fijas <span aria-hidden="true">→</span></a>
                </div>
-            </div>
-            <div class="pergolaType" id="moviles">
+            </article>
+            <article class="pergolaType" id="moviles">
                <div class="pergolaTypeImage">
-                  <img src="/pagina2/multimedia/m3/1.webp" alt="Pérgolas Móviles">
+                  <img src="/pagina2/multimedia/m3/1.webp" alt="Pérgola móvil de aluminio con lamas motorizadas" loading="lazy">
                </div>
                <div class="pergolaTypeContent">
-                  <h2>Pérgolas Móviles</h2>
-                  <p class="pergolaTypeText">Controlá la luz y el clima con sistemas adaptables</p>
+                  <span class="pergolaTypeNum">02 · Luz y clima a tu medida</span>
+                  <h2>Pérgola Móvil</h2>
+                  <p class="pergolaTypeText">Lamas motorizadas que regulan sol, sombra y ventilación.</p>
                   <ul class="pergolaTypeList">
                      <li>Apertura y cierre</li>
                      <li>Protección solar</li>
                      <li>Estética moderna</li>
                   </ul>
+                  <a href="#obrasMoviles" class="pergolaTypeLink">Ver obras de pérgolas móviles <span aria-hidden="true">→</span></a>
                </div>
-            </div>
+            </article>
          </section>
 
                   <!-- Portfolio modal + grid -->
@@ -112,7 +127,7 @@
                   <h2>Obras realizadas</h2>
                   <p class="portfolioSubtitle">Proyectos seleccionados que muestran nuestra calidad, detalle y soluciones a medida.</p>
                </div>
-               <section class="album">
+               <section class="album" id="obrasMoviles">
                   <div class="albumHeader">
                     <h2>Móviles</h2>
                     <p class="albumSubtitle">Sistemas adaptables para controlar la luz y el clima con estilo.</p>
@@ -136,7 +151,7 @@
                      </div>
                   </div>
                </section>
-               <section class="album">
+               <section class="album" id="obrasFijas">
                   <div class="albumHeader">
                     <h2>Fijas</h2>
                     <p class="albumSubtitle">Estructuras permanentes y elegantes, pensadas para durar.</p>
